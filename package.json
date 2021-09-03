@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "name": "cdi",
+  "version": "0.0.0",
+  "main": "./index.js",
+  "bin": {
+    "cdi": "cli.js"
+  },
+  "description": "TODO.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rpg",
+    "nlp",
+    "character",
+    "stats"
+  ],
+  "author": "Charles Fewlass",
+  "license": "MIT",
+  "dependencies": {
+    "compromise": "^13.11.3"
+  }
+}
