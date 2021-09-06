@@ -1,44 +1,42 @@
-"use strict";
+'use strict';
 const nlp = require('compromise');
 nlp.extend(require('compromise-sentences'));
-require('./names/tag-name');
+const tagName = require('./names/tag-name');
 
 module.exports = async function cdi(name, description) {
-   var doc = nlp(description).debug();
-   const nameTags = await tagName(name);
-   console.log(nameTags);
+    var doc = nlp(description);
+    doc.contractions().expand();
 
-   for (let tag in nameTags) {
-      let word = doc.match(nameTags[tag]).debug();
-      word.tag(tag).debug();
+    const nameTags = await tagName(name);
 
-      // Add 'principal' tag to names.
-      switch (tag) {
-          case 'fullName':
-              word.tag('Principal').debug();
-              break;
-          case 'firstName':
-              word.tag('Principal');
-              break;
-          case 'lastName':
-              word.tag('Principal');
-              break;
-      }
-   }
+    for (let tag in nameTags) {
+        let word = doc.match(nameTags[tag]);
+        word.tag(tag);
 
-   // Start breaking down doc to sentences, clauses, and phrases.
-     var sentences = doc.sentences().debug();
-     for (let i = 0; i < sentences.length; i++) {
-         var subjects = sentences.subjects().debug();
-         var clauses = sentences.clauses().debug();
+        // Add 'principal' tag to names.
+        switch (tag) {
+            case 'fullName':
+                word.tag('Principal');
+                break;
+            case 'firstName':
+                word.tag('Principal');
+                break;
+            case 'lastName':
+                word.tag('Principal');
+                break;
+        }
+    }
 
-         for (let j=0; j < clauses.length; j++) {
-             let clause = nlp(clauses[j]).debug();
-             if (clause.has('#ProperNoun')) {console.log('Yes');}
-         }
+    // Start breaking down doc to sentences, clauses, and phrases.
+    var sentences = doc.sentences();
+    var subjects = '';
+    var clauses = '';
 
-     }
+    for (let i = 0; i < sentences.length; i++) {
+        subjects = sentences.subjects();
+        clauses = sentences.clauses();
+    }
 
-     console.log(subjects);
-     console.log(clauses);
-}
+    const preppedDoc = {doc: doc, sentences: sentences, clauses: clauses, subjects: subjects};
+    return (preppedDoc);
+};
