@@ -1,7 +1,7 @@
 module.exports = class NameTagger {
     constructor(name) {
         this.name = name;
-        this._nameTags = {
+        this.nameTags = {
             fullName: '',
             firstName: '',
             middleName: '',
@@ -16,11 +16,12 @@ module.exports = class NameTagger {
 
     }
 
-    get _nameTags() {
-        return this._nameTags;
+    get tags() {
+        this.assignNameTags();
+        return this.nameTags;
     }
 
-    set _nameTags(name) {
+    assignNameTags() {
         var introductor = false; // Segment that introduces a name. Descriptors that are not an Honorific.
 
         // Look for informal discriptors on the name such as [The] Hulk or Andre [the Giant].
@@ -35,76 +36,76 @@ module.exports = class NameTagger {
         switch(this.numberOfParts) {
             case 0: break;
             case 1:
-                this._nameTags.firstName = this.name;
+                this.nameTags.firstName = this.name;
                 break;
             case 2:
                 if (introductor) {
-                    this._nameTags.prefix = this.nameParts[0];
-                    this._nameTags.descriptor = this.nameParts[1];
+                    this.nameTags.prefix = this.nameParts[0];
+                    this.nameTags.descriptor = this.nameParts[1];
                     break;
                 }
-                if (this._nameTags.honorific) {
-                    this._nameTags.prefix = this.nameParts[0];
-                    this._nameTags.lastName = this.nameParts[1];
-                } else if (this._nameTags.suffix) {
-                    this._nameTags.firstName = this.nameParts[0];
-                    this._nameTags.suffix = this.nameParts[1];
+                if (this.nameTags.honorific) {
+                    this.nameTags.prefix = this.nameParts[0];
+                    this.nameTags.lastName = this.nameParts[1];
+                } else if (this.nameTags.suffix) {
+                    this.nameTags.firstName = this.nameParts[0];
+                    this.nameTags.suffix = this.nameParts[1];
                 } else {
-                    this._nameTags.firstName = this.nameParts[0];
-                    this._nameTags.lastName = this.nameParts[1];
+                    this.nameTags.firstName = this.nameParts[0];
+                    this.nameTags.lastName = this.nameParts[1];
                 }
                 break;
             case 3:
                 if (introductor) {
-                    this._nameTags.prefix = this.nameParts[0];
-                    this._nameTags.descriptor = this.nameParts[1];
-                    this._nameTags.lastName = this.nameParts[2];
+                    this.nameTags.prefix = this.nameParts[0];
+                    this.nameTags.descriptor = this.nameParts[1];
+                    this.nameTags.lastName = this.nameParts[2];
                     break;
                 }
-                if (this._nameTags.honorific) {
-                    this._nameTags.prefix = this.nameParts[0];
-                    this._nameTags.firstName = this.nameParts[1];
+                if (this.nameTags.honorific) {
+                    this.nameTags.prefix = this.nameParts[0];
+                    this.nameTags.firstName = this.nameParts[1];
                 } else {
-                    this._nameTags.firstName = this.nameParts[0];
+                    this.nameTags.firstName = this.nameParts[0];
                 }
-                if (this._nameTags.suffix) {
-                    this._nameTags.suffix = this.nameParts[2];
-                    this._nameTags.lastName = this.nameParts[1];
+                if (this.nameTags.suffix) {
+                    this.nameTags.suffix = this.nameParts[2];
+                    this.nameTags.lastName = this.nameParts[1];
                 } else {
-                    this._nameTags.lastName = this.nameParts[2];
+                    this.nameTags.lastName = this.nameParts[2];
                 }
                 break;
             case 4:
-                if (this._nameTags.honorific) {
-                    this._nameTags.prefix = this.nameParts[0];
-                    this._nameTags.firstName = this.nameParts[1];
+                if (this.nameTags.honorific) {
+                    this.nameTags.prefix = this.nameParts[0];
+                    this.nameTags.firstName = this.nameParts[1];
                 } else {
-                    this._nameTags.firstName = this.nameParts[0];
+                    this.nameTags.firstName = this.nameParts[0];
                 }
-                if (this._nameTags.suffix) {
-                    this._nameTags.suffix = this.nameParts[3];
-                    this._nameTags.lastName = this.nameParts[2];
+                if (this.nameTags.suffix) {
+                    this.nameTags.suffix = this.nameParts[3];
+                    this.nameTags.lastName = this.nameParts[2];
                 } else {
-                    this._nameTags.lastName = this.nameParts[3];
+                    this.nameTags.lastName = this.nameParts[3];
                 }
                 break;
             case 5:
-                if (this._nameTags.honorific) {
-                    this._nameTags.prefix = this.nameParts[0];
-                    this._nameTags.firstName = this.nameParts[1];
+                if (this.nameTags.honorific) {
+                    this.nameTags.prefix = this.nameParts[0];
+                    this.nameTags.firstName = this.nameParts[1];
                 } else {
-                    this._nameTags.firstName = this.nameParts[0];
+                    this.nameTags.firstName = this.nameParts[0];
                 }
-                if (this._nameTags.suffix) {
-                    this._nameTags.suffix = this.nameParts[4];
-                    this._nameTags.lastName = this.nameParts[3];
+                if (this.nameTags.suffix) {
+                    this.nameTags.suffix = this.nameParts[4];
+                    this.nameTags.lastName = this.nameParts[3];
                 } else {
-                    this._nameTags.lastName = this.nameParts[4];
+                    this.nameTags.lastName = this.nameParts[4];
                 }
                 break;
         }
 
-        this._nameTags.fullName = this.getFullName();
+        this.nameTags.fullName = this.getFullName();
     }
 
     whatAreTheNameParts() {
@@ -119,7 +120,7 @@ module.exports = class NameTagger {
         // Is there an informal descriptor at the end, such as "Lawrence the Axe?"
         if ((this.name.indexOf('the') !== -1) && (this.name.indexOf('the' !== 0))) {
             let position = this.name.indexOf('the');
-            this._nameTags.descriptor = this.name.slice(position).trim();
+            this.nameTags.descriptor = this.name.slice(position).trim();
             this.name = this.name.slice(0, position).trim();
             return true;
         }
@@ -137,7 +138,7 @@ module.exports = class NameTagger {
         const honorifics = ['Mrs.', 'Mr.', 'Ms.', 'Dr.', 'Sir', 'Madam', 'Doctor'];
         for (let i in honorifics) {
             if (this.name.indexOf(honorifics[i]) === 0) {
-                this._nameTags.honorific = honorifics[i];
+                this.nameTags.honorific = honorifics[i];
                 return true;
             }
         }
@@ -150,14 +151,14 @@ module.exports = class NameTagger {
         // For the purposes of RPG characters, if only a single name is provided, i.e. Sting, then this method will assign
         // Sting as a fullName.
         for (let i = 0; i < this.numberOfParts; i++) {   // default e.g. John, Mary Williams, The Hulk, The Great Gatsby
-            this._nameTags.fullName += ' ' + this.nameParts[i];
+            this.nameTags.fullName += ' ' + this.nameParts[i];
         }
-        if ((this._nameTags.honorific) && (this.numberOfParts > 2)) {   // honorific: leave if this.name has two parts. e.g. Dr. Strange.
-            this._nameTags.fullName = this._nameTags.fullName.slice(this._nameTags.honorific.length);
+        if ((this.nameTags.honorific) && (this.numberOfParts > 2)) {   // honorific: leave if this.name has two parts. e.g. Dr. Strange.
+            this.nameTags.fullName = this.nameTags.fullName.slice(this.nameTags.honorific.length);
         }
-        this._nameTags.fullName = this._nameTags.fullName.trim();
-        if ((this.numberOfParts === 1) && (this._nameTags.descriptor)) {   // ending descriptors such as Andre the Giant
-            this._nameTags.fullName = this.name + ' ' + this._nameTags.descriptor;
+        this.nameTags.fullName = this.nameTags.fullName.trim();
+        if ((this.numberOfParts === 1) && (this.nameTags.descriptor)) {   // ending descriptors such as Andre the Giant
+            this.nameTags.fullName = this.name + ' ' + this.nameTags.descriptor;
         }
     }
 };
