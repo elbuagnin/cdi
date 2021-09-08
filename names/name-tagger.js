@@ -1,5 +1,6 @@
 module.exports = class NameTagger {
-    constructor(name) {
+    constructor(name, doc) {
+        this.doc = doc;
         this.name = name;
         this.nameTags = {
             fullName: '',
@@ -14,11 +15,30 @@ module.exports = class NameTagger {
         this.nameParts = []; // The individual words of a name.
         this.numberOfParts = 0; // How many words are in the name.
 
+        // Do the work
+        this.assignNameTags();
+        this.writeToDoc();
+
     }
 
-    get tags() {
-        this.assignNameTags();
-        return this.nameTags;
+    writeToDoc() {
+        for (let tag in this.nameTags) {
+            let word = this.doc.match(this.nameTags[tag]);
+            word.tag(tag);
+
+            // Add 'principal' tag to names.
+            switch (tag) {
+                case 'fullName':
+                    word.tag('Principal');
+                    break;
+                case 'firstName':
+                    word.tag('Principal');
+                    break;
+                case 'lastName':
+                    word.tag('Principal');
+                    break;
+            }
+        }
     }
 
     assignNameTags() {

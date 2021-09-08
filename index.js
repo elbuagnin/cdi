@@ -7,26 +7,7 @@ module.exports = async function cdi(name, description) {
     var doc = nlp(description);
     doc.contractions().expand();
 
-    const nt = new ntClass(name);
-    const nameTags = nt.tags;
-
-    for (let tag in nameTags) {
-        let word = doc.match(nameTags[tag]);
-        word.tag(tag);
-
-        // Add 'principal' tag to names.
-        switch (tag) {
-            case 'fullName':
-                word.tag('Principal');
-                break;
-            case 'firstName':
-                word.tag('Principal');
-                break;
-            case 'lastName':
-                word.tag('Principal');
-                break;
-        }
-    }
+    const nt = new ntClass(name, doc);
 
     // Start breaking down doc to sentences, clauses, and phrases.
     var sentences = doc.sentences();
