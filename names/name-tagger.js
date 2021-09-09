@@ -125,7 +125,7 @@ module.exports = class NameTagger {
                 break;
         }
 
-        this.nameTags.fullName = this.getFullName();
+        this.getFullName();
     }
 
     whatAreTheNameParts() {
