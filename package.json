@@ -20,6 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "compromise": "^13.11.3",
-    "compromise-sentences": "^0.3.0"
+    "compromise-sentences": "^0.3.0",
+    "nodemon": "^2.0.12"
   }
 }

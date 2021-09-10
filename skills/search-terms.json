@@ -1,0 +1,8 @@
+{
+    "0": {"search": "#Principal+ .+ #Copula #Determiner? #Adjective? #Noun+", "skill": "#Noun"},
+    "1": {"search": "who #copula #Adjective? #Negative+ #Noun+", "skill": "!#Noun"},
+    "2": {"search": "(fights|kills|battles)", "skill": "#FighterType"},
+    "3": {"search": "#Actor", "skill": "#Actor"},
+    "4": {"search": "#Activity", "skill": "#Activity"},
+    "5": {"search": "#Noun and (a|an) #Adjective? [<skill>#Noun]", "skill": "#Noun"}
+}
