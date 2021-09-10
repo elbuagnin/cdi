@@ -5,3 +5,4 @@ node_modules/
 .lesshintrc
 .gitignore
 .eslintrc
+reload.sh

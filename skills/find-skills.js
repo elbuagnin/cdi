@@ -8,16 +8,27 @@ module.exports = async function findSkills(doc) {
         searchTerms.push(Object.values(st)[key]);
     }
 
-    // Search for the terms by sentence in the doc.
+    // // Prepare the doc
+    // Set aside parantheticals
+
+
+    // Search for the terms, sentence by sentence, clause by clause, in the doc.
     let sentences = doc.sentences();
     sentences.forEach(sentence => {
 
-        for (let j in searchTerms) {
-            let searchTerm = searchTerms[j].search;
-            if (sentence.match(searchTerm).text() !== '') {
-                console.log(searchTerm);
-                console.log(sentence.match(searchTerm).text());
+        let clauses = sentence.clauses();
+        clauses.forEach(clause => {
+
+            for (let j in searchTerms) {
+                let searchTerm = searchTerms[j].search;
+                if (clause.match(searchTerm).text() !== '') {
+                    console.log('\x1b[1m', '\x1b[36m', searchTerm, '\x1b[0m');
+                    console.log(clause.match(searchTerm).text());
+                    let skill = clause.match(searchTerm, 'skill').text();
+                    console.log(skill);
+
+                }
             }
-        }
+        });
     });
 };

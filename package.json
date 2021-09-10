@@ -19,6 +19,7 @@
   "author": "Charles Fewlass",
   "license": "MIT",
   "dependencies": {
+    "colors": "^1.4.0",
     "compromise": "^13.11.3",
     "compromise-sentences": "^0.3.0",
     "nodemon": "^2.0.12"
