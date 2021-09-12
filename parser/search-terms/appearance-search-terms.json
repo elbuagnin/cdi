@@ -1,3 +1,8 @@
 {
-    "HairIsColor": {"search": "hair #Copula #Adjective?+ #Noun+", "appearance": "#Noun"}
+    "HairIsColor": {"search": "hair #Copula #Adjective?+ #Noun+", "appearance": "#Noun+"},
+    "HairVerb": {"search": "hair (#Verb && !#Copula?)+ (#Preposition?|#Determiner?)?+ #Adjective?+ #Noun+", "appearance": "#Adjective?+ #Noun", "fixme": true},
+    "WearsANoun": {"search": "wears (a|an) #adjective?+ #Noun+", "wearing": "#Noun+"},
+    "WearingANoun": {"search": "wearing (a|an) #adjective?+ #Noun+", "wearing": "#Noun+"},
+    "AdornedWithANoun": {"search": "adorned with (a|an) #adjective?+ #Noun+", "wearing": "#Noun+"},
+    "LookLike": {"search": "(look|looks) like (a|an) #adjective?+ #Noun+", "simile": "#Noun+"}
 }

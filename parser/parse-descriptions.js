@@ -1,9 +1,9 @@
 const skillTermData = require('./search-terms/skill-search-terms');
 const appearanceTermData = require('./search-terms/appearance-search-terms');
-const speciesTermData = require('./search-terms/species-search-terms.json');
+const entityTermData = require('./search-terms/entity-search-terms.json');
 
 module.exports = async function findSkills(doc) {
-    var speciesSearchTerms = [];
+    var entitySearchTerms = [];
     var skillSearchTerms = [];
     var appearanceSearchTerms = [];
     loadSearchTerms();
@@ -16,7 +16,7 @@ module.exports = async function findSkills(doc) {
         clauses.forEach(clause => {
 
             parseSkills(clause);
-            parseSpecies(clause);
+            parseEntity(clause);
             parseAppearance(clause);
         });
     });
@@ -26,9 +26,9 @@ module.exports = async function findSkills(doc) {
         for (let key in Object.keys(skillTermData)) {
             skillSearchTerms.push(Object.values(skillTermData)[key]);
         }
-        // Species
-        for (let key in Object.keys(speciesTermData)) {
-            speciesSearchTerms.push(Object.values(speciesTermData)[key]);
+        // entity
+        for (let key in Object.keys(entityTermData)) {
+            entitySearchTerms.push(Object.values(entityTermData)[key]);
         }
         // Appearance
         for (let key in Object.keys(appearanceTermData)) {
@@ -50,9 +50,9 @@ module.exports = async function findSkills(doc) {
         }
     }
 
-    function parseSpecies (clause) {
-        for (let j in speciesSearchTerms) {
-            let searchTerm = speciesSearchTerms[j].search;
+    function parseEntity (clause) {
+        for (let j in entitySearchTerms) {
+            let searchTerm = entitySearchTerms[j].search;
             if (clause.match(searchTerm).text() !== '') {
                 console.log('\x1b[1m', '\x1b[36m', searchTerm, '\x1b[0m');
                 console.log(clause.match(searchTerm).text());
