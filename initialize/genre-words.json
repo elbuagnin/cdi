@@ -1,4 +1,12 @@
 {
+    "elf": "Species",
+    "dwarf": "Species",
+    "halfling": "Species",
+    "human": "Species",
+    "gnome": "Species",
+    "orc": "Species",
+    "half-orc": "Species",
+    "half-elf": "Species",
     "thief":"RogueType",
     "cutpurse":"RogueType",
     "pickpocket":"RogueType",

@@ -6,6 +6,8 @@
    "SocialGroup":"Noun",
    "Event":"Noun",
    "Species":"Noun",
+   "Age": "Comparable",
+   "Gender": "Noun",
    "Archetype":"Actor",
    "Occupation":"Actor",
    "FullName":"Person",
