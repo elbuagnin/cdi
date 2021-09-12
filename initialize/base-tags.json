@@ -1,0 +1,12 @@
+{
+   "World":"Place",
+   "Geography":"Place",
+   "Structure":"Place",
+   "Settlement":"Place",
+   "SocialGroup":"Noun",
+   "Event":"Noun",
+   "Archetype":"Actor",
+   "Occupation":"Actor",
+   "FullName":"Person",
+   "Characteristic": "Adjective"
+}

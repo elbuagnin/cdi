@@ -7,7 +7,7 @@ module.exports = async function findSkills(doc) {
     for (let key in Object.keys(st)) {
         searchTerms.push(Object.values(st)[key]);
     }
-
+    // console.log(JSON.stringify(searchTerms));
     // // Prepare the doc
     // Set aside parantheticals
 
@@ -26,6 +26,7 @@ module.exports = async function findSkills(doc) {
                     console.log(clause.match(searchTerm).text());
                     let skill = clause.match(searchTerm, 'skill').text();
                     console.log(skill);
+                    console.log('\x1b[37m', clause.out('tags'));
 
                 }
             }

@@ -1,0 +1,20 @@
+const nlp = require('compromise');
+const btags = require('./base-tags');
+const etags = require('./environment-tags');
+const gtags = require('./genre-tags');
+const stags = require('./setting-tags');
+const allTags = Object.assign(btags, etags, gtags, stags);
+
+module.exports = nlp.extend((Doc, world) => {
+    // Load the tags from the JSON files.
+    for (let i in Object.keys(allTags)) {
+        let key = Object.keys(allTags)[i];
+        let value = Object.values(allTags)[i];
+        let newTag = {};
+        newTag[key] = value;
+
+        world.addWords(newTag);
+
+    }
+
+});
