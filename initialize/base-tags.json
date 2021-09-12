@@ -5,6 +5,7 @@
    "Settlement":"Place",
    "SocialGroup":"Noun",
    "Event":"Noun",
+   "Species":"Noun",
    "Archetype":"Actor",
    "Occupation":"Actor",
    "FullName":"Person",

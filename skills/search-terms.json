@@ -4,5 +4,6 @@
     "PersonFights": {"search": "(#Principal|#Pronoun|who)+ (fights|kills|battles)", "skill": "#FighterType"},
     "Actor": {"search": "#Actor", "skill": "#Actor"},
     "Activity": {"search": "#Activity", "skill": "#Activity"},
-    "andNoun": {"search": "#Noun and (a|an) #Adjective? [<skill>#Noun]", "skill": "#Noun"}
+    "andNoun": {"search": "#Noun and (a|an) #Adjective? [<skill>#Noun]", "skill": "#Noun"},
+    "FollowerOfDeity": {"search": "(follower|priest|priestess||disciple) of #Deity", "skill": "#PriestType"}
 }

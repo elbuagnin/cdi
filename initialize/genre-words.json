@@ -33,5 +33,6 @@
     "moneylender":"Occupation",
     "jeweler":"Occupation",
     "silk merchant":"Occupation",
+    "artificer": "Occupation",
     "gang":"Organization"
 }
