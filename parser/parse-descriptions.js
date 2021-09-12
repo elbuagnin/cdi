@@ -1,4 +1,4 @@
-const st = require('./search-terms');
+const st = require('./search-terms/skill-search-terms');
 
 module.exports = async function findSkills(doc) {
 
