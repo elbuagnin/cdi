@@ -1,3 +1,6 @@
 {
-    "lbs": {"search":"[<weight>#Cardinal] (lbs|pounds)", "weight": "#Cardinal"}
+    "#lbs": {"search":"[<weight>#Cardinal] [<unit>(lbs|pounds)]", "weight": 65, "unit": 15},
+    "Weight#": {"search":"weight [<weight>#Cardinal]"},
+    "Height#'##": {"search":"[<height>/[0-9]{1,2}'[0-9]{1,2}\"/]"},
+    "HeightFeet": {"search":"#Cardinal (feet|ft)"}
 }
