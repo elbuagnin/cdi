@@ -19,12 +19,13 @@ module.exports = nlp.extend((Doc, world) => {
     };
 
     Doc.prototype.loadCDITags = function() {
+        let obj = {};
         Object.keys(allTags).forEach(k => {
             let tag = formatTag(allTags[k]);
-            let obj = {};
             obj[k] = tag;
-            world.addTags(obj);
         });
+
+        world.addTags(obj);
     };
 
     Doc.prototype.loadCDIWords = function() {
