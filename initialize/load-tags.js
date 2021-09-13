@@ -1,12 +1,12 @@
 const nlp = require('compromise');
-const correctives = require('./correctives');
-const btags = require('./base-tags');
-const etags = require('./environment-tags');
-const gtags = require('./genre-tags');
-const bwords = require('./base-words');
-const ewords = require('./environment-words.json');
-const gwords = require('./genre-words');
-const swords = require('./setting-words');
+const correctives = require('./tags-words/correctives');
+const btags = require('./tags-words/base-tags');
+const etags = require('./tags-words/environment-tags');
+const gtags = require('./tags-words/genre-tags');
+const bwords = require('./tags-words/base-words');
+const ewords = require('./tags-words/environment-words.json');
+const gwords = require('./tags-words/genre-words');
+const swords = require('./tags-words/setting-words');
 const allTags = Object.assign(btags, etags, gtags);
 const allWords = Object.assign(correctives, bwords, ewords, gwords, swords);
 
@@ -18,17 +18,13 @@ module.exports = nlp.extend((Doc, world) => {
         return fTag;
     };
 
-    const addIn = function (allTags) {
+    Doc.prototype.loadCDITags = function() {
         Object.keys(allTags).forEach(k => {
             let tag = formatTag(allTags[k]);
             let obj = {};
             obj[k] = tag;
             world.addTags(obj);
         });
-    };
-
-    Doc.prototype.loadCDITags = function() {
-        addIn(allTags);
     };
 
     Doc.prototype.loadCDIWords = function() {
