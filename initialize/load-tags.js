@@ -1,4 +1,5 @@
 const nlp = require('compromise');
+const correctives = require('./correctives');
 const btags = require('./base-tags');
 const etags = require('./environment-tags');
 const gtags = require('./genre-tags');
@@ -7,7 +8,7 @@ const ewords = require('./environment-words.json');
 const gwords = require('./genre-words');
 const swords = require('./setting-words');
 const allTags = Object.assign(btags, etags, gtags);
-const allWords = Object.assign(bwords, ewords, gwords, swords);
+const allWords = Object.assign(correctives, bwords, ewords, gwords, swords);
 
 
 module.exports = nlp.extend((Doc, world) => {

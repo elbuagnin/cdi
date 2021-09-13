@@ -1,5 +1,5 @@
 {
-    "PersonIsActor": {"search": "(#Principal|#Pronoun|who)+ .+ #Copula #Determiner? #Adjective? (#Actor|#Occupation)+", "skill": "(#Actor|#Occupation)+"},
+    "PersonIsActor": {"search": "(#Principal|#Pronoun|who)+ .+ #Copula #Determiner? #Adjective? (#Actor|#Occupation)", "skill": "(#Actor|#Occupation)+"},
     "PersonIsNotActor": {"search": "(#Principal|#Pronoun|who)+ .+ #copula #Determiner? #Adjective? #Negative+ #Noun+", "skill": "!#Noun"},
     "PersonFights": {"search": "(#Principal|#Pronoun|who)+ (fights|kills|battles)", "skill": "#FighterType"},
     "Actor": {"search": "#Actor", "skill": "#Actor"},
