@@ -6,3 +6,4 @@ node_modules/
 .gitignore
 .eslintrc
 reload.sh
+app.js
