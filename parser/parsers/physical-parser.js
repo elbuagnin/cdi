@@ -6,6 +6,13 @@ for (let key in Object.keys(physicalTermData)) {
 }
 
 const parsePhysical = function (clause) {
+    let matches = findMatches(clause);
+    let duplicates = findDuplicates(matches);
+    assignCharacteristics(matches, duplicates);
+
+};
+
+function findMatches (clause) {
     let information = [];
 
     for (let j in physicalSearchTerms) {
@@ -22,24 +29,29 @@ const parsePhysical = function (clause) {
             }
         }
     }
-    interpretInformation(information);
-};
+    return information;
+}
 
-function interpretInformation (information) {
+function findDuplicates (matches) {
 
     // Solution to duplicate values in array by
     // @Author: Naveed Ali
     // Thanks!
-    information.forEach((value, index, arr) => {
+    matches.forEach((value, index, arr) => {
+        let duplicates = [];
         let firstIndex = arr.indexOf(value);
         let lastIndex = arr.lastIndexOf(value);
 
         if (firstIndex !== lastIndex) {
-            console.log('Dupe = ' + value);
-        } else {
-            console.log('Unique = ' + value);
+            duplicates.push(value);
         }
+
+        return duplicates;
     });
+}
+
+function assignCharacteristics (matches, duplicates) {
+    return;
 }
 
 module.exports = {parsePhysical};
