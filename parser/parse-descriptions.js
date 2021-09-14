@@ -1,4 +1,3 @@
-const appearanceTermData = require('./search-terms/appearance-search-terms');
 const skillParser =require('./parsers/skill-parser');
 const entityParser =require('./parsers/entity-parser');
 const physicalParser =require('./parsers/physical-parser');
