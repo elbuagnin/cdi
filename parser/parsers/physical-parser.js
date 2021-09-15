@@ -6,9 +6,18 @@ for (let key in Object.keys(physicalTermData)) {
 }
 
 const parsePhysical = function (clause) {
+    var evaluatedMatches = {};
     let matchedRules = findMatches(clause);
     if (matchedRules.length !== 0) {
-        evaluateMatches(matchedRules);
+        evaluatedMatches = evaluateMatches(matchedRules);
+    }
+
+    if (_.size(evaluatedMatches) > 0) {
+        const parsedObject = {clause: clause, evaluatedMatches: evaluatedMatches};
+        console.log(JSON.stringify(parsedObject));
+        return parsedObject;
+    } else {
+        return false;
     }
 };
 
@@ -20,8 +29,6 @@ function findMatches (clause) {
         let matchData = physicalSearchTerms[key].matchData;
 
         if (clause.match(searchTerm).text() !== '') {
-            console.log('\x1b[1m', '\x1b[36m', searchTerm, '\x1b[0m');
-            console.log(clause.match(searchTerm).text());
             let matchedValues = [];
             let matches = clause.match(searchTerm).groups();
             for (let match in matches) {
@@ -29,7 +36,7 @@ function findMatches (clause) {
                 matchTerm = matches[match].text();
                 matchedValues.push(matchTerm);
             }
-            let obj = {clause: clause, rule: searchTerm, matchedValues: matchedValues, matchData: matchData};
+            let obj = {rule: searchTerm, matchedValues: matchedValues, matchData: matchData};
             matchedRules.push(obj);
         }
     }
@@ -37,10 +44,9 @@ function findMatches (clause) {
 }
 
 function evaluateMatches (matchedRules) {
-    console.log('jtest: '+JSON.stringify(matchedRules));
     let valuesList = [];
     let valuesData = [];
-    let evaluatedMatches = [];
+    let evaluatedMatches = {};
 
     for (let key in matchedRules) {
         let rule = matchedRules[key].rule;
@@ -55,17 +61,15 @@ function evaluateMatches (matchedRules) {
 
         for (let key in values) {
             if (valuesList.indexOf(values[key])) {
-                console.log('not found');
                 valuesList.push(values[key]);
                 valuesData.push({token: matchDataList[key].token, value: values[key], tokenConfidence: matchDataList[key].tokenConfidence});
             } else {
-                console.log('found');
                 valuesData[key]['tokenConfidence'] += matchDataList[key].tokenConfidence;
             }
         }
-        evaluatedMatches.push({rule: rule});
+        evaluatedMatches = {rule: rule, matchedTokens: valuesData};
     }
-    return;
+    return evaluatedMatches;
 }
 
 module.exports = {parsePhysical};
