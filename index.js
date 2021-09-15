@@ -1,7 +1,7 @@
 'use strict';
+global._ = require('lodash');
 const nlp = require('compromise');
 nlp.extend(require('compromise-sentences'));
-//nlp.extend(require('./initialize/load-tags'));
 require('./initialize/load-tags');
 const ntClass = require('./name/name-tagger');
 const pdClass = require('./parser/parse-descriptions.js');
