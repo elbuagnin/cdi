@@ -8,7 +8,7 @@ for (let key in Object.keys(skillTermData)) {
 
 // Main function
 // Takes a string and parses it using JSON file rules to find useful characteristics.
-const parseSkill = function (clause) {
+const parseSkills = function (clause) {
     var evaluatedMatches = {};
     let matchedRules = findMatches(clause);
     if (matchedRules.length !== 0) {
@@ -77,4 +77,4 @@ function evaluateMatches (matchedRules) {
     return evaluatedMatches;
 }
 
-module.exports = {parseSkill};
+module.exports = {parseSkills};
