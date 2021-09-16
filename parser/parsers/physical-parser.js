@@ -1,10 +1,13 @@
 const physicalTermData = require('../search-terms/physical-search-terms');
 var physicalSearchTerms = [];
 
+// Load the Parsing rules
 for (let key in Object.keys(physicalTermData)) {
     physicalSearchTerms.push(Object.values(physicalTermData)[key]);
 }
 
+// Main function
+// Takes a string and parses it using JSON file rules to find useful characteristics.
 const parsePhysical = function (clause) {
     var evaluatedMatches = {};
     let matchedRules = findMatches(clause);
@@ -14,13 +17,13 @@ const parsePhysical = function (clause) {
 
     if (_.size(evaluatedMatches) > 0) {
         const parsedObject = {clause: clause, evaluatedMatches: evaluatedMatches};
-        console.log(JSON.stringify(parsedObject));
         return parsedObject;
     } else {
         return false;
     }
 };
 
+// Finds all the rules that match the text.
 function findMatches (clause) {
     let matchedRules = [];
 
@@ -43,10 +46,9 @@ function findMatches (clause) {
     return matchedRules;
 }
 
+// Goes through the matches, merges repeated tokens, and pulls in token names and confidence data from rules.
 function evaluateMatches (matchedRules) {
-    let valuesList = [];
-    let valuesData = [];
-    let evaluatedMatches = {};
+    let evaluatedMatches = [];
 
     for (let key in matchedRules) {
         let rule = matchedRules[key].rule;
@@ -59,6 +61,8 @@ function evaluateMatches (matchedRules) {
             matchDataList.push(obj);
         }
 
+        let valuesList = [];
+        let valuesData = [];
         for (let key in values) {
             if (valuesList.indexOf(values[key])) {
                 valuesList.push(values[key]);
@@ -67,7 +71,8 @@ function evaluateMatches (matchedRules) {
                 valuesData[key]['tokenConfidence'] += matchDataList[key].tokenConfidence;
             }
         }
-        evaluatedMatches = {rule: rule, matchedTokens: valuesData};
+        let obj = {rule: rule, matchedTokens: valuesData};
+        evaluatedMatches.push(obj);
     }
     return evaluatedMatches;
 }
