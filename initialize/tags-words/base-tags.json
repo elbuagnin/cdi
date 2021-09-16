@@ -11,5 +11,6 @@
    "Archetype":"Actor",
    "Occupation":"Actor",
    "FullName":"Person",
-   "Characteristic": "Adjective"
+   "Characteristic": "Adjective",
+   "Color": "Adjective"
 }
