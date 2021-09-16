@@ -1,9 +1,7 @@
 {
-    "PersonIsActor": {"search": "(#Principal|#Pronoun|who)+ .+ #Copula #Determiner? #Adjective? (#Actor|#Occupation|#Archetype)", "skill": "(#Actor|#Occupation)+"},
-    "PersonIsNotActor": {"search": "(#Principal|#Pronoun|who)+ .+ #copula #Determiner? #Adjective? #Negative+ #Noun+", "skill": "!#Noun"},
-    "PersonFights": {"search": "(#Principal|#Pronoun|who)+ (fights|kills|battles)", "skill": "#FighterType"},
-    "Actor": {"search": "#Actor", "skill": "#Actor"},
-    "Activity": {"search": "#Activity", "skill": "#Activity"},
-    "andNoun": {"search": "#Noun and (a|an) #Adjective? [<skill>#Noun]", "skill": "#Noun"},
-    "FollowerOfDeity": {"search": "(follower|priest|priestess||disciple) of #Deity", "skill": "#PriestType"}
+    "PersonIsActor": {"search": "(#Principal|#Pronoun|who)+ .+ #Copula #Determiner? #Adjective? [<occupation>(#Actor|#Occupation|#Archetype)]", "matchData": {"occupation": 75}},
+    "PersonIsNotActor": {"search": "(#Principal|#Pronoun|who)+ .+ #copula #Determiner? #Adjective? #Negative+ [<notSkill>#Noun+]", "matchData": {"notSkill": 60}},
+    "PersonFights": {"search": "(#Principal|#Pronoun|who)+ [<skill>(fights|kills|battles)]", "matchData": {"skill": 60}},
+    "andNoun": {"search": "#Noun and (a|an) #Adjective? [<skill>#Noun]", "matchData": {"skill": 30}},
+    "FollowerOfDeity": {"search": "[<skill>(follower|priest|priestess||disciple)] of #Deity", "matchData": {"skill": 60}}
 }

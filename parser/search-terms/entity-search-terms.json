@@ -1,4 +1,4 @@
 {
-    "AnAgeSpeciesGender": {"search": "(a|an) #Age #Species #Gender", "species": "#Noun"},
-    "YearsOld": {"search": "#Cardinal years old", "age": "#Number"}
+    "AnAgeSpeciesGender": {"search": "(a|an) [<age>#Age] [<species>#Species] [<gender>#Gender]", "matchData": {"age": 75, "species": 75, "gender": 75}},
+    "YearsOld": {"search": "[<age>#Cardinal] years old", "matchData": {"age": 80}}
 }

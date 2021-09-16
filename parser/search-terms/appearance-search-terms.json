@@ -1,8 +1,8 @@
 {
-    "HairIsColor": {"search": "hair #Copula #Adjective?+ #Noun+", "appearance": "#Noun+"},
-    "HairVerb": {"search": "hair (#Verb && !#Copula?)+ (#Preposition?|#Determiner?)?+ #Adjective?+ #Noun+", "appearance": "#Adjective?+ #Noun", "fixme": true},
-    "WearsANoun": {"search": "wears (a|an) #adjective?+ #Noun+", "wearing": "#Noun+"},
-    "WearingANoun": {"search": "wearing (a|an) #adjective?+ #Noun+", "wearing": "#Noun+"},
-    "AdornedWithANoun": {"search": "adorned with (a|an) #adjective?+ #Noun+", "wearing": "#Noun+"},
-    "LookLike": {"search": "(look|looks) like (a|an) #adjective?+ #Noun+", "simile": "#Noun+"}
+    "HairIsColor": {"search": "hair #Copula #Adjective?+ [<hairColor>#Noun+]", "matchData": {"hairColor": 40}},
+    "HairVerb": {"search": "hair (#Verb && !#Copula?)+ (#Preposition?|#Determiner?)?+ #Adjective?+ [<hairDescription>#Noun+]", "matchData": {"hairDescription": 60}, "fixme": true},
+    "WearsANoun": {"search": "wears (a|an) #adjective?+ [<clothing>#Noun+]", "matchData": {"clothing": 70}},
+    "WearingANoun": {"search": "wearing (a|an) #adjective?+ [<clothing>#Noun+]", "matchData": {"clothing": 75}},
+    "AdornedWithANoun": {"search": "adorned with (a|an) #adjective?+ [<accessory>#Noun+]", "matchData": {"accessory": 70}},
+    "LookLike": {"search": "(look|looks) like (a|an) #adjective?+ [<looksLike>#Noun+]", "matchData": {"looksLike": 80}}
 }
