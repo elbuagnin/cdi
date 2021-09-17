@@ -4,14 +4,16 @@ const btags = require('./tags-words/base-tags');
 const etags = require('./tags-words/environment-tags');
 const gtags = require('./tags-words/genre-tags');
 const bwords = require('./tags-words/base-words');
-const ewords = require('./tags-words/environment-words.json');
+const ewords = require('./tags-words/environment-words');
 const gwords = require('./tags-words/genre-words');
 const swords = require('./tags-words/setting-words');
-const allTags = Object.assign(btags, etags, gtags);
-const allWords = Object.assign(correctives, bwords, ewords, gwords, swords);
+const colors = require('./tags-words/colors');
 
+const allTagData = [correctives, btags, etags, gtags];
+const allWordData = [bwords, ewords, gwords, swords, colors];
 
 module.exports = nlp.extend((Doc, world) => {
+
     const formatTag = function (tag) {
         let fTag = {};
         fTag = {isA: tag};
@@ -19,23 +21,29 @@ module.exports = nlp.extend((Doc, world) => {
     };
 
     Doc.prototype.loadCDITags = function() {
-        let obj = {};
-        Object.keys(allTags).forEach(k => {
-            let tag = formatTag(allTags[k]);
-            obj[k] = tag;
-        });
+        //let allTags = loadTagData();
+        allTagData.forEach(dataSet => {
+            let obj = {};
+            Object.keys(dataSet).forEach(k => {
+                let tag = formatTag(dataSet[k]);
+                obj[k] = tag;
+            });
 
-        world.addTags(obj);
+            world.addTags(obj);
+        });
     };
 
     Doc.prototype.loadCDIWords = function() {
-        for (let i in Object.keys(allWords)) {
-            let key = Object.keys(allWords)[i];
-            let value = Object.values(allWords)[i];
-            let newWord = {};
-            newWord[key] = value;
+        //let allWords = loadWordData();
+        allWordData.forEach(dataSet => {
+            for (let i in Object.keys(dataSet)) {
+                let key = Object.keys(dataSet)[i];
+                let value = Object.values(dataSet)[i];
+                let newWord = {};
+                newWord[key] = value;
 
-            world.addWords(newWord);
-        }
+                world.addWords(newWord);
+            }
+        });
     };
 });
