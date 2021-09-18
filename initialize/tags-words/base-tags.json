@@ -8,9 +8,10 @@
    "Species":"Noun",
    "Age": "Comparable",
    "Gender": "Noun",
+   "BodyType": "Comparable",
    "Archetype":"Actor",
    "Occupation":"Actor",
    "FullName":"Person",
    "Characteristic": "Adjective",
-   "Color": "Adjective"
+   "Color": "Comparable"
 }

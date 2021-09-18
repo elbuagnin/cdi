@@ -7,10 +7,11 @@ const bwords = require('./tags-words/base-words');
 const ewords = require('./tags-words/environment-words');
 const gwords = require('./tags-words/genre-words');
 const swords = require('./tags-words/setting-words');
-const colors = require('./tags-words/colors');
+const colors = require('./tags-words/base-words/colors');
+const bodytypes = require('./tags-words/base-words/body-types');
 
 const allTagData = [correctives, btags, etags, gtags];
-const allWordData = [bwords, ewords, gwords, swords, colors];
+const allWordData = [bwords, ewords, gwords, swords, colors, bodytypes];
 
 module.exports = nlp.extend((Doc, world) => {
 
