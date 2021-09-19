@@ -1,8 +1,21 @@
 {
-    "HairIsColor": {"search": "hair #Copula #Adjective?+ [<hairColor>#Noun+]", "matchData": {"hairColor": 40}},
+    "HairIsColor": {"search": "hair #Copula #Adjective?+ [<hairColor>#Color+]", "matchData": {"hairColor": 40}},
+
+    "ColorHair": {"search": "[<hairColor>#Color] hair", "matchData": {"hairColor": 40}},
+
     "HairVerb": {"search": "hair (#Verb && !#Copula?)+ (#Preposition?|#Determiner?)?+ #Adjective?+ [<hairDescription>#Noun+]", "matchData": {"hairDescription": 60}, "fixme": true},
+
+    "ColorEyes": {"search": "[<eyeColor>#Color] eyes", "matchData": {"eyeColor": 60}},
+
+    "EyesLikeNoun": {"search": "Eyes like #Adjective?+ [<eyeColor>#Noun #Noun?+]", "matchData": {"eyeColor": 50}, "simile": true},
+
     "WearsANoun": {"search": "wears (a|an) #adjective?+ [<clothing>#Noun+]", "matchData": {"clothing": 70}},
+
     "WearingANoun": {"search": "wearing (a|an) #adjective?+ [<clothing>#Noun+]", "matchData": {"clothing": 75}},
+
     "AdornedWithANoun": {"search": "adorned with (a|an) #adjective?+ [<accessory>#Noun+]", "matchData": {"accessory": 70}},
-    "LookLike": {"search": "(look|looks) like (a|an) #adjective?+ [<looksLike>#Noun+]", "matchData": {"looksLike": 80}}
+
+    "LookLike": {"search": "(look|looks) like (a|an) #adjective?+ [<looksLike>#Noun+]", "matchData": {"appearance": 80}, "simile": true},
+
+    "BodyType": {"search": "[<bodyType>#BodyType]", "matchData": {"bodyType": 60}}
 }
