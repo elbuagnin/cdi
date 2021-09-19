@@ -16,7 +16,7 @@ const parseSkills = function (clause) {
     }
 
     if (_.size(evaluatedMatches) > 0) {
-        const parsedObject = {clause: clause, evaluatedMatches: evaluatedMatches};
+        const parsedObject = {parser: 'skill', clause: clause, evaluatedMatches: evaluatedMatches};
         return parsedObject;
     } else {
         return false;
