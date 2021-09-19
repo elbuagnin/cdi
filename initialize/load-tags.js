@@ -9,11 +9,14 @@ const gwords = require('./tags-words/genre-words');
 const swords = require('./tags-words/setting-words');
 const colors = require('./tags-words/base-words/colors');
 const units = require('./tags-words/base-words/units');
-const bodytypes = require('./tags-words/base-words/body-types');
+const bodytypes = require('./tags-words/appearance-words/body-types');
+const bodyparts = require('./tags-words/appearance-words/body-parts');
+const hairstyles = require('./tags-words/appearance-words/hair-styles');
+const facialhair = require('./tags-words/appearance-words/facial-hair.json');
 const sneakywords = require('./tags-words/archetype-words/sneaky-words');
 
 const allTagData = [correctives, btags, etags, gtags];
-const allWordData = [bwords, ewords, gwords, swords, colors, units, bodytypes, sneakywords];
+const allWordData = [correctives, bwords, ewords, gwords, swords, colors, units, bodytypes, bodyparts, hairstyles, facialhair, sneakywords];
 
 module.exports = nlp.extend((Doc, world) => {
 

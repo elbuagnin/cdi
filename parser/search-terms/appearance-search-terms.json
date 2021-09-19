@@ -1,11 +1,21 @@
 {
-    "HairIsColor": {"search": "hair #Copula #Adjective?+ [<hairColor>#Color+]", "matchData": {"hairColor": 40}},
+    "HairIsColor": {"search": "(hair|coiffure|mane|tresses|wig) #Copula #Adjective?+ [<hairColor>#Color?+ #Color]", "matchData": {"hairColor": 40}},
 
-    "ColorHair": {"search": "[<hairColor>#Color] hair", "matchData": {"hairColor": 40}},
+    "ColorHair": {"search": "[<hairColor>#Color?+ #Color] (hair|coiffure|mane|tresses|wig)", "matchData": {"hairColor": 40}},
+
+    "HairShoulderLength": {"search": "(hair|coiffure|mane|tresses|wig) (#Copula|#Preposition)? [<hairLength>shoulder length]", "matchData": {"hairLength": 80}},
+
+    "AdjectiveHair": {"search": "[<hairType>(#Adjective && !#Color)?+ #Adjective && !#Color] (hair|coiffure|mane|tresses|wig)", "matchData": {"hairType": 60}},
+
+    "HairStyle": {"search": "(hair|coiffure|mane|tresses|wig) in #Noun?+ [<hairStyle>#HairStyle]", "matchData": {"hairStyle": 60}, "fixme": true},
+
+    "ShoulderLengthHairStyle": {"search": "[<hairLength>shoulder length] [<hairStyle>#HairStyle]", "matchData": {"hairLength": 90, "hairStyle": 80}},
 
     "HairVerb": {"search": "hair (#Verb && !#Copula?)+ (#Preposition?|#Determiner?)?+ #Adjective?+ [<hairDescription>#Noun+]", "matchData": {"hairDescription": 60}, "fixme": true},
 
-    "ColorEyes": {"search": "[<eyeColor>#Color] eyes", "matchData": {"eyeColor": 60}},
+    "FacialHair": {"search": "[<facialHair>#FacialHair]", "matchData": {"facialHair": 65}},
+
+    "ColorEyes": {"search": "[<eyeColor>#Color?+ #Color] (eye|eyes)", "matchData": {"eyeColor": 60}},
 
     "EyesLikeNoun": {"search": "Eyes like #Adjective?+ [<eyeColor>#Noun #Noun?+]", "matchData": {"eyeColor": 50}, "simile": true},
 
@@ -17,5 +27,11 @@
 
     "LookLike": {"search": "(look|looks) like (a|an) #adjective?+ [<looksLike>#Noun+]", "matchData": {"appearance": 80}, "simile": true},
 
-    "BodyType": {"search": "[<bodyType>#BodyType]", "matchData": {"bodyType": 60}}
+    "BodyType": {"search": "[<bodyType>#BodyType] !#Noun?", "matchData": {"bodyType": 20}},
+
+    "BodyTypeBody": {"search": "[<bodyType>]#BodyType (body|frame|torso)", "matchData": {"bodyType": 60}},
+
+    "PersonIsBodyType": {"search": "(#Principal||#Pronoun) #Copula #Adjective?+ [<bodyType>#BodyType]", "matchData": {"bodyType": 80}},
+
+    "AdjectiveBodyPart": {"search": "[<description>#Adjective?+ (and|but)? #Adjective] [<bodyPart>#BodyPart]", "matchData": {"description": 90, "bodyPart": 80}}
 }
