@@ -31,7 +31,7 @@ function findMatches (clause) {
         let searchTerm = physicalSearchTerms[key].search;
         let matchData = physicalSearchTerms[key].matchData;
 
-        if (clause.match(searchTerm).text() !== '') {
+        if (clause.match(searchTerm).found) {
             let matchedValues = [];
             let matches = clause.match(searchTerm).groups();
             for (let match in matches) {
