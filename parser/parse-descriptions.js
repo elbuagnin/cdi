@@ -13,10 +13,14 @@ module.exports = async function parseDescriptions(doc) {
         let clauses = sentence.clauses();
         clauses.forEach(clause => {
 
-            skillParser.parseSkills(clause);
-            entityParser.parseEntity(clause);
-            physicalParser.parsePhysical(clause);
-            appearanceParser.parseAppearance(clause);
+            let skills = skillParser.parseSkills(clause);
+            if (skills) {console.log(skills);}
+            let entity = entityParser.parseEntity(clause);
+            if (entity) {console.log(entity);}
+            let physical = physicalParser.parsePhysical(clause);
+            if (physical) {console.log(physical);}
+            let appearance = appearanceParser.parseAppearance(clause);
+            if (appearance) {console.log(appearance);}
         });
     });
 };
