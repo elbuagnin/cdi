@@ -6,6 +6,19 @@ const appearanceParser =require('./parsers/appearance-parser');
 module.exports = async function parseDescriptions(doc) {
     doc.debug();
 
+    function displayMatchInfo (matchData) {
+        console.log('\n\x1b[1m' + matchData.parser + '\x1b[0m');
+        console.log(matchData.clause.debug());
+
+        matchData.evaluatedMatches.forEach(match => {
+            console.log('\x1b[34m\nRule: ' + match.rule + '\x1b[0m');
+
+            match.matchedTokens.forEach(token => {
+                console.log(token);
+            });
+        });
+    }
+
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
     let sentences = doc.sentences();
     sentences.forEach(sentence => {
@@ -14,13 +27,13 @@ module.exports = async function parseDescriptions(doc) {
         clauses.forEach(clause => {
 
             let skills = skillParser.parseSkills(clause);
-            if (skills) {console.log(skills);}
+            if (skills) {displayMatchInfo(skills);}
             let entity = entityParser.parseEntity(clause);
-            if (entity) {console.log(entity);}
+            if (entity) {displayMatchInfo(entity);}
             let physical = physicalParser.parsePhysical(clause);
-            if (physical) {console.log(physical);}
+            if (physical) {displayMatchInfo(physical);}
             let appearance = appearanceParser.parseAppearance(clause);
-            if (appearance) {console.log(appearance);}
+            if (appearance) {displayMatchInfo(appearance);}
         });
     });
 };
