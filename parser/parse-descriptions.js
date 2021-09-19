@@ -3,7 +3,7 @@ const entityParser =require('./parsers/entity-parser');
 const physicalParser =require('./parsers/physical-parser');
 const appearanceParser =require('./parsers/appearance-parser');
 
-module.exports = async function parseDescriptions(doc) {
+module.exports = function parseDescriptions(doc) {
     doc.debug();
 
     function displayMatchInfo (matchData) {
@@ -25,7 +25,6 @@ module.exports = async function parseDescriptions(doc) {
 
         let clauses = sentence.clauses();
         clauses.forEach(clause => {
-
             let skills = skillParser.parseSkills(clause);
             if (skills) {displayMatchInfo(skills);}
             let entity = entityParser.parseEntity(clause);
