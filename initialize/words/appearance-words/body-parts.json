@@ -7,6 +7,8 @@
     "arch of the foot": "BodyPart",
     "ass": "BodyPart",
     "backside": "BodyPart",
+    "belly": "BodyPart",
+    "belly button": "BodyPart",
     "bicep": "BodyPart",
     "biceps": "BodyPart",
     "bone": "BodyPart",
