@@ -1,13 +1,11 @@
+const fs = require ('../helpers/filesystem');
 const parser =require('./parser');
-const rulePath = './search-rules/';
+const rulePath = './parser/search-rules/';
 
-module.exports = function parseDescriptions(doc) {
+module.exports = async function parseDescriptions(doc) {
     doc.debug();
 
-    const skillRules = loadRules ('skill-search-terms');
-    const entityRules = loadRules ('entity-search-terms');
-    const physicalRules = loadRules ('physical-search-terms');
-    const appearanceRules = loadRules ('appearance-search-terms');
+    var ruleSets = await loadRules(rulePath);
 
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
     let sentences = doc.sentences();
@@ -16,29 +14,25 @@ module.exports = function parseDescriptions(doc) {
         let clauses = sentence.clauses();
         clauses.forEach(clause => {
 
-            let skills = parser.parse(clause, skillRules);
-            if (skills) {displayMatchInfo(skills);}
-
-            let entity = parser.parse(clause, entityRules);
-            if (entity) {displayMatchInfo(entity);}
-
-            let physical = parser.parse(clause, physicalRules);
-            if (physical) {displayMatchInfo(physical);}
-
-            let appearance = parser.parse(clause, appearanceRules);
-            if (appearance) {displayMatchInfo(appearance);}
+            for (let key = 0; key < ruleSets.length; key++) {
+                let characteristics = parser.parse(clause, ruleSets[key]);
+                if (characteristics) {displayMatchInfo(characteristics);}
+            }
         });
     });
 
-    function loadRules (file) {
-        let fileData = '';
-        let searchRules = [];
-        fileData = require (rulePath + file);
-        for (let key in Object.keys(fileData)) {
-            searchRules.push(Object.values(fileData)[key]);
+    async function loadRules (dir) {
+        let rules = [];
+        const fileType = '.json';
+        for await (const file of fs.getFiles(dir, fileType)) {
+            let searchRules = [];
+            let fileData = await require (file);
+            for (let key in Object.keys(fileData)) {
+                searchRules.push(Object.values(fileData)[key]);
+            }
+            rules.push(searchRules);
         }
-
-        return searchRules;
+        return rules;
     }
 
     function displayMatchInfo (matchData) {
