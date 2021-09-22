@@ -1,5 +1,6 @@
 const http = require('http');
 const fs = require('fs');
+var text = '';
 
 const requestListener = function (req, res) {
     res.writeHead(200);
@@ -12,7 +13,6 @@ server.listen(8080);
 
 async function test() {
     const name = 'Dax';
-    const text = '';
 
     fs.readFile('./sample.txt', 'utf8', (err, data) => {
          if (err) {
