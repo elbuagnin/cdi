@@ -1,22 +1,14 @@
-const skillTermData = require('../search-terms/skill-search-terms');
-var skillSearchTerms = [];
-
-// Load the Parsing rules
-for (let key in Object.keys(skillTermData)) {
-    skillSearchTerms.push(Object.values(skillTermData)[key]);
-}
-
 // Main function
 // Takes a string and parses it using JSON file rules to find useful characteristics.
-const parseSkills = function (clause) {
+const parse = function (segment, searchRules) {
     var evaluatedMatches = {};
-    let matchedRules = findMatches(clause);
+    let matchedRules = findMatches(segment, searchRules);
     if (matchedRules.length !== 0) {
         evaluatedMatches = evaluateMatches(matchedRules);
     }
 
     if (_.size(evaluatedMatches) > 0) {
-        const parsedObject = {parser: 'skill', clause: clause, evaluatedMatches: evaluatedMatches};
+        const parsedObject = {segment: segment, evaluatedMatches: evaluatedMatches};
         return parsedObject;
     } else {
         return false;
@@ -24,23 +16,30 @@ const parseSkills = function (clause) {
 };
 
 // Finds all the rules that match the text.
-function findMatches (clause) {
+function findMatches (segment, searchRules) {
     let matchedRules = [];
 
-    for (let key in skillSearchTerms) {
-        let searchTerm = skillSearchTerms[key].search;
-        let matchData = skillSearchTerms[key].matchData;
+    for (let key in searchRules) {
+        let matchData = searchRules[key].matchData;
+        let searchTerm = undefined;
 
-        if (clause.match(searchTerm).text() !== '') {
-            let matchedValues = [];
-            let matches = clause.match(searchTerm).groups();
-            for (let match in matches) {
-                let matchTerm = '';
-                matchTerm = matches[match].text();
-                matchedValues.push(matchTerm);
+        if (searchRules[key].search) {
+            searchTerm = searchRules[key].search;
+            if (searchTerm.regex) {
+                searchTerm.regex = new RegExp(searchTerm.regex, 'g'); // Have to convert from JSON
             }
-            let obj = {rule: searchTerm, matchedValues: matchedValues, matchData: matchData};
-            matchedRules.push(obj);
+            if (segment.match(searchTerm).found) {
+                let matchedValues = [];
+                let matches = segment.match(searchTerm).groups();
+                for (let match in matches) {
+                    let matchTerm = '';
+                    matchTerm = matches[match].text();
+                    matchedValues.push(matchTerm);
+                }
+
+                let obj = {rule: searchTerm, matchedValues: matchedValues, matchData: matchData};
+                matchedRules.push(obj);
+            }
         }
     }
     return matchedRules;
@@ -77,4 +76,4 @@ function evaluateMatches (matchedRules) {
     return evaluatedMatches;
 }
 
-module.exports = {parseSkills};
+module.exports = {parse};
