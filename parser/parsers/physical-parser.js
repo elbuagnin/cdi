@@ -30,11 +30,12 @@ function findMatches (clause) {
     for (let key in physicalSearchTerms) {
         let matchData = physicalSearchTerms[key].matchData;
         let searchTerm = undefined;
-        let regexTerm = undefined;
 
         if (physicalSearchTerms[key].search) {
             searchTerm = physicalSearchTerms[key].search;
-
+            if (searchTerm.regex) {
+                searchTerm.regex = new RegExp(searchTerm.regex, '');
+            }
             if (clause.match(searchTerm).found) {
                 let matchedValues = [];
                 let matches = clause.match(searchTerm).groups();
@@ -47,8 +48,6 @@ function findMatches (clause) {
                 let obj = {rule: searchTerm, matchedValues: matchedValues, matchData: matchData};
                 matchedRules.push(obj);
             }
-        } else if (physicalSearchTerms[key].regex) {
-            regexTerm = physicalSearchTerms.regex;
         }
     }
     return matchedRules;

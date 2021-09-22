@@ -17,6 +17,8 @@
 
     "ColorEyes": {"search": "[<eyeColor>#Color?+ #Color] (eye|eyes)", "matchData": {"eyeColor": 60}},
 
+    "NounColorEyes": {"search": "[<eyeColor>#Noun #Color] (eye|eyes)", "matchData": {"eyeColor": 60}},
+
     "EyesLikeNoun": {"search": "Eyes like #Adjective?+ [<eyeColor>#Noun #Noun?+]", "matchData": {"eyeColor": 50}, "simile": true},
 
     "WearsANoun": {"search": "wears (a|an) #adjective?+ [<clothing>#Noun+]", "matchData": {"clothing": 70}},
