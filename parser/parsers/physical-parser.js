@@ -28,19 +28,26 @@ function findMatches (clause) {
     let matchedRules = [];
 
     for (let key in physicalSearchTerms) {
-        let searchTerm = physicalSearchTerms[key].search;
         let matchData = physicalSearchTerms[key].matchData;
+        let searchTerm = undefined;
 
-        if (clause.match(searchTerm).found) {
-            let matchedValues = [];
-            let matches = clause.match(searchTerm).groups();
-            for (let match in matches) {
-                let matchTerm = '';
-                matchTerm = matches[match].text();
-                matchedValues.push(matchTerm);
+        if (physicalSearchTerms[key].search) {
+            searchTerm = physicalSearchTerms[key].search;
+            if (searchTerm.regex) {
+                searchTerm.regex = new RegExp(searchTerm.regex, '');
             }
-            let obj = {rule: searchTerm, matchedValues: matchedValues, matchData: matchData};
-            matchedRules.push(obj);
+            if (clause.match(searchTerm).found) {
+                let matchedValues = [];
+                let matches = clause.match(searchTerm).groups();
+                for (let match in matches) {
+                    let matchTerm = '';
+                    matchTerm = matches[match].text();
+                    matchedValues.push(matchTerm);
+                }
+
+                let obj = {rule: searchTerm, matchedValues: matchedValues, matchData: matchData};
+                matchedRules.push(obj);
+            }
         }
     }
     return matchedRules;

@@ -2,5 +2,8 @@
     "#lbs": {"search":"[<weight>#Cardinal] [<unit>(lbs|pounds)]", "matchData": {"weight": 25, "unit": 100}},
     "Weight#": {"search":"weight [<weight>#Cardinal]", "matchData": {"weight": 50}},
     "Height#'##": {"search":"height [<height>/[0-9]'[0-9]{2}/]", "matchData": {"height": 50}},
-    "HeightFeet": {"search":"[<height>#Cardinal] [<unit>(feet|ft)]", "matchData": {"height": 20}}
+    "HeightFeet": {"search":"[<height>#Cardinal] [<unit>(feet|ft)]", "matchData": {"height": 20}},
+
+
+    "TestJSON": {"search":{"regex":"cloak"}, "matchData": {"clothing": 80}}
 }
