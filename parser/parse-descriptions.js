@@ -48,10 +48,15 @@ module.exports = async function parseDescriptions(doc) {
 
         matchData.evaluatedMatches.forEach(match => {
             console.log('\x1b[34m\nRule: ' + match.rule + '\x1b[0m');
+            console.log('RuleType: ' + match.ruleType);
 
-            match.matchedTokens.forEach(token => {
-                console.log(token);
-            });
+            if (match.ruleType === 'search')   {
+                match.matchedTokens.forEach(token => {
+                    console.log(token);
+                });
+            } else if (match.ruleType === 'count') {
+                console.log(match.matchData);
+            }
         });
     }
 };
