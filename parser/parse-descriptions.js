@@ -1,4 +1,5 @@
 const fs = require ('../helpers/filesystem');
+const path = require ('path');
 const parser =require('./parser');
 const rulePath = './parser/search-rules/';
 
@@ -14,9 +15,13 @@ module.exports = async function parseDescriptions(doc) {
         let clauses = sentence.clauses();
         clauses.forEach(clause => {
 
-            for (let key = 0; key < ruleSets.length; key++) {
-                let characteristics = parser.parse(clause, ruleSets[key]);
-                if (characteristics) {displayMatchInfo(characteristics);}
+            // for (let key = 0; key < ruleSets.length; key++) {
+            for (let name in ruleSets) {
+                let characteristics = parser.parse(clause, ruleSets[name]);
+                if (characteristics) {
+                    Object.assign(characteristics, {ruleSet: name});
+                    displayMatchInfo(characteristics);
+                }
             }
         });
     });
@@ -25,18 +30,20 @@ module.exports = async function parseDescriptions(doc) {
         let rules = [];
         const fileType = '.json';
         for await (const file of fs.getFiles(dir, fileType)) {
+            let fileName = path.basename(file);
+            let ruleSetName = fileName.substring(0, fileName.indexOf('-'));
             let searchRules = [];
             let fileData = await require (file);
             for (let key in Object.keys(fileData)) {
                 searchRules.push(Object.values(fileData)[key]);
             }
-            rules.push(searchRules);
+            rules[ruleSetName] = searchRules;
         }
         return rules;
     }
 
     function displayMatchInfo (matchData) {
-        console.log('\n\x1b[1m' + matchData.parser + '\x1b[0m');
+        console.log('\n\x1b[1m' + matchData.ruleSet + '\x1b[0m');
         console.log(matchData.segment.debug());
 
         matchData.evaluatedMatches.forEach(match => {
