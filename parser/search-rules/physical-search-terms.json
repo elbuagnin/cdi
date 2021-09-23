@@ -5,5 +5,5 @@
     "HeightFeet": {"search":"[<height>#Cardinal] [<unit>(feet|ft)]", "matchData": {"height": 20}},
 
 
-    "TestJSON": {"search":{"regex":"cloak"}, "matchData": {"clothing": 80}}
+    "TestJSON": {"search":{"word":"cloak"}, "matchData": {"clothing": 80}}
 }

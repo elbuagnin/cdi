@@ -3,5 +3,7 @@
     "PersonIsNotActor": {"search": "(#Principal|#Pronoun|who)+ .+ #copula #Determiner? #Adjective? #Negative+ [<notSkill>#Noun+]", "matchData": {"notSkill": 60}},
     "PersonFights": {"search": "(#Principal|#Pronoun|who)+ [<skill>(fights|kills|battles)]", "matchData": {"skill": 60}},
     "andNoun": {"search": "#Noun and (a|an) #Adjective? [<skill>#Noun]", "matchData": {"skill": 30}},
-    "FollowerOfDeity": {"search": "[<skill>(follower|priest|priestess||disciple)] of #Deity", "matchData": {"skill": 60}}
+    "FollowerOfDeity": {"search": "[<skill>(follower|priest|priestess||disciple)] of #Deity", "matchData": {"skill": 60}},
+
+    "RogueWordsCount": {"count": "#RogueWord?+ #RogueWord", "matchData": {"Archetype":"RogueType"} }
 }

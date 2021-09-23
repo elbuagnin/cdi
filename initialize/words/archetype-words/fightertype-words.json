@@ -1,0 +1,10 @@
+{
+    "armed": "CombatWord",
+    "armor": "CombatWord",
+    "attack": "CombatWord",
+    "beweaponed": "CombatWord",
+    "defend": "CombatWord",
+    "outfight": "CombatWord",
+    "shield": "CombatWord",
+    "weapon": "CombatWord"
+}

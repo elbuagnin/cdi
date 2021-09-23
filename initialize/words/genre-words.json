@@ -10,6 +10,7 @@
     "rogue":"RogueType",
     "thief":"RogueType",
     "cutpurse":"RogueType",
+    "con artist":"RogueType",
     "pickpocket":"RogueType",
     "picklock":"RogueType",
     "alleybasher":"RogueType",
