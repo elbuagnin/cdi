@@ -11,6 +11,9 @@ module.exports = async function parseDescriptions(doc) {
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
     let sentences = doc.sentences();
     sentences.forEach(sentence => {
+        console.log('##########################################################');
+        console.log('Sentence: ' + sentence.text() );
+        getSentenceStructure (sentence);
 
         let clauses = sentence.clauses();
         clauses.forEach(clause => {
@@ -25,6 +28,43 @@ module.exports = async function parseDescriptions(doc) {
             }
         });
     });
+
+    function getSentenceStructure (sentence) {
+        let subjects = sentence.subjects();
+        let verbs = sentence.verbs();
+        let nouns = sentence.nouns();
+
+        // subjects
+        if (subjects) {
+            subjects.forEach(subject => {
+                console.log(subject.text());
+            });
+        }
+        // Break up the sentence into words so we can easily determine each word position.
+        let termList = sentence.termList();
+        let words = [];
+        termList.map(term => {
+            words.push(term.text);
+        });
+
+        // Creating a bare-bones structure of nouns verbs.
+        let structure = [];
+        let bareBones = [];
+
+        verbs.forEach (verb => {
+            let position = words.indexOf(verb.text());
+            structure[position] = 'Verb';
+            bareBones[position] = verb.text();
+        });
+
+        nouns.forEach (noun => {
+            let position = words.indexOf(noun.text());
+            structure[position] = 'Noun';
+            bareBones[position] = noun.text();
+        });
+        console.log(structure);
+        console.log(bareBones);
+    }
 
     async function loadRules (dir) {
         let rules = [];
