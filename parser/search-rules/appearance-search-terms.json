@@ -27,7 +27,7 @@
 
     "AdornedWithANoun": {"search": "adorned with (a|an) #adjective?+ [<accessory>#Noun+]", "matchData": {"accessory": 70}},
 
-    "Clothing": {"search": "#Clothing", "matchData": {"clothing": 40}},
+    "Clothing": {"search": "[<clothing>#Clothing]", "matchData": {"clothing": 40}},
 
     "LookLike": {"search": "(look|looks) like (a|an) #adjective?+ [<looksLike>#Noun+]", "matchData": {"appearance": 80}, "simile": true},
 

@@ -1,6 +1,7 @@
 {
     "apron":"Clothing",
     "belt":"Clothing",
+    "utility belt":"Clothing",
     "beret":"Clothing",
     "boots":"Clothing",
     "bra":"Clothing",
@@ -22,6 +23,7 @@
     "pants":"Clothing",
     "pullover":"Clothing",
     "robe":"Clothing",
+    "robes":"Clothing",
     "sash":"Clothing",
     "sandels":"Clothing",
     "scarf":"Clothing",
