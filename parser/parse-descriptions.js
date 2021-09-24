@@ -27,8 +27,11 @@ module.exports = async function parseDescriptions(doc) {
             }
         });
     });
-
-    return allCharacteristics;
+    if (allCharacteristics) {
+        return allCharacteristics;
+    } else {
+        return false;
+    }
 
     async function loadRules (dir) {
         let rules = [];
