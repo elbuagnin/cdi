@@ -5,7 +5,7 @@ const rulePath = './parser/search-rules/';
 
 module.exports = async function parseDescriptions(doc) {
     doc.debug();
-
+    var allCharacteristics = [];
     var ruleSets = await loadRules(rulePath);
 
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
@@ -21,11 +21,14 @@ module.exports = async function parseDescriptions(doc) {
                 let characteristics = parser.parse(clause, ruleSets[name]);
                 if (characteristics) {
                     Object.assign(characteristics, {ruleSet: name});
+                    allCharacteristics.push(characteristics);
                     displayMatchInfo(characteristics);
                 }
             }
         });
     });
+
+    return allCharacteristics;
 
     async function loadRules (dir) {
         let rules = [];
