@@ -1,31 +1,38 @@
 const fs = require ('../helpers/filesystem');
 const path = require ('path');
-const parser =require('./parser');
+const parser = require('./parser');
 const rulePath = './parser/search-rules/';
+const grammar = require ('../methods/grammar');
 
-module.exports = async function parseDescriptions(doc) {
-    doc.debug();
+module.exports = async function parseDescriptions(description) {
     var allCharacteristics = [];
     var ruleSets = await loadRules(rulePath);
 
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
-    let sentences = doc.sentences();
+    let paragraph = new grammar(description);
+    let sentences = paragraph.getSentences();
+
     sentences.forEach(sentence => {
         console.log('##########################################################');
-        console.log('Sentence: ' + sentence.text() );
-
-        let clauses = sentence.clauses();
-        clauses.forEach(clause => {
-
-            for (let name in ruleSets) {
-                let characteristics = parser.parse(clause, ruleSets[name]);
-                if (characteristics) {
-                    Object.assign(characteristics, {ruleSet: name});
-                    allCharacteristics.push(characteristics);
-                    displayMatchInfo(characteristics);
-                }
-            }
-        });
+        console.log('Sentence: ' + sentence );
+        sentence = new grammar(sentence);
+        let complete = sentence.isCompleteSentence();
+        let subject = sentence.getSubject();
+        let mainClause = sentence.getMainClause();
+        let mainVerb = sentence.getMainVerb();
+        console.log(complete + '\n' + JSON.stringify(mainClause) + '\n' + subject + ' : ' + mainVerb);
+        // let clauses = sentence.clauses();
+        // clauses.forEach(clause => {
+        //
+        //     for (let name in ruleSets) {
+        //         let characteristics = parser.parse(clause, ruleSets[name]);
+        //         if (characteristics) {
+        //             Object.assign(characteristics, {ruleSet: name});
+        //             allCharacteristics.push(characteristics);
+        //             displayMatchInfo(characteristics);
+        //         }
+        //     }
+        // });
     });
     if (allCharacteristics) {
         return allCharacteristics;
