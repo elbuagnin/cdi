@@ -1,5 +1,4 @@
 import nlp from 'compromise';
-import './extend-nlp.js';
 import * as mfs from '../helpers/filesystem.js';
 const baseDir = './initialize/';
 const tagDir = baseDir + 'tags/';
