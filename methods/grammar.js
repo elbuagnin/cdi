@@ -1,18 +1,13 @@
-// import {unified} from 'unified';
-// import {stream} from 'unified-stream';
-// import retextEnglish from 'retext-english';
-// import retextStringify from 'retext-stringify';
+import {unified} from 'unified';
+//import {stream} from 'unified-stream';
+import retextEnglish from 'retext-english';
+import retextStringify from 'retext-stringify';
 // import retextEmoji from 'retext-emoji';
 import grandiloquent from 'grandiloquent';
 import nlp from 'compromise';
 import _ from 'lodash-es';
 
-// const syntax = unified()
-//   .use(retextEnglish)
-//   .use(retextEmoji, {convert: 'encode'})
-//   .use(retextStringify);
-//
-// process.stdin.pipe(stream(syntax)).pipe(process.stdout);
+//process.stdin.pipe(stream(retext)).pipe(process.stdout);
 
 export default class Grammar {
     constructor (text) {
@@ -20,6 +15,31 @@ export default class Grammar {
         this.doc = nlp(text);
         this.paragraph = grandiloquent.paragraph(text);
         this.sentence = grandiloquent.sentence(text);
+
+        this.syntax();
+    }
+
+    syntax () {
+        //var file = {};
+        unified()
+            .use(retextEnglish)
+            .use(retextStringify)
+            .process(this.sentence)
+            .then(
+                (file) => {
+                    console.error(file);
+                    console.log(String(file));
+                    file.tagged.forEach(word => {
+                        console.log(word);
+                        // console.log(word.meta);
+                        // console.log(word.tags);
+                    });
+                },
+                (error) => {
+                    // Handle your error here!
+                    throw error;
+                }
+            );
     }
 
     getSentences () {
