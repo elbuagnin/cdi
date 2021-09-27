@@ -1,12 +1,25 @@
-module.exports = class grammar {
-    constructor (text) {
-        this.glp = require('grandiloquent');
-        this.nlp = require('compromise');
+// import {unified} from 'unified';
+// import {stream} from 'unified-stream';
+// import retextEnglish from 'retext-english';
+// import retextStringify from 'retext-stringify';
+// import retextEmoji from 'retext-emoji';
+import grandiloquent from 'grandiloquent';
+import nlp from 'compromise';
+import _ from 'lodash-es';
 
+// const syntax = unified()
+//   .use(retextEnglish)
+//   .use(retextEmoji, {convert: 'encode'})
+//   .use(retextStringify);
+//
+// process.stdin.pipe(stream(syntax)).pipe(process.stdout);
+
+export default class Grammar {
+    constructor (text) {
         this.original = text;
-        this.doc = this.nlp(text);
-        this.paragraph = this.glp.paragraph(text);
-        this.sentence = this.glp.sentence(text);
+        this.doc = nlp(text);
+        this.paragraph = grandiloquent.paragraph(text);
+        this.sentence = grandiloquent.sentence(text);
     }
 
     getSentences () {
@@ -47,7 +60,7 @@ module.exports = class grammar {
     getMainVerb () {
         let mainVerb = this.sentence.getMainVerb();
         if (mainVerb) {
-            let nlpVerb = this.nlp(mainVerb.toString());
+            let nlpVerb = nlp(mainVerb.toString());
             if (nlpVerb.canBe('#Verb').found === false) {
                 return false;
             }
@@ -130,17 +143,17 @@ module.exports = class grammar {
         let string = '';
 
         switch (this.isType(text)) {
-            case 'glp':
-                string = text.toString();
-                break;
-            case 'nlp':
-                string = text.text();
-                break;
-            case 'string':
-                string = text;
-                break;
-            default:
-                throw new Error('Wrong data type for `text`. Expecting type nlp, glp, or string.');
+        case 'glp':
+            string = text.toString();
+            break;
+        case 'nlp':
+            string = text.text();
+            break;
+        case 'string':
+            string = text;
+            break;
+        default:
+            throw new Error('Wrong data type for `text`. Expecting type nlp, glp, or string.');
         }
 
         return string;
@@ -149,7 +162,7 @@ module.exports = class grammar {
     glpToNlp (glpText) {
         if (this.isType(glpText) === 'glp') {
             let text = glpText.toString();
-            return this.nlp(text);
+            return nlp(text);
         } else {
             throw new Error('Wrong variable type. Expecting type glp'); // fixme
         }
@@ -167,7 +180,7 @@ module.exports = class grammar {
     verifyHasNoun (text) {
         text = this.textToString(text);
 
-        if (this.nlp(text).nouns().found === true) {
+        if (nlp(text).nouns().found === true) {
             return true;
         } else {
             return false;
@@ -200,9 +213,9 @@ module.exports = class grammar {
         regex = / (\W)/g;
         text = text.replace(regex, '$1');
 
-        regex = /(?:\.|,|\!|\?)$/g;
+        regex = /(?:\.|,|!|\?)$/g;
         text = text.replace(regex, '');
 
         return text.trim();
     }
-};
+}

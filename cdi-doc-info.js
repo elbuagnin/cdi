@@ -1,7 +1,7 @@
 'use strict';
-const nlp = require('compromise');
-require('./initialize/load-data');
-const readline = require('readline');
+import nlp from 'compromise';
+import loadData from './initialize/load-data';
+import readline from 'readline';
 
 posTagger();
 

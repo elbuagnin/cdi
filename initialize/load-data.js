@@ -1,25 +1,27 @@
-const nlp = require('compromise');
-require ('./extend-nlp');
-var primer = nlp('');
-const fs = require ('../helpers/filesystem');
+import nlp from 'compromise';
+import './extend-nlp.js';
+import * as mfs from '../helpers/filesystem.js';
 const baseDir = './initialize/';
 const tagDir = baseDir + 'tags/';
 const wordDir = baseDir + 'words/';
 
-loadData (tagDir, 'tags')
+loadJSONData (tagDir, 'tags')
      .catch(console.error);
-loadData (wordDir, 'words')
+loadJSONData (wordDir, 'words')
      .catch(console.error);
 
-async function loadData(dir, dataType) {
+async function loadJSONData(dir, dataType) {
     const fileType = '.json';
-    for await (const file of fs.getFiles(dir, fileType)) {
-        let dataset = await require(file);
-        if (dataType === 'tags') {
-            primer.addCustomTags([dataset]);
-        }
-        if (dataType === 'words') {
-            primer.addCustomWords([dataset]);
-        }
-    }
+    const primer = nlp('This is a test.');
+    console.log(primer.nouns().text());
+debugger;
+    // for await (const file of mfs.getFileNames(dir, fileType)) {
+    //     let dataset = await mfs.loadJSONFile(file);
+    //     if (dataType === 'tags') {
+    //         primer.addCustomTags([dataset]);
+    //     }
+    //     if (dataType === 'words') {
+    //         primer.addCustomWords([dataset]);
+    //     }
+    // }
 }

@@ -1,4 +1,4 @@
-module.exports = class NameTagger {
+export class NameTagger {
     constructor(name, doc) {
         this.doc = doc;
         this.name = name;

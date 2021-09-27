@@ -2,6 +2,7 @@
   "private": true,
   "name": "cdi",
   "version": "0.0.0",
+  "type": "module",
   "main": "./index.js",
   "bin": {
     "cdi": "cli.js"
@@ -24,6 +25,11 @@
     "compromise-sentences": "^0.3.0",
     "grandiloquent": "^1.5.7",
     "lodash": "^4.17.21",
-    "nodemon": "^2.0.12"
+    "lodash-es": "^4.17.21",
+    "nodemon": "^2.0.12",
+    "retext-english": "^4.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0"
   }
 }
