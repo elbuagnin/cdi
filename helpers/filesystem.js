@@ -15,7 +15,7 @@ export const getFileNames = async function* (dir, fileType) {
 };
 
 export const loadJSONFile = async function (file) {
-    fs.readFile(file, 'utf8', (err, data) => {
+    const jsonObj = await fs.readFile(file, 'utf8', (err, data) => {
 
         if (err) {
             console.log(`Error reading file from disk: ${err}`);
@@ -26,4 +26,5 @@ export const loadJSONFile = async function (file) {
         }
 
     });
+    return jsonObj;
 };

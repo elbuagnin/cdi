@@ -1,6 +1,6 @@
 'use strict';
 import nlp from 'compromise';
-import loadData from './initialize/load-data';
+import './initialize/load-data.js';
 import readline from 'readline';
 
 posTagger();
@@ -15,7 +15,7 @@ function posTagger () {
         setTimeout(() => {
             let doc = nlp(text);
             doc.debug();}
-            , 2000
+        , 2000
         );
 
         rl.close();

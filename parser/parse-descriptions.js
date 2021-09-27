@@ -1,12 +1,12 @@
 import * as mfs from '../helpers/filesystem.js';
 import path from 'path';
 //import parser from './parser';
-//const rulePath = './parser/search-rules/';
+const rulePath = './parser/search-rules/';
 import grammar from '../methods/grammar.js';
 
 export default async function parseDescriptions(description) {
     var allCharacteristics = [];
-    //var ruleSets = await loadRules(rulePath);
+    var ruleSets = await loadRules(rulePath);
 
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
     let paragraph = new grammar(description);
