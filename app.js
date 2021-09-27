@@ -1,5 +1,5 @@
 import http from 'http';
-import fs from 'fs';
+import {readFile} from 'fs';
 import cdi from './index.js';
 var text = '';
 
@@ -15,12 +15,12 @@ server.listen(8080);
 async function test() {
     const name = 'Dax';
 
-    fs.readFile('./sample.txt', 'utf8', (err, data) => {
-         if (err) {
+    readFile('./sample.txt', 'utf8', (err, data) => {
+        if (err) {
             console.err(err);
             return;
-         }
-         text = data;
+        }
+        text = data;
     });
 
     cdi(name, text);
