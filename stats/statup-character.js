@@ -1,4 +1,4 @@
-module.exports = async function assignStats (characteristics) {
+export default async function assignStats (characteristics) {
     var archetypeCounts = [];
     archetypeCounts['RogueType'] = 0;
     // for (let set in characteristics) {
@@ -32,4 +32,4 @@ module.exports = async function assignStats (characteristics) {
         console.log(segment.text());
         console.log(archetypeCounts);
     });
-};
+}

@@ -1,13 +1,10 @@
 'use strict';
-global._ = require('lodash');
-const nlp = require('compromise');
-nlp.extend(require('compromise-sentences'));
-require('./initialize/load-data');
-const ntClass = require('./name/name-tagger');
-const pdClass = require('./parser/parse-descriptions');
-const statUpCharacter = require('./stats/statup-character');
+import './initialize/load-data.js';
+//import ntClass from './name/name-tagger.js';
+import pdClass from './parser/parse-descriptions.js';
+import statUpCharacter from './stats/statup-character.js';
 
-module.exports = function cdi(name, description) {
+export default function cdi(name, description) {
 
     //var doc = nlp(description); // Natural Language Parser
     //doc.contractions().expand();
@@ -22,4 +19,4 @@ module.exports = function cdi(name, description) {
 
     // const preppedDoc = {doc: doc};
     // return (preppedDoc);
-};
+}

@@ -100,4 +100,4 @@ function evaluateMatches (matchedRules) {
     return evaluatedMatches;
 }
 
-module.exports = {parse};
+export parse;

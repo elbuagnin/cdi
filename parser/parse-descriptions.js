@@ -1,12 +1,12 @@
-const fs = require ('../helpers/filesystem');
-const path = require ('path');
-const parser = require('./parser');
-const rulePath = './parser/search-rules/';
-const grammar = require ('../methods/grammar');
+import * as mfs from '../helpers/filesystem.js';
+import path from 'path';
+//import parser from './parser';
+//const rulePath = './parser/search-rules/';
+import grammar from '../methods/grammar.js';
 
-module.exports = async function parseDescriptions(description) {
+export default async function parseDescriptions(description) {
     var allCharacteristics = [];
-    var ruleSets = await loadRules(rulePath);
+    //var ruleSets = await loadRules(rulePath);
 
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
     let paragraph = new grammar(description);
@@ -43,11 +43,11 @@ module.exports = async function parseDescriptions(description) {
     async function loadRules (dir) {
         let rules = [];
         const fileType = '.json';
-        for await (const file of fs.getFiles(dir, fileType)) {
+        for await (const file of mfs.getFileNames(dir, fileType)) {
             let fileName = path.basename(file);
             let ruleSetName = fileName.substring(0, fileName.indexOf('-'));
             let searchRules = [];
-            let fileData = await require (file);
+            let fileData = await mfs.loadJSONFile (file);
             for (let key in Object.keys(fileData)) {
                 searchRules.push(Object.values(fileData)[key]);
             }
@@ -73,4 +73,4 @@ module.exports = async function parseDescriptions(description) {
             }
         });
     }
-};
+}

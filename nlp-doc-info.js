@@ -1,6 +1,6 @@
 'use strict';
-const nlp = require('compromise');
-const readline = require('readline');
+import nlp from 'compromise';
+import readline from 'readline';
 
 var rl = readline.createInterface({
     input: process.stdin,

@@ -1,5 +1,6 @@
-const http = require('http');
-const fs = require('fs');
+import http from 'http';
+import fs from 'fs';
+import cdi from './index.js';
 var text = '';
 
 const requestListener = function (req, res) {
@@ -22,6 +23,5 @@ async function test() {
          text = data;
     });
 
-    const cdi = require ('./index');
     cdi(name, text);
 }

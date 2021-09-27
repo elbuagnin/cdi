@@ -1,3 +1,3 @@
-var colors = require('colors');
+import colors from 'colors';
 
-module.exports = { colors };
+export colors;

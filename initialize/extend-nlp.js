@@ -1,6 +1,6 @@
-const nlp = require('compromise');
+import nlp from 'compromise';
 
-module.exports = nlp.extend((Doc, world) => {
+nlp.extend((Doc, world) => {
 
     const formatTag = function (tag) {
         let fTag = {};
