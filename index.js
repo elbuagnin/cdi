@@ -1,5 +1,5 @@
 'use strict';
-import './extend-nlp.js';
+import './initialize/extend-nlp.js';
 import './initialize/load-data.js';
 //import ntClass from './name/name-tagger.js';
 import descriptionParser from './parser/parse-descriptions.js';
