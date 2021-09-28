@@ -9,13 +9,12 @@ export default async function parseDescriptions(description, name) {
     var ruleSets = await loadRules(rulePath);
 
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
-    let paragraph = new grammar(description, name);
-    let sentences = paragraph.getSentences();
+    let document = new grammar(description, name);
 
-    sentences.forEach(sentence => {
+    document.sentences.forEach(sentence => {
         console.log('##########################################################');
         console.log('Sentence: ' + sentence );
-        sentence = new grammar(sentence);
+        //sentence = new grammar(sentence);
         let complete = sentence.isCompleteSentence();
         let subject = sentence.getSubject();
         let mainClause = sentence.getMainClause();
