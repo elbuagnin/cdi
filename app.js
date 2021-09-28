@@ -23,5 +23,5 @@ async function test() {
         text = data;
     });
 
-    cdi(name, text);
+    cdi(text, name);
 }

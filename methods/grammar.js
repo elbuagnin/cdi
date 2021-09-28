@@ -4,8 +4,9 @@ import _ from 'lodash-es';
 import nlpTagName from '../lib/nlp-name-tagger.js';
 
 export default class Grammar {
-    constructor (name, text) {
+    constructor (text, name) {
         this.name = name;
+        this.nameTags = {};
         this.original = text;
         this.doc = nlp(text);
         this.paragraph = grandiloquent.paragraph(text);
@@ -13,7 +14,7 @@ export default class Grammar {
     }
 
     tagCharacterName () {
-        nlpTagName(this.name);
+        this.nameTags = nlpTagName(this.doc, this.name);
     }
 
     getSentences () {

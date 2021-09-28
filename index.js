@@ -4,13 +4,13 @@ import './initialize/load-data.js';
 import descriptionParser from './parser/parse-descriptions.js';
 import statUpCharacter from './stats/statup-character.js';
 
-export default function cdi(name, description) {
+export default function cdi(description, name) {
 
 
     //doc.contractions().expand();
 
     console.log('\x1b[1m', '\x1b[34m', '\n\n####################\n',name, '\n', '\x1b[0m');
-    descriptionParser(name, description)
+    descriptionParser(description, name)
         .then(results => {
             statUpCharacter (results);
         });
