@@ -1,14 +1,19 @@
 import grandiloquent from 'grandiloquent';
 import nlp from 'compromise';
 import _ from 'lodash-es';
+import nlpTagName from '../lib/nlp-name-tagger.js';
 
 export default class Grammar {
-    constructor (text) {
+    constructor (name, text) {
+        this.name = name;
         this.original = text;
         this.doc = nlp(text);
         this.paragraph = grandiloquent.paragraph(text);
         this.sentence = grandiloquent.sentence(text);
+    }
 
+    tagCharacterName () {
+        nlpTagName(this.name);
     }
 
     getSentences () {
