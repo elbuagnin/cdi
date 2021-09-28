@@ -1,5 +1,5 @@
 import nlp from 'compromise';
-import * as mfs from '../helpers/filesystem.js';
+import * as mfs from '../lib/filesystem.js';
 const baseDir = './initialize/';
 const tagDir = baseDir + 'tags/';
 const wordDir = baseDir + 'words/';

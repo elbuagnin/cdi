@@ -1,4 +1,4 @@
-import * as mfs from '../helpers/filesystem.js';
+import * as mfs from '../lib/filesystem.js';
 import path from 'path';
 //import parser from './parser';
 const rulePath = './parser/search-rules/';
