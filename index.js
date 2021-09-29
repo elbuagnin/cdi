@@ -6,6 +6,7 @@ import statUpCharacter from './stats/statup-character.js';
 
 global.info = function (v) {
     console.log('Type: ' + typeof v);
+    console.log('Object Constructor: ' + v.constructor.name);
     console.log('Contents: ' + JSON.stringify(v));
 };
 
