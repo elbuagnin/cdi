@@ -10,29 +10,30 @@ export default async function parseDescriptions(description, name) {
 
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
     let document = new grammar(description, name);
-
+    //
     document.sentences.forEach(sentence => {
         console.log('##########################################################');
-        console.log('Sentence: ' + sentence );
-        //sentence = new grammar(sentence);
-        let complete = sentence.isCompleteSentence();
-        let subject = sentence.getSubject();
-        let mainClause = sentence.getMainClause();
-        let mainVerb = sentence.getMainVerb();
-        console.log(complete + '\n' + JSON.stringify(mainClause) + '\n' + subject + ' : ' + mainVerb);
-        // let clauses = sentence.clauses();
-        // clauses.forEach(clause => {
-        //
-        //     for (let name in ruleSets) {
-        //         let characteristics = parser.parse(clause, ruleSets[name]);
-        //         if (characteristics) {
-        //             Object.assign(characteristics, {ruleSet: name});
-        //             allCharacteristics.push(characteristics);
-        //             displayMatchInfo(characteristics);
-        //         }
-        //     }
-        // });
+        console.log('Sentence: ' + sentence.text() );
+    //sentence = new grammar(sentence);
+    // let complete = sentence.isCompleteSentence();
+    // let subject = sentence.getSubject();
+    // let mainClause = sentence.getMainClause();
+    // let mainVerb = sentence.getMainVerb();
+    // console.log(complete + '\n' + JSON.stringify(mainClause) + '\n' + subject + ' : ' + mainVerb);
+    // let clauses = sentence.clauses();
+    // clauses.forEach(clause => {
+    //
+    //     for (let name in ruleSets) {
+    //         let characteristics = parser.parse(clause, ruleSets[name]);
+    //         if (characteristics) {
+    //             Object.assign(characteristics, {ruleSet: name});
+    //             allCharacteristics.push(characteristics);
+    //             displayMatchInfo(characteristics);
+    //         }
+    //     }
+    // });
     });
+
     if (allCharacteristics) {
         return allCharacteristics;
     } else {
