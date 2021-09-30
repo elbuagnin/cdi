@@ -1,6 +1,13 @@
 import nlp from 'compromise';
 
-nlp.extend((Doc, world) => { // eslint-disable-line no-unused-vars
+nlp.extend((Doc, world) => { // eslint-disable-line
+
+    Doc.prototype.nounPhrase = function () {
+        let gerunds = this.match('#Gerund');
+
+        return gerunds;
+    };
+
 
     Doc.prototype.subject = function () {
         let syntax = this.match('[<subject>#Noun] * #Verb').groups();
@@ -8,37 +15,83 @@ nlp.extend((Doc, world) => { // eslint-disable-line no-unused-vars
     };
 
     Doc.prototype.compoundClauses = function () {
-        let conjunction = this.match('#Conjunction');
 
+        let compoundClauses = undefined;
+
+        // Steely Dan groove ... [ ,and ] ... they groove with style.
+        let conjunction = this.match('#Conjunction');
         if (conjunction.found) {
             if (conjunction.justBefore().has('@hasComma')) {
-                let clauses = this.match(conjunction).split();
-                return clauses;
+                compoundClauses = this.match(conjunction).split();
+                compoundClauses.lastTerms().first().delete();
             }
         }
-        return false;
+
+        // Pink Floyd is a band ... [ ; ] ... they are not a guy.
+        if (this.match('@hasSemicolon').found) {
+            console.log('hasSemiColon');
+            compoundClauses = this.match('@hasSemicolon').split();
+        }
+
+        if (compoundClauses) {
+            return compoundClauses;
+        } else {
+            return false;
+        }
+    };
+
+    Doc.prototype.prepositionPhrases = function () {
+        let prepositions = this.prepositions().json().map(o=>o.text);
+        let phrases = [];
+
+        prepositions.forEach (preposition => {
+            let currentMatch = this.match(preposition).lookAhead('#Noun').matchOne('#Noun');
+            let endPhrase = currentMatch.text();
+
+            while (currentMatch !== false) {
+                let nextTerm = this.match(currentMatch).justAfter();
+                if (nextTerm.match('#Noun').found) {
+                    currentMatch = nextTerm;
+                    endPhrase += ' ' + nextTerm.text();
+                } else if (nextTerm.match('#Conjunction').found) {
+                    let nextNextTerm = nextTerm.justAfter();
+                    if (nextNextTerm.nouns().found) {
+                        currentMatch = nextTerm;
+                        endPhrase += ' ' + nextTerm.text();
+                    } else {
+                        if (currentMatch.match('#Pronoun').found) {
+                            //endPhrase = endPhrase.replace(currentMatch.text(), '');
+                        }
+                        currentMatch = false;
+                    }
+                } else {
+                    if (currentMatch.match('#Pronoun').found) {
+                        endPhrase = endPhrase.replace(currentMatch.text(), '');
+                    }
+                    currentMatch = false;
+                }
+            }
+
+            let prepPhrase = this.matchOne(preposition + ' * ' + endPhrase).text();
+            phrases.push(prepPhrase);
+        });
     };
 
     Doc.prototype.justBefore = function () {
 
         let precedingWords = this.parent().before(this);
-        let precedingWord = precedingWords.match('.$');
-
+        let precedingWord = precedingWords.lastTerms();
         return precedingWord;
+        // return this.parent().lookBehind('.').matchOne('.');
     };
 
     Doc.prototype.justAfter = function () {
 
         let succeedingWords = this.parent().after(this);
-        let succeedingWord = succeedingWords.match('^.');
+        let succeedingWord = succeedingWords.firstTerms();
 
         return succeedingWord;
     };
-
-
-
-
-
 
 
 
@@ -104,41 +157,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line no-unused-vars
 //         }
 //     }
 //
-//     getPrepositionalPhrases () {
-//         let prepositions = this.doc.prepositions().json().map(o=>o.text);
-//         let phrases = [];
-//
-//         prepositions.forEach (preposition => {
-//             let currentMatch = this.doc.match(preposition).lookAhead('#Noun').matchOne('#Noun');
-//             let endPhrase = currentMatch.text();
-//
-//             while (currentMatch !== false) {
-//                 let nextTerm = this.doc.match(currentMatch).lookAhead('.').matchOne('.');
-//                 if (nextTerm.match('#Noun').found) {
-//                     currentMatch = nextTerm;
-//                     endPhrase += ' ' + nextTerm.text();
-//                 } else if (nextTerm.match('#Conjunction').found) {
-//                     let nextNextTerm = nextTerm.lookAhead('.').matchOne('.');
-//                     if (nextNextTerm.nouns().found) {
-//                         currentMatch = nextTerm;
-//                         endPhrase += ' ' + nextTerm.text();
-//                     } else {
-//                         if (currentMatch.match('#Pronoun').found) {
-//                             //endPhrase = endPhrase.replace(currentMatch.text(), '');
-//                         }
-//                         currentMatch = false;
-//                     }
-//                 } else {
-//                     if (currentMatch.match('#Pronoun').found) {
-//                         endPhrase = endPhrase.replace(currentMatch.text(), '');
-//                     }
-//                     currentMatch = false;
-//                 }
-//             }
-//
-//             let prepPhrase = this.doc.matchOne(preposition + ' * ' + endPhrase).text();
-//             phrases.push(prepPhrase);
-//         });
+
 //
 //         phrases = _.uniq(phrases);
 //         console.log('Preposition Phrases: ' + JSON.stringify(phrases));

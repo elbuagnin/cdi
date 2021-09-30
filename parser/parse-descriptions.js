@@ -9,20 +9,20 @@ export default async function parseDescriptions(description, name) {
     var allCharacteristics = [];
     //var ruleSets = await loadRules(rulePath);
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
-    let document = nlp('This is a test sentence. Here, also, is another fine example. A green car is colorful, but red cars are more so.', 'Fred');
+    let document = nlp('This is a test sentence. Here, also, is another fine example. A green car is colorful, but red cars are more so. Fred ate the apple; Candice ate the orange. Parking the car is a bitch. We walked the dog from the park.', 'Fred');
     nlp.verbose('tagger');
     document.sentences().forEach(sentence => {
         console.log('##########################################################');
-        console.log(sentence.text() );
-        console.log(sentence.debug());
-        //info(sentence);
+        info(sentence, 'sentence')// eslint-disable-line
         // let complete = sentence.isCompleteSentence();
         let subject = sentence.subject();
-        info(subject); // eslint-disable-line
-        if (subject ) { console.log('Subject is: ' + subject.text()); }
-        let compound = sentence.compoundClauses();
-        info(compound); // eslint-disable-line
-        if (compound) { console.log('Compound: ' + compound.text()); }
+        info(subject, 'subject'); // eslint-disable-line
+        let compoundClauses = sentence.compoundClauses();
+        info(compoundClauses, 'compoundClauses'); // eslint-disable-line
+        let nounPhrase = sentence.nounPhrase();
+        info(nounPhrase, 'nounPhrase')// eslint-disable-line
+        let prepositionPhrases = sentence.prepositionPhrases();
+        info(prepositionPhrases, 'prepositionPhrases')// eslint-disable-line
     // let mainClause = sentence.getMainClause();
     // let mainVerb = sentence.getMainVerb();
     // console.log(complete + '\n' + JSON.stringify(mainClause) + '\n' + subject + ' : ' + mainVerb);

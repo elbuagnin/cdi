@@ -32,9 +32,10 @@ const term = {
     }
 };
 
-global.info = function (v, name) { // eslint-disable-line
+global.info = function (v, name = 'unknown') { // eslint-disable-line
     console.log('\n');
     console.log(term.bg.blue +term.fg.white + 'Info on Variable:                                        ' + term.reset);
+    console.log(term.fg.blue + 'Name: ' + term.reset + name);
     if (v) {
         console.log(term.fg.blue + 'Type: ' + term.reset + typeof v);
         console.log(term.fg.blue + 'Object Constructor: ' + term.reset + v.constructor.name);
