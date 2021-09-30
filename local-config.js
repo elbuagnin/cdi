@@ -32,6 +32,15 @@ const term = {
     }
 };
 
+global.display = function (v, name = '') { // eslint-disable-line
+    console.log('\n' + term.bright + term.fg.crimson);
+    if (name) {
+        console.log(name + ': ');
+    }
+    console.log(String(v));
+    console.log(term.reset);
+};
+
 global.info = function (v, name = 'unknown') { // eslint-disable-line
     console.log('\n');
     console.log(term.bg.blue +term.fg.white + 'Info on Variable:                                        ' + term.reset);

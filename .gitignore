@@ -1,9 +1,3 @@
 npm-debug.log
 node_modules/
 .editorconfig
-.htmlhintrc
-.lesshintrc
-.gitignore
-.eslintrc
-reload.sh
-app.js
