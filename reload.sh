@@ -13,12 +13,10 @@ curlwithcode() {
     echo "statuscode : $statuscode"
     echo "exitcode : $code"
     echo "body : $body"
-
-    if [[ ($statuscode != '200') && ($try < 3)]]; then
-        $try = $try + 1
-        curlwithcode localhost:8080
-    fi
 }
 
-sleep 1s
 curlwithcode localhost:8080
+if [[ $statuscode != '200' ]]; then
+    sleep 1
+    curlwithcode localhost:8080
+fi
