@@ -1,14 +1,9 @@
 'use strict';
+import './local-config.js';
 import './initialize/nlp-methods/nlp-custom-tags-words.js';
 import './initialize/load-data.js';
 import descriptionParser from './parser/parse-descriptions.js';
 import statUpCharacter from './stats/statup-character.js';
-
-global.info = function (v) {
-    console.log('Type: ' + typeof v);
-    console.log('Object Constructor: ' + v.constructor.name);
-    console.log('Contents: ' + JSON.stringify(v));
-};
 
 export default function cdi(description, name) {
 

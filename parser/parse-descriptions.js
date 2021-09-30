@@ -1,22 +1,28 @@
 import * as mfs from '../lib/filesystem.js';
 import path from 'path';
 //import parser from './parser';
-const rulePath = './parser/search-rules/';
-import grammar from '../methods/grammar.js';
+//const rulePath = './parser/search-rules/';
+import nlp from 'compromise';
+import '../methods/syntax.js';
 
 export default async function parseDescriptions(description, name) {
     var allCharacteristics = [];
-    var ruleSets = await loadRules(rulePath);
-
+    //var ruleSets = await loadRules(rulePath);
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
-    let document = new grammar(description, name);
-    //
-    document.sentences.forEach(sentence => {
+    let document = nlp('This is a test sentence. Here, also, is another fine example. A green car is colorful, but red cars are more so.', 'Fred');
+    nlp.verbose('tagger');
+    document.sentences().forEach(sentence => {
         console.log('##########################################################');
-        console.log('Sentence: ' + sentence.text() );
-    //sentence = new grammar(sentence);
-    // let complete = sentence.isCompleteSentence();
-    // let subject = sentence.getSubject();
+        console.log(sentence.text() );
+        console.log(sentence.debug());
+        //info(sentence);
+        // let complete = sentence.isCompleteSentence();
+        let subject = sentence.subject();
+        info(subject); // eslint-disable-line
+        if (subject ) { console.log('Subject is: ' + subject.text()); }
+        let compound = sentence.compoundClauses();
+        info(compound); // eslint-disable-line
+        if (compound) { console.log('Compound: ' + compound.text()); }
     // let mainClause = sentence.getMainClause();
     // let mainVerb = sentence.getMainVerb();
     // console.log(complete + '\n' + JSON.stringify(mainClause) + '\n' + subject + ' : ' + mainVerb);
