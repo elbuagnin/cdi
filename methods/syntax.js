@@ -1,11 +1,45 @@
 import nlp from 'compromise';
+// import _ from 'lodash-es';
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
-    Doc.prototype.nounPhrase = function () {
-        let gerunds = this.match('#Gerund');
+    Doc.prototype.nounPhrases = function () {
+        let phrases = [];
+        let nouns = this.nouns().reverse();
+        info(nouns, 'nouns'); // eslint-disable-line
 
-        return gerunds;
+        nouns.forEach(noun => {
+            let nounPhrase = noun.text();
+            let currentMatch = noun;
+            while(currentMatch !== false) {
+                let preceedingTerm = this.match(currentMatch).justBefore();
+                if (preceedingTerm.not('#Verb').found) {
+                    currentMatch = preceedingTerm;
+                    nounPhrase = currentMatch.text() + ' ' + nounPhrase;
+                } else {
+                    currentMatch = false;
+                }
+            }
+            info(nounPhrase, 'nounPhrase'); // eslint-disable-line
+            phrases.push(nounPhrase);
+            info(phrases, 'phrases before'); // eslint-disable-line
+            //let i = phrases.length;
+            phrases.forEach((phrase, i) => {
+                console.log(term.fg.blue + phrase); // eslint-disable-line
+                for (let j = 0; j < i; j++) {
+                    console.log(term.fg.green + phrases[j]); // eslint-disable-line
+                    if (phrases[j].indexOf(phrases[i]) === 0) {
+                        console.log(term.fg.red + phrases[i]); // eslint-disable-line
+                        phrases.splice(i, 1);
+                    }
+                }
+            });
+
+            info(phrases, 'phrases after'); // eslint-disable-line
+        });
+        phrases.reverse();
+        info(phrases, 'phrases final'); // eslint-disable-line
+        return stringArrayToNlp(this, phrases);
     };
 
 
@@ -40,8 +74,8 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         }
     };
 
-    Doc.prototype.prepositionPhrases = function () {
-        let prepositions = this.prepositions().json().map(o=>o.text);
+    Doc.prototype.prepositionalPhrases = function () {
+        let prepositions = this.prepositions().out('array'); //.json().map(o=>o.text);
         let phrases = [];
 
         prepositions.forEach (preposition => {
@@ -75,14 +109,18 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             let prepPhrase = this.matchOne(preposition + ' * ' + endPhrase).text();
             phrases.push(prepPhrase);
         });
+
+        return stringArrayToNlp(this, phrases);
     };
 
     Doc.prototype.justBefore = function () {
 
         let precedingWords = this.parent().before(this);
         let precedingWord = precedingWords.lastTerms();
-        return precedingWord;
-        // return this.parent().lookBehind('.').matchOne('.');
+
+        if (precedingWord.found) {
+            return precedingWord;
+        } else return this.match('');
     };
 
     Doc.prototype.justAfter = function () {
@@ -90,10 +128,49 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let succeedingWords = this.parent().after(this);
         let succeedingWord = succeedingWords.firstTerms();
 
-        return succeedingWord;
+        if (succeedingWord.found) {
+            return succeedingWord;
+        } else return this.match('');
     };
 
+    // Private helpers
+    function stringArrayToNlp (doc, arrayOfStrings) {
+        info(arrayOfStrings, 'Incomming arrayOfStrings'); // eslint-disable-line
+        arrayOfStrings.forEach(string => {
+            info(string, 'string to split on'); // eslint-disable-line
+            doc = doc.splitBefore(string);
+            doc = doc.splitAfter(string);
+        });
 
+        info(doc.length, 'doc.length'); // eslint-disable-line
+        const indices = [];
+        info(indices, 'indices'); // eslint-disable-line
+        doc.forEach((segment, index) => {
+            arrayOfStrings.forEach(string => {
+                if (segment.has(string)) {
+                    indices.push(index);
+                }
+            });
+        });
+
+        const remove = [];
+        for (let i=0; i<indices.length; i++) {
+            if (indices.indexOf(i) === -1) {
+                remove.push(i);
+            }
+        }
+
+        doc.forEach((segment, i) => {
+            if (remove.indexOf(i) > -1) {
+                doc.eq(i).delete();
+            }
+        });
+
+        info(indices, 'indices'); // eslint-disable-line
+        info(remove, 'remove'); // eslint-disable-line
+        info(doc, 'doc after split'); // eslint-disable-line
+        return doc;
+    }
 
 });
 

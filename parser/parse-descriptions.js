@@ -9,20 +9,21 @@ export default async function parseDescriptions(description, name) {
     var allCharacteristics = [];
     //var ruleSets = await loadRules(rulePath);
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
-    let document = nlp('This is a test sentence. Here, also, is another fine example. A green car is colorful, but red cars are more so. Fred ate the apple; Candice ate the orange. Parking the car is a bitch. We walked the dog from the park.', 'Fred');
+    let document = nlp('The low-milage, very green car does not use a lot of premium gas.', 'Fred');
     nlp.verbose('tagger');
     document.sentences().forEach(sentence => {
         console.log('##########################################################');
+        display(sentence.text(), 'Sentence'); // eslint-disable-line
         info(sentence, 'sentence')// eslint-disable-line
         // let complete = sentence.isCompleteSentence();
         let subject = sentence.subject();
         info(subject, 'subject'); // eslint-disable-line
         let compoundClauses = sentence.compoundClauses();
         info(compoundClauses, 'compoundClauses'); // eslint-disable-line
-        let nounPhrase = sentence.nounPhrase();
+        let nounPhrase = sentence.nounPhrases();
         info(nounPhrase, 'nounPhrase')// eslint-disable-line
-        let prepositionPhrases = sentence.prepositionPhrases();
-        info(prepositionPhrases, 'prepositionPhrases')// eslint-disable-line
+        let prepositionalPhrases = sentence.prepositionalPhrases();
+        info(prepositionalPhrases, 'prepositionalPhrases')// eslint-disable-line
     // let mainClause = sentence.getMainClause();
     // let mainVerb = sentence.getMainVerb();
     // console.log(complete + '\n' + JSON.stringify(mainClause) + '\n' + subject + ' : ' + mainVerb);
