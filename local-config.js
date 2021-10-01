@@ -1,4 +1,5 @@
-global.term = { // eslint-disable-line
+/* eslint-disable no-undef */
+global.term = {
     reset: '\x1b[0m',
     bright: '\x1b[1m',
     dim: '\x1b[2m',
@@ -32,7 +33,7 @@ global.term = { // eslint-disable-line
     }
 };
 
-global.display = function (v, name = '') { // eslint-disable-line
+global.display = function (v, name = '') {
     console.log('\n' + term.bright);
     if (name) {
         console.log(name + ': ');
@@ -41,33 +42,50 @@ global.display = function (v, name = '') { // eslint-disable-line
     console.log(term.reset);
 };
 
-global.info = function (v, name = 'unknown') { // eslint-disable-line
-    console.log('\n');
-    console.log(term.bg.blue +term.fg.white + 'Info on Variable:                                        ' + term.reset);
-    console.log(term.fg.blue + 'Name: ' + term.reset + name);
-    if (v) {
-        console.log(term.fg.blue + 'Type: ' + term.reset + typeof v);
-        console.log(term.fg.blue + 'Object Constructor: ' + term.reset + v.constructor.name);
-        console.log(term.fg.blue + 'Contents: ' + term.reset + JSON.stringify(v));
-
-        switch (v.constructor.name) {
-        case 'sentence':
-            v.text();
-            v.debug();
-            break;
-        case 'So':
-            v.text();
-            v.debug();
-            break;
-        case 't':
-            v.text();
-            v.debug();
-            break;
-        default:
-            break;
-        }
-    } else {
-        console.log('Undefined');
+global.devBlock = function (name, devInfoOn = false) {
+    if (devInfoOn) {
+        console.log('\n');
+        console.log(term.bg.red + term.fg.white + 'Function Call:                                           ' + term.reset);
+        console.log(term.bright + name + term.reset);
     }
-    console.log(term.bg.cyan + term.fg.white + '---------------------------------------------------------' + term.reset + '\n');
 };
+
+global.devInfo = function (v, name = 'unknown', devInfoOn = false, devBlockName = '') { // eslint-disable-line
+    if (devInfoOn === true) {
+
+        console.log('\n');
+        console.log(term.bg.blue + term.fg.white + 'Info on Variable:                                        ' + term.reset);
+
+        if (devBlockName) {
+            console.log(term.fg.blue + 'Block: ' + term.reset + term.bright + devBlockName + term.reset);
+        }
+
+        console.log(term.fg.blue + 'Name: ' + term.reset  + term.bright + name + term.reset);
+        if (v) {
+            console.log(term.fg.blue + 'Type: ' + term.reset + typeof v);
+            console.log(term.fg.blue + 'Object Constructor: ' + term.reset + v.constructor.name);
+            console.log(term.fg.blue + 'Contents: ' + term.reset + JSON.stringify(v));
+
+            switch (v.constructor.name) {
+            case 'sentence':
+                v.text();
+                v.debug();
+                break;
+            case 'So':
+                v.text();
+                v.debug();
+                break;
+            case 't':
+                v.text();
+                v.debug();
+                break;
+            default:
+                break;
+            }
+        } else {
+            console.log('Undefined');
+        }
+        console.log(term.bg.cyan + term.fg.white + '---------------------------------------------------------' + term.reset);
+    }
+};
+/* eslint-enable no-undef */
