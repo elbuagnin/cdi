@@ -3,10 +3,34 @@ import nlp from 'compromise';
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
+    world.addTags({
+        Clause: {
+            isA: '',
+            notA: 'Phrase'
+        },
+        Phrase: {
+            isA: '',
+            notA: 'Clause',
+        },
+        NounPhrase: {
+            isA: 'Phrase',
+            notA: 'VerbPhrase'
+        },
+        PrepositionalPhrase: {
+            isA: 'Phrase',
+        }
+    });
+
     Doc.prototype.nounPhrases = function () {
+        /* Development Options */
+        let devBlockName = 'nounPhrases';
+        let devInfoOn = false;
+        devBlock('nounPhrases', devInfoOn);  // eslint-disable-line
+        /***********************/
+
         let phrases = [];
         let nouns = this.nouns().reverse();
-        info(nouns, 'nouns'); // eslint-disable-line
+        devInfo(nouns, 'nouns'); // eslint-disable-line
 
         nouns.forEach(noun => {
             let nounPhrase = noun.text();
@@ -20,26 +44,29 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                     currentMatch = false;
                 }
             }
-            info(nounPhrase, 'nounPhrase'); // eslint-disable-line
+            devInfo(nounPhrase, 'nounPhrase', devInfoOn, devBlockName); // eslint-disable-line
             phrases.push(nounPhrase);
-            info(phrases, 'phrases before'); // eslint-disable-line
-            //let i = phrases.length;
+            devInfo(phrases, 'phrases before', devInfoOn, devBlockName); // eslint-disable-line
+
             phrases.forEach((phrase, i) => {
-                console.log(term.fg.blue + phrase); // eslint-disable-line
+                //console.log(term.fg.blue + phrase); // eslint-disable-line
                 for (let j = 0; j < i; j++) {
-                    console.log(term.fg.green + phrases[j]); // eslint-disable-line
+                    //console.log(term.fg.green + phrases[j]); // eslint-disable-line
                     if (phrases[j].indexOf(phrases[i]) === 0) {
-                        console.log(term.fg.red + phrases[i]); // eslint-disable-line
+                        //console.log(term.fg.red + phrases[i]); // eslint-disable-line
                         phrases.splice(i, 1);
                     }
                 }
             });
 
-            info(phrases, 'phrases after'); // eslint-disable-line
+            devInfo(phrases, 'phrases after', devInfoOn, devBlockName); // eslint-disable-line
         });
         phrases.reverse();
-        info(phrases, 'phrases final'); // eslint-disable-line
-        return stringArrayToNlp(this, phrases);
+        devInfo(phrases, 'phrases final', devInfoOn, devBlockName); // eslint-disable-line
+        let nounPhrases = stringArrayToNlp(this, phrases);
+        syntaxTag(nounPhrases, 'NounPhrase');
+        devInfo(nounPhrases, 'Returing nounPhrases', devInfoOn, devBlockName); // eslint-disable-line
+        return nounPhrases;
     };
 
 
@@ -75,6 +102,12 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     };
 
     Doc.prototype.prepositionalPhrases = function () {
+        /* Development Options */
+        let devBlockName = 'prepositionalPhrases'; // eslint-disable-line
+        let devInfoOn = false; // eslint-disable-line
+        devBlock('prepositionalPhrases', devInfoOn); // eslint-disable-line
+        /***********************/
+
         let prepositions = this.prepositions().out('array'); //.json().map(o=>o.text);
         let phrases = [];
 
@@ -133,18 +166,43 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         } else return this.match('');
     };
 
-    // Private helpers
+    // Private Helpers
+    const tagIDs = {};
+    function* generateID (tag) {
+        if (tag in tagIDs) {
+            tagIDs[tag]++;
+        } else {
+            tagIDs[tag] = 0;
+        }
+        yield tag + tagIDs[tag];
+    }
+
+    function syntaxTag(doc, tag) {
+        doc.forEach (item => {
+            let id = generateID(tag).next().value;
+            devInfo(id, 'id'); // eslint-disable-line
+            item.tag(tag);
+            item.tag(id);
+        });
+    }
+
     function stringArrayToNlp (doc, arrayOfStrings) {
-        info(arrayOfStrings, 'Incomming arrayOfStrings'); // eslint-disable-line
+        /* Development Options */
+        let devBlockName = 'stringArrayToNlp';
+        let devInfoOn = false;
+        devBlock('stringArrayToNlp', devInfoOn); // eslint-disable-line
+        /***********************/
+
+        devInfo(arrayOfStrings, 'Incomming arrayOfStrings', devInfoOn, devBlockName); // eslint-disable-line
         arrayOfStrings.forEach(string => {
-            info(string, 'string to split on'); // eslint-disable-line
+            devInfo(string, 'string to split on', devInfoOn, devBlockName); // eslint-disable-line
             doc = doc.splitBefore(string);
             doc = doc.splitAfter(string);
         });
 
-        info(doc.length, 'doc.length'); // eslint-disable-line
+        devInfo(doc.length, 'doc.length', devInfoOn, devBlockName); // eslint-disable-line
         const indices = [];
-        info(indices, 'indices'); // eslint-disable-line
+        devInfo(indices, 'indices', devInfoOn, devBlockName); // eslint-disable-line
         doc.forEach((segment, index) => {
             arrayOfStrings.forEach(string => {
                 if (segment.has(string)) {
@@ -166,9 +224,9 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             }
         });
 
-        info(indices, 'indices'); // eslint-disable-line
-        info(remove, 'remove'); // eslint-disable-line
-        info(doc, 'doc after split'); // eslint-disable-line
+        devInfo(indices, 'indices', devInfoOn, devBlockName); // eslint-disable-line
+        devInfo(remove, 'remove', devInfoOn, devBlockName); // eslint-disable-line
+        devInfo(doc, 'doc after split', devInfoOn, devBlockName); // eslint-disable-line
         return doc;
     }
 
@@ -235,60 +293,6 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 //     }
 //
 
-//
-//         phrases = _.uniq(phrases);
-//         console.log('Preposition Phrases: ' + JSON.stringify(phrases));
-//         return phrases;
-//     }
-//
-//     // Internal helpers
-//     isType (text) {
-//         let type = text.constructor.name;
-//         if (type === 'Sentence') { return 'glp'; }
-//         if (type.substr(0,4) === 'Doc$') { return 'nlp'; }
-//         if (Array.isArray(text) === true) { return 'array'; }
-//
-//         return typeof text;
-//     }
-//
-//     textToString (text) {
-//         let string = '';
-//
-//         switch (this.isType(text)) {
-//         case 'glp':
-//             string = text.toString();
-//             break;
-//         case 'nlp':
-//             string = text.text();
-//             break;
-//         case 'string':
-//             string = text;
-//             break;
-//         default:
-//             throw new Error('Wrong data type for `text`. Expecting type nlp, glp, or string.');
-//         }
-//
-//         return string;
-//     }
-//
-//     glpToNlp (glpText) {
-//         if (this.isType(glpText) === 'glp') {
-//             let text = glpText.toString();
-//             return nlp(text);
-//         } else {
-//             throw new Error('Wrong variable type. Expecting type glp'); // fixme
-//         }
-//     }
-//
-//     nlpToGlp (nlpText) {
-//         if (this.isType(nlpText) === 'nlp') {
-//             let text = nlpText.text();
-//             return this.glp.sentence(text);
-//         } else {
-//             throw new Error('Wrong variable type. Expecting type nlp');
-//         }
-//     }
-//
 //     verifyHasNoun (text) {
 //         text = this.textToString(text);
 //
