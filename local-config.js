@@ -1,4 +1,4 @@
-const term = {
+global.term = { // eslint-disable-line
     reset: '\x1b[0m',
     bright: '\x1b[1m',
     dim: '\x1b[2m',
@@ -33,11 +33,11 @@ const term = {
 };
 
 global.display = function (v, name = '') { // eslint-disable-line
-    console.log('\n' + term.bright + term.fg.crimson);
+    console.log('\n' + term.bright);
     if (name) {
         console.log(name + ': ');
     }
-    console.log(String(v));
+    console.log(term.fg.red + String(v));
     console.log(term.reset);
 };
 
@@ -56,6 +56,10 @@ global.info = function (v, name = 'unknown') { // eslint-disable-line
             v.debug();
             break;
         case 'So':
+            v.text();
+            v.debug();
+            break;
+        case 't':
             v.text();
             v.debug();
             break;
