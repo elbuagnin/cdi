@@ -22,11 +22,9 @@
   "dependencies": {
     "colors": "^1.4.0",
     "compromise": "^13.11.3",
-    "grandiloquent": "^1.5.7",
+    "compromise-sentences": "^0.3.0",
     "lodash-es": "^4.17.21",
-    "nodemon": "^2.0.12",
-    "retext-english": "^4.1.0",
-    "retext-stringify": "^3.1.0"
+    "nodemon": "^2.0.12"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.5",

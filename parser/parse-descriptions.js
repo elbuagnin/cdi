@@ -1,38 +1,46 @@
 import * as mfs from '../lib/filesystem.js';
 import path from 'path';
 //import parser from './parser';
-const rulePath = './parser/search-rules/';
-import grammar from '../methods/grammar.js';
+//const rulePath = './parser/search-rules/';
+import nlp from 'compromise';
+import '../methods/syntax.js';
 
 export default async function parseDescriptions(description, name) {
     var allCharacteristics = [];
-    var ruleSets = await loadRules(rulePath);
-
+    //var ruleSets = await loadRules(rulePath);
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
-    let document = new grammar(description, name);
-
-    document.sentences.forEach(sentence => {
+    let document = nlp('The low-milage, very green car does not use a lot of premium gas.', 'Fred');
+    nlp.verbose('tagger');
+    document.sentences().forEach(sentence => {
         console.log('##########################################################');
-        console.log('Sentence: ' + sentence );
-        //sentence = new grammar(sentence);
-        let complete = sentence.isCompleteSentence();
-        let subject = sentence.getSubject();
-        let mainClause = sentence.getMainClause();
-        let mainVerb = sentence.getMainVerb();
-        console.log(complete + '\n' + JSON.stringify(mainClause) + '\n' + subject + ' : ' + mainVerb);
-        // let clauses = sentence.clauses();
-        // clauses.forEach(clause => {
-        //
-        //     for (let name in ruleSets) {
-        //         let characteristics = parser.parse(clause, ruleSets[name]);
-        //         if (characteristics) {
-        //             Object.assign(characteristics, {ruleSet: name});
-        //             allCharacteristics.push(characteristics);
-        //             displayMatchInfo(characteristics);
-        //         }
-        //     }
-        // });
+        display(sentence.text(), 'Sentence'); // eslint-disable-line
+        info(sentence, 'sentence')// eslint-disable-line
+        // let complete = sentence.isCompleteSentence();
+        let subject = sentence.subject();
+        info(subject, 'subject'); // eslint-disable-line
+        let compoundClauses = sentence.compoundClauses();
+        info(compoundClauses, 'compoundClauses'); // eslint-disable-line
+        let nounPhrase = sentence.nounPhrases();
+        info(nounPhrase, 'nounPhrase')// eslint-disable-line
+        let prepositionalPhrases = sentence.prepositionalPhrases();
+        info(prepositionalPhrases, 'prepositionalPhrases')// eslint-disable-line
+    // let mainClause = sentence.getMainClause();
+    // let mainVerb = sentence.getMainVerb();
+    // console.log(complete + '\n' + JSON.stringify(mainClause) + '\n' + subject + ' : ' + mainVerb);
+    // let clauses = sentence.clauses();
+    // clauses.forEach(clause => {
+    //
+    //     for (let name in ruleSets) {
+    //         let characteristics = parser.parse(clause, ruleSets[name]);
+    //         if (characteristics) {
+    //             Object.assign(characteristics, {ruleSet: name});
+    //             allCharacteristics.push(characteristics);
+    //             displayMatchInfo(characteristics);
+    //         }
+    //     }
+    // });
     });
+
     if (allCharacteristics) {
         return allCharacteristics;
     } else {

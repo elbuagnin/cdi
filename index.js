@@ -1,4 +1,5 @@
 'use strict';
+import './local-config.js';
 import './initialize/nlp-methods/nlp-custom-tags-words.js';
 import './initialize/load-data.js';
 import descriptionParser from './parser/parse-descriptions.js';
