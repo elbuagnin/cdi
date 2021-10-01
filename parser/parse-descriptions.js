@@ -6,6 +6,12 @@ import nlp from 'compromise';
 import '../methods/syntax.js';
 
 export default async function parseDescriptions(description, name) {
+    /* Development Options */
+    let devBlockName = 'parseDescriptions'; // eslint-disable-line
+    let devInfoOn = true; // eslint-disable-line
+    devBlock('parseDescriptions', devInfoOn); // eslint-disable-line
+    /***********************/
+
     var allCharacteristics = [];
     //var ruleSets = await loadRules(rulePath);
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
@@ -14,16 +20,16 @@ export default async function parseDescriptions(description, name) {
     document.sentences().forEach(sentence => {
         console.log('##########################################################');
         display(sentence.text(), 'Sentence'); // eslint-disable-line
-        info(sentence, 'sentence')// eslint-disable-line
+        devInfo(sentence, 'sentence')// eslint-disable-line
         // let complete = sentence.isCompleteSentence();
         let subject = sentence.subject();
-        info(subject, 'subject'); // eslint-disable-line
+        devInfo(subject, 'subject', devInfoOn, devBlockName); // eslint-disable-line
         let compoundClauses = sentence.compoundClauses();
-        info(compoundClauses, 'compoundClauses'); // eslint-disable-line
+        devInfo(compoundClauses, 'compoundClauses', devInfoOn, devBlockName); // eslint-disable-line
         let nounPhrase = sentence.nounPhrases();
-        info(nounPhrase, 'nounPhrase')// eslint-disable-line
+        devInfo(nounPhrase, 'nounPhrase', devInfoOn, devBlockName)// eslint-disable-line
         let prepositionalPhrases = sentence.prepositionalPhrases();
-        info(prepositionalPhrases, 'prepositionalPhrases')// eslint-disable-line
+        devInfo(prepositionalPhrases, 'prepositionalPhrases', devInfoOn, devBlockName)// eslint-disable-line
     // let mainClause = sentence.getMainClause();
     // let mainVerb = sentence.getMainVerb();
     // console.log(complete + '\n' + JSON.stringify(mainClause) + '\n' + subject + ' : ' + mainVerb);
