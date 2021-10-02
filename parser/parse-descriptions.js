@@ -2,8 +2,8 @@ import * as mfs from '../lib/filesystem.js';
 import path from 'path';
 //import parser from './parser';
 //const rulePath = './parser/search-rules/';
+
 import nlp from 'compromise';
-import '../methods/syntax.js';
 
 export default async function parseDescriptions(description, name) {
     /* Development Options */
@@ -16,22 +16,11 @@ export default async function parseDescriptions(description, name) {
     //var ruleSets = await loadRules(rulePath);
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
     let document = nlp('I will have been studying Italian for three years', 'Fred');
-    nlp.verbose('tagger');
     document.sentences().forEach(sentence => {
         console.log('##########################################################');
         devInfo(sentence, 'sentence', devInfoOn, devBlockName); // eslint-disable-line
-        // let complete = sentence.isCompleteSentence();
-        let subject = sentence.subject();
-        devInfo(subject, 'subject', devInfoOn, devBlockName); // eslint-disable-line
-        let compoundClauses = sentence.compoundClauses();
-        devInfo(compoundClauses, 'compoundClauses', devInfoOn, devBlockName); // eslint-disable-line
-        let nounPhrase = sentence.nounPhrases();
-        devInfo(nounPhrase, 'nounPhrase', devInfoOn, devBlockName)// eslint-disable-line
-        let prepositionalPhrases = sentence.prepositionalPhrases();
-        devInfo(prepositionalPhrases, 'prepositionalPhrases', devInfoOn, devBlockName)// eslint-disable-line
-    // let mainClause = sentence.getMainClause();
-    // let mainVerb = sentence.getMainVerb();
-    // console.log(complete + '\n' + JSON.stringify(mainClause) + '\n' + subject + ' : ' + mainVerb);
+        sentence.sentenceSyntax();
+
     // let clauses = sentence.clauses();
     // clauses.forEach(clause => {
     //
