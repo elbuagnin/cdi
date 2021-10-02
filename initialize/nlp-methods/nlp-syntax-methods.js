@@ -31,10 +31,11 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         /***********************/
 
         let copy = this.clone();
+        devInfo(copy, 'copy', devInfoOn, devBlockName); // eslint-disable-line
         let phrases = [];
 
         // Find all nouns.
-        let nouns = copy.match('#Noun && !#PrepositionalPhrase').reverse();
+        let nouns = copy.nouns().not('#PrepositionalPhrase').reverse();
         devInfo(nouns, 'nouns', devInfoOn, devBlockName); // eslint-disable-line
 
         // Looking for potential head nouns of noun phrases.
@@ -46,11 +47,11 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             devInfo(phrases, 'phrases before', devInfoOn, devBlockName); // eslint-disable-line
             // Eliminate phrases that are subphrases of other choices.
             phrases.forEach((phrase, i) => {
-                //console.log(term.fg.blue + phrase); // eslint-disable-line
+                console.log(term.fg.blue + phrase); // eslint-disable-line
                 for (let j = 0; j < i; j++) {
-                    //console.log(term.fg.green + phrases[j]); // eslint-disable-line
+                    console.log(term.fg.green + phrases[j]); // eslint-disable-line
                     if (phrases[j].indexOf(phrases[i]) === 0) {
-                        //console.log(term.fg.red + phrases[i]); // eslint-disable-line
+                        console.log(term.fg.red + phrases[i]); // eslint-disable-line
                         phrases.splice(i, 1);
                     }
                 }
