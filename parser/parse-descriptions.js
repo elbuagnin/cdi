@@ -18,9 +18,9 @@ export default async function parseDescriptions(description, name) {
     let document = nlp('I will have been studying Italian for three years', 'Fred');
     document.sentences().forEach(sentence => {
         console.log('##########################################################');
-        devInfo(sentence, 'sentence', devInfoOn, devBlockName); // eslint-disable-line
+        devInfo(sentence, 'sentence before syntax', devInfoOn, devBlockName); // eslint-disable-line
         sentence.sentenceSyntax();
-
+        devInfo(sentence, 'sentence after syntax', devInfoOn, devBlockName); // eslint-disable-line
     // let clauses = sentence.clauses();
     // clauses.forEach(clause => {
     //
