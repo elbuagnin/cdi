@@ -30,18 +30,19 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         devBlock('nounPhrases', devInfoOn);  // eslint-disable-line
         /***********************/
 
+        let copy = this.clone();
         let phrases = [];
 
         // Find all nouns.
-        let nouns = this.match('#Noun && !PrepositionalPhrase').reverse();
-        devInfo(nouns, 'nouns'); // eslint-disable-line
+        let nouns = copy.match('#Noun && !PrepositionalPhrase').reverse();
+        devInfo(nouns, 'nouns', devInfoOn, devBlockName); // eslint-disable-line
 
         // Looking for potential head nouns of noun phrases.
         nouns.forEach(noun => {
             let nounPhrase = noun.text();
             let currentMatch = noun;
             while(currentMatch !== false) {
-                let preceedingTerm = this.match(currentMatch).justBefore();
+                let preceedingTerm = copy.match(currentMatch).justBefore();
                 if (preceedingTerm.not('#Verb').found) {
                     currentMatch = preceedingTerm;
                     nounPhrase = currentMatch.text() + ' ' + nounPhrase;
@@ -69,8 +70,8 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         });
         phrases.reverse();
         devInfo(phrases, 'phrases final', devInfoOn, devBlockName); // eslint-disable-line
-        let nounPhrases = stringArrayToNlp(this, phrases);
-        syntaxTag(nounPhrases, 'NounPhrase');
+        let nounPhrases = stringArrayToNlp(copy, phrases);
+        this.syntaxTag(nounPhrases, 'NounPhrase');
         devInfo(nounPhrases, 'Returing nounPhrases', devInfoOn, devBlockName); // eslint-disable-line
         return nounPhrases;
     };
@@ -114,15 +115,19 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         devBlock('prepositionalPhrases', devInfoOn); // eslint-disable-line
         /***********************/
 
-        let prepositions = this.prepositions().out('array'); //.json().map(o=>o.text);
+        let copy = this.clone();
         let phrases = [];
 
+        // Find preprosition words.
+        let prepositions = copy.prepositions().out('array'); //.json().map(o=>o.text);
+
+        // Search forward fo the noun that ends the prepositional phrase.
         prepositions.forEach (preposition => {
-            let currentMatch = this.match(preposition).lookAhead('#Noun').matchOne('#Noun');
+            let currentMatch = copy.match(preposition).lookAhead('#Noun').matchOne('#Noun');
             let endPhrase = currentMatch.text();
 
             while (currentMatch !== false) {
-                let nextTerm = this.match(currentMatch).justAfter();
+                let nextTerm = copy.match(currentMatch).justAfter();
                 if (nextTerm.match('#Noun').found) {
                     currentMatch = nextTerm;
                     endPhrase += ' ' + nextTerm.text();
@@ -145,12 +150,12 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                 }
             }
 
-            let prepPhrase = this.matchOne(preposition + ' * ' + endPhrase).text();
+            let prepPhrase = copy.matchOne(preposition + ' * ' + endPhrase).text();
             phrases.push(prepPhrase);
         });
 
-        let prepositionalPhrases = stringArrayToNlp(this, phrases);
-        syntaxTag(prepositionalPhrases, 'PrepositionalPhrase');
+        let prepositionalPhrases = stringArrayToNlp(copy, phrases);
+        this.syntaxTag(prepositionalPhrases, 'PrepositionalPhrase');
         return prepositionalPhrases;
     };
 
@@ -175,6 +180,8 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     };
 
     // Private Helpers
+
+    // Generates unique IDs for by Tag.
     const tagIDs = {};
     function* generateID (tag) {
         if (tag in tagIDs) {
@@ -185,33 +192,47 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         yield tag + tagIDs[tag];
     }
 
-    function syntaxTag(doc, tag) {
-        doc.forEach (item => {
+    Doc.prototype.syntaxTag = function (segments, tag) {
+        if (!segments) return;
+
+        segments.forEach (item => {
+            // Tag with syntax tag and unique id.
             let id = generateID(tag).next().value;
-            devInfo(id, 'id'); // eslint-disable-line
+
+            // Tag original sentence.
+            this.match(item.text()).tag(tag);
+            this.match(item.text()).tag(id);
+            // Tag segment copies sent in args.
             item.tag(tag);
             item.tag(id);
         });
-    }
+    };
 
     function stringArrayToNlp (doc, arrayOfStrings) {
         /* Development Options */
         let devBlockName = 'stringArrayToNlp';
-        let devInfoOn = false;
-        devBlock('stringArrayToNlp', devInfoOn); // eslint-disable-line
+        let devInfoOn = true;
+        devBlock('stringArrayToNlp', devInfoOn, devBlockName); // eslint-disable-line
         /***********************/
 
         devInfo(arrayOfStrings, 'Incomming arrayOfStrings', devInfoOn, devBlockName); // eslint-disable-line
+
+        if (arrayOfStrings.length === 0) return;
+
+        // Let's not splice up the original.
+        let copy = doc.clone();
+
+        // Split up the strings.
         arrayOfStrings.forEach(string => {
             devInfo(string, 'string to split on', devInfoOn, devBlockName); // eslint-disable-line
-            doc = doc.splitBefore(string);
-            doc = doc.splitAfter(string);
+            copy = copy.splitBefore(string);
+            copy = copy.splitAfter(string);
         });
 
-        devInfo(doc.length, 'doc.length', devInfoOn, devBlockName); // eslint-disable-line
+        devInfo(copy.length, 'copy.length', devInfoOn, devBlockName); // eslint-disable-line
         const indices = [];
         devInfo(indices, 'indices', devInfoOn, devBlockName); // eslint-disable-line
-        doc.forEach((segment, index) => {
+        copy.forEach((segment, index) => {
             arrayOfStrings.forEach(string => {
                 if (segment.has(string)) {
                     indices.push(index);
@@ -226,16 +247,16 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             }
         }
 
-        doc.forEach((segment, i) => {
+        copy.forEach((segment, i) => {
             if (remove.indexOf(i) > -1) {
-                doc.eq(i).delete();
+                copy.eq(i).delete();
             }
         });
 
         devInfo(indices, 'indices', devInfoOn, devBlockName); // eslint-disable-line
         devInfo(remove, 'remove', devInfoOn, devBlockName); // eslint-disable-line
-        devInfo(doc, 'doc after split', devInfoOn, devBlockName); // eslint-disable-line
-        return doc;
+        devInfo(copy, 'copy after split', devInfoOn, devBlockName); // eslint-disable-line
+        return copy;
     }
 
 });
