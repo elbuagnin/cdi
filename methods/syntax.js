@@ -24,14 +24,17 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     Doc.prototype.nounPhrases = function () {
         /* Development Options */
         let devBlockName = 'nounPhrases';
-        let devInfoOn = false;
+        let devInfoOn = true;
         devBlock('nounPhrases', devInfoOn);  // eslint-disable-line
         /***********************/
 
         let phrases = [];
+
+        // Find all nouns.
         let nouns = this.nouns().reverse();
         devInfo(nouns, 'nouns'); // eslint-disable-line
 
+        // Looking for potential head nouns of noun phrases.
         nouns.forEach(noun => {
             let nounPhrase = noun.text();
             let currentMatch = noun;
@@ -44,6 +47,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                     currentMatch = false;
                 }
             }
+
             devInfo(nounPhrase, 'nounPhrase', devInfoOn, devBlockName); // eslint-disable-line
             phrases.push(nounPhrase);
             devInfo(phrases, 'phrases before', devInfoOn, devBlockName); // eslint-disable-line
@@ -59,7 +63,14 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                 }
             });
 
+            phrases.forEach(phrase => {
+                var anyPrepositionalPhrases = phrase.prepositionalPhrases();
+
+                devInfo(anyPrepositionalPhrases, 'anyPrepositionalPhrases', devInfoOn, devBlockName); // eslint-disable-line
+            });
             devInfo(phrases, 'phrases after', devInfoOn, devBlockName); // eslint-disable-line
+
+
         });
         phrases.reverse();
         devInfo(phrases, 'phrases final', devInfoOn, devBlockName); // eslint-disable-line
@@ -143,7 +154,9 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             phrases.push(prepPhrase);
         });
 
-        return stringArrayToNlp(this, phrases);
+        let prepositionalPhrases = stringArrayToNlp(this, phrases);
+        syntaxTag(prepositionalPhrases, 'PrepositionalPhrase');
+        return prepositionalPhrases;
     };
 
     Doc.prototype.justBefore = function () {
