@@ -83,7 +83,7 @@ global.devInfo = function (v, name = 'unknown', devInfoOn = false, devBlockName 
         // }
         displayStack();
 
-        console.log(term.fg.blue + 'Name: ' + term.reset  + term.bright + name + term.reset);
+        console.log(term.fg.blue + term.bright + 'Name: ' + term.reset  + term.bright + name + term.reset);
         if (v) {
             console.log(term.fg.blue + 'Type: ' + term.reset + typeof v);
             console.log(term.fg.blue + 'Object Constructor: ' + term.reset + v.constructor.name);
