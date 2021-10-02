@@ -15,12 +15,11 @@ export default async function parseDescriptions(description, name) {
     var allCharacteristics = [];
     //var ruleSets = await loadRules(rulePath);
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
-    let document = nlp('The low-milage, very green car does not use a lot of premium gas.', 'Fred');
+    let document = nlp('I will have been studying Italian for three years', 'Fred');
     nlp.verbose('tagger');
     document.sentences().forEach(sentence => {
         console.log('##########################################################');
-        display(sentence.text(), 'Sentence'); // eslint-disable-line
-        devInfo(sentence, 'sentence')// eslint-disable-line
+        devInfo(sentence, 'sentence', devInfoOn, devBlockName); // eslint-disable-line
         // let complete = sentence.isCompleteSentence();
         let subject = sentence.subject();
         devInfo(subject, 'subject', devInfoOn, devBlockName); // eslint-disable-line
