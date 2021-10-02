@@ -1,9 +1,11 @@
 'use strict';
 import './local-config.js';
+import './initialize/nlp-methods/nlp-syntax-methods.js';
+import './initialize/nlp-methods/nlp-sentence-syntax.js';
 import './initialize/nlp-methods/nlp-custom-tags-words.js';
 import './initialize/load-data.js';
 import descriptionParser from './parser/parse-descriptions.js';
-import statUpCharacter from './stats/statup-character.js';
+import statUpCharacter from './statter/statup-character.js';
 
 export default function cdi(description, name) {
 

@@ -22,6 +22,8 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     });
 
     Doc.prototype.nounPhrases = function () {
+        // Call prepositionalPhrases() before looking for nounPhrases.
+
         /* Development Options */
         let devBlockName = 'nounPhrases';
         let devInfoOn = true;
@@ -31,7 +33,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let phrases = [];
 
         // Find all nouns.
-        let nouns = this.nouns().reverse();
+        let nouns = this.match('#Noun && !PrepositionalPhrase').reverse();
         devInfo(nouns, 'nouns'); // eslint-disable-line
 
         // Looking for potential head nouns of noun phrases.
@@ -47,11 +49,11 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                     currentMatch = false;
                 }
             }
-
             devInfo(nounPhrase, 'nounPhrase', devInfoOn, devBlockName); // eslint-disable-line
             phrases.push(nounPhrase);
-            devInfo(phrases, 'phrases before', devInfoOn, devBlockName); // eslint-disable-line
 
+            devInfo(phrases, 'phrases before', devInfoOn, devBlockName); // eslint-disable-line
+            // Eliminate phrases that are subphrases of other choices.
             phrases.forEach((phrase, i) => {
                 //console.log(term.fg.blue + phrase); // eslint-disable-line
                 for (let j = 0; j < i; j++) {
@@ -62,14 +64,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                     }
                 }
             });
-
-            phrases.forEach(phrase => {
-                var anyPrepositionalPhrases = phrase.prepositionalPhrases();
-
-                devInfo(anyPrepositionalPhrases, 'anyPrepositionalPhrases', devInfoOn, devBlockName); // eslint-disable-line
-            });
             devInfo(phrases, 'phrases after', devInfoOn, devBlockName); // eslint-disable-line
-
 
         });
         phrases.reverse();
