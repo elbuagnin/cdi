@@ -52,9 +52,8 @@ global.devBlock = function (name, devInfoOn = false) {
         console.log('\n');
         console.log(term.bg.magenta + term.fg.white + 'Function Call:                                           ' + term.reset);
         console.log(term.bright + name + term.reset);
+        displayStack();
     }
-
-    displayStack();
 };
 
 global.devBlockOver = function (name) {
