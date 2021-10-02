@@ -33,22 +33,44 @@ global.term = {
     }
 };
 
-global.display = function (v, name = '') {
-    console.log('\n' + term.bright);
-    if (name) {
-        console.log(name + ': ');
+global.display = function (v, name = '', devInfoOn = false) {
+    if (devInfoOn) {
+        console.log('\n' + term.bright);
+        if (name) {
+            console.log(name + ': ');
+        }
+        console.log(term.fg.magenta + String(v));
+        console.log(term.reset);
     }
-    console.log(term.fg.magenta + String(v));
-    console.log(term.reset);
 };
 
+const stack = [];
 global.devBlock = function (name, devInfoOn = false) {
+    stack.push(name);
+
     if (devInfoOn) {
         console.log('\n');
         console.log(term.bg.magenta + term.fg.white + 'Function Call:                                           ' + term.reset);
         console.log(term.bright + name + term.reset);
     }
+
+    displayStack();
 };
+
+global.devBlockOver = function (name) {
+    stack.pop(name);
+};
+
+function displayStack () {
+    if (stack.length > -1) {
+        console.log(term.bright);
+        console.log(term.fg.blue + 'Call Stack: ' + term.reset);
+        stack.forEach(call => {
+            console.log(call);
+        });
+        console.log(term.reset + '\n');
+    }
+}
 
 global.devInfo = function (v, name = 'unknown', devInfoOn = false, devBlockName = '') { // eslint-disable-line
     if (devInfoOn === true) {
@@ -56,9 +78,10 @@ global.devInfo = function (v, name = 'unknown', devInfoOn = false, devBlockName 
         console.log('\n');
         console.log(term.bg.blue + term.fg.white + 'Info on Variable:                                        ' + term.reset);
 
-        if (devBlockName) {
-            console.log(term.fg.blue + 'Block: ' + term.reset + term.bright + devBlockName + term.reset);
-        }
+        // if (devBlockName) {
+        //     console.log(term.fg.blue + 'Block: ' + term.reset + term.bright + devBlockName + term.reset);
+        // }
+        displayStack();
 
         console.log(term.fg.blue + 'Name: ' + term.reset  + term.bright + name + term.reset);
         if (v) {

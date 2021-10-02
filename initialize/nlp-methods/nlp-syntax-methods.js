@@ -34,22 +34,12 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let phrases = [];
 
         // Find all nouns.
-        let nouns = copy.match('#Noun && !PrepositionalPhrase').reverse();
+        let nouns = copy.match('#Noun && !#PrepositionalPhrase').reverse();
         devInfo(nouns, 'nouns', devInfoOn, devBlockName); // eslint-disable-line
 
         // Looking for potential head nouns of noun phrases.
         nouns.forEach(noun => {
-            let nounPhrase = noun.text();
-            let currentMatch = noun;
-            while(currentMatch !== false) {
-                let preceedingTerm = copy.match(currentMatch).justBefore();
-                if (preceedingTerm.not('#Verb').found) {
-                    currentMatch = preceedingTerm;
-                    nounPhrase = currentMatch.text() + ' ' + nounPhrase;
-                } else {
-                    currentMatch = false;
-                }
-            }
+            let nounPhrase = noun.phraseBackwardTo('#Verb');
             devInfo(nounPhrase, 'nounPhrase', devInfoOn, devBlockName); // eslint-disable-line
             phrases.push(nounPhrase);
 
@@ -68,12 +58,15 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             devInfo(phrases, 'phrases after', devInfoOn, devBlockName); // eslint-disable-line
 
         });
+
         phrases.reverse();
         devInfo(phrases, 'phrases final', devInfoOn, devBlockName); // eslint-disable-line
         let nounPhrases = stringArrayToNlp(copy, phrases);
         this.syntaxTag(nounPhrases, 'NounPhrase');
         devInfo(nounPhrases, 'Returing nounPhrases', devInfoOn, devBlockName); // eslint-disable-line
         return nounPhrases;
+
+        devBlockOver('nounPhrases'); // eslint-disable-line
     };
 
 
@@ -119,77 +112,128 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let phrases = [];
 
         // Find preprosition words.
-        let prepositions = copy.prepositions().out('array'); //.json().map(o=>o.text);
+        let prepositions = copy.prepositions().reverse();
 
         // Search forward fo the noun that ends the prepositional phrase.
         prepositions.forEach (preposition => {
-            let currentMatch = copy.match(preposition).lookAhead('#Noun').matchOne('#Noun');
-            let endPhrase = currentMatch.text();
-
-            while (currentMatch !== false) {
-                let nextTerm = copy.match(currentMatch).justAfter();
-                if (nextTerm.match('#Noun').found) {
-                    currentMatch = nextTerm;
-                    endPhrase += ' ' + nextTerm.text();
-                } else if (nextTerm.match('#Conjunction').found) {
-                    let nextNextTerm = nextTerm.justAfter();
-                    if (nextNextTerm.nouns().found) {
-                        currentMatch = nextTerm;
-                        endPhrase += ' ' + nextTerm.text();
-                    } else {
-                        if (currentMatch.match('#Pronoun').found) {
-                            //endPhrase = endPhrase.replace(currentMatch.text(), '');
-                        }
-                        currentMatch = false;
-                    }
-                } else {
-                    if (currentMatch.match('#Pronoun').found) {
-                        endPhrase = endPhrase.replace(currentMatch.text(), '');
-                    }
-                    currentMatch = false;
-                }
-            }
-
-            let prepPhrase = copy.matchOne(preposition + ' * ' + endPhrase).text();
+            devInfo(preposition, 'preposition', true); // eslint-disable-line
+            let prepPhrase = preposition.phraseForwardTo('#Noun', '#Conjunction', '#Pronoun');
+            //let prepPhrase = copy.matchOne(preposition + ' * ' + endPhrase).text();
             phrases.push(prepPhrase);
         });
 
         let prepositionalPhrases = stringArrayToNlp(copy, phrases);
         this.syntaxTag(prepositionalPhrases, 'PrepositionalPhrase');
         return prepositionalPhrases;
+
+        devBlockOver('prepositionalPhrases'); // eslint-disable-line
     };
 
     Doc.prototype.justBefore = function () {
+        /* Development Options */
+      let devBlockName = 'justBefore'; // eslint-disable-line
+      let devInfoOn = true; // eslint-disable-line
+      devBlock('justBefore', devInfoOn); // eslint-disable-line
+        /***********************/
 
+      devInfo(this.parent(), 'this.parent()', devInfoOn, devBlockName); // eslint-disable-line
         let precedingWords = this.parent().before(this);
         let precedingWord = precedingWords.lastTerms();
-
+        devInfo(precedingWords, 'precedingWords', devInfoOn, devBlockName); // eslint-disable-line
+        devInfo(precedingWord, 'precedingWord', devInfoOn, devBlockName); // eslint-disable-line
         if (precedingWord.found) {
             return precedingWord;
         } else return this.match('');
+
+        devBlockOver('justBefore'); // eslint-disable-line
     };
 
     Doc.prototype.justAfter = function () {
-
+        /* Development Options */
+      let devBlockName = 'justAfter'; // eslint-disable-line
+      let devInfoOn = true; // eslint-disable-line
+      devBlock('justAfter', devInfoOn); // eslint-disable-line
+        /***********************/
+        devInfo(this.parent(), 'this.parent()', devInfoOn, devBlockName); // eslint-disable-line
         let succeedingWords = this.parent().after(this);
+        devInfo(succeedingWords, 'succeedingWords', devInfoOn, devBlockName); // eslint-disable-line
         let succeedingWord = succeedingWords.firstTerms();
+        devInfo(succeedingWord, 'succeedingWord', devInfoOn, devBlockName); // eslint-disable-line
 
         if (succeedingWord.found) {
             return succeedingWord;
         } else return this.match('');
+
+        devBlockOver('justAfter'); // eslint-disable-line
     };
 
     // Private Helpers
 
+    Doc.prototype.phraseBackwardTo = function (tail) {
+        /* Development Options */
+      let devBlockName = 'phraseBackwardTo'; // eslint-disable-line
+      let devInfoOn = true; // eslint-disable-line
+      devBlock('phraseBackwardTo()', devInfoOn); // eslint-disable-line
+        /***********************/
+
+        let phrase = this.text();
+        devInfo(phrase, 'phrase', devInfoOn, devBlockName); // eslint-disable-line
+        let currentMatch = this;
+        devInfo(currentMatch, 'currentMatch', devInfoOn, devBlockName); // eslint-disable-line
+        while(currentMatch !== false) {
+            let preceedingTerm = this.match(currentMatch).justBefore();
+            devInfo(preceedingTerm, 'preceedingTerm', devInfoOn, devBlockName); // eslint-disable-line
+            if (preceedingTerm.not(tail).found) {
+                currentMatch = preceedingTerm;
+                phrase = currentMatch.text() + ' ' + phrase;
+            } else {
+                currentMatch = false;
+            }
+        }
+
+        devBlockOver('phraseBackwardTo'); // eslint-disable-line
+    };
+
+    Doc.prototype.phraseForwardTo = function (tail, keepGoing = '', goneToFar = '') {
+        let phrase = this.text();
+        devInfo(phrase, 'arg', true, 'phraseForwardTo'); // eslint-disable-line
+        let currentMatch = this;
+        devInfo(currentMatch, 'currentMatch', true, 'phraseForwardTo'); // eslint-disable-line
+        while(currentMatch !== false) {
+            let succeedingTerm = currentMatch.justAfter();
+            devInfo(succeedingTerm, 'succeedingTerm', true, 'phraseForwardTo'); // eslint-disable-line
+            if (succeedingTerm.not(tail).found) {
+                currentMatch = succeedingTerm;
+                phrase = phrase + ' ' + currentMatch.text();
+            } else {
+                currentMatch = false;
+            }
+            if (succeedingTerm.match(goneToFar).found) {
+                phrase = phrase.substring(phrase.indexOf(goneToFar), phrase.lastIndexOf(goneToFar));
+            }
+        }
+
+        devBlockOver('phraseForwardTo'); // eslint-disable-line
+    };
+
     // Generates unique IDs for by Tag.
     const tagIDs = {};
     function* generateID (tag) {
+        /* Development Options */
+      let devBlockName = 'generateID'; // eslint-disable-line
+      let devInfoOn = true; // eslint-disable-line
+      devBlock('generateID', devInfoOn); // eslint-disable-line
+        /***********************/
+
         if (tag in tagIDs) {
             tagIDs[tag]++;
         } else {
             tagIDs[tag] = 0;
         }
+        devInfo(tagIDs, 'tagIDs', devInfoOn, devBlockName); // eslint-disable-line
         yield tag + tagIDs[tag];
+
+        devBlockOver('generateID'); // eslint-disable-line
     }
 
     Doc.prototype.syntaxTag = function (segments, tag) {
@@ -211,7 +255,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     function stringArrayToNlp (doc, arrayOfStrings) {
         /* Development Options */
         let devBlockName = 'stringArrayToNlp';
-        let devInfoOn = true;
+        let devInfoOn = false;
         devBlock('stringArrayToNlp', devInfoOn, devBlockName); // eslint-disable-line
         /***********************/
 
@@ -257,6 +301,8 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         devInfo(remove, 'remove', devInfoOn, devBlockName); // eslint-disable-line
         devInfo(copy, 'copy after split', devInfoOn, devBlockName); // eslint-disable-line
         return copy;
+
+        devBlockOver('stringArrayToNlp'); // eslint-disable-line
     }
 
 });

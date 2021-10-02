@@ -15,7 +15,7 @@ export default async function parseDescriptions(description, name) {
     var allCharacteristics = [];
     //var ruleSets = await loadRules(rulePath);
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
-    let document = nlp('I will have been studying Italian for three years', 'Fred');
+    let document = nlp('My friends and I will have been studying Italian for three years', 'Fred');
     document.sentences().forEach(sentence => {
         console.log('##########################################################');
         devInfo(sentence, 'sentence before syntax', devInfoOn, devBlockName); // eslint-disable-line
@@ -34,7 +34,7 @@ export default async function parseDescriptions(description, name) {
     //     }
     // });
     });
-
+    devBlockOver('parseDescriptions'); // eslint-disable-line
     if (allCharacteristics) {
         return allCharacteristics;
     } else {
