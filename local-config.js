@@ -38,14 +38,14 @@ global.display = function (v, name = '') {
     if (name) {
         console.log(name + ': ');
     }
-    console.log(term.fg.red + String(v));
+    console.log(term.fg.magenta + String(v));
     console.log(term.reset);
 };
 
 global.devBlock = function (name, devInfoOn = false) {
     if (devInfoOn) {
         console.log('\n');
-        console.log(term.bg.red + term.fg.white + 'Function Call:                                           ' + term.reset);
+        console.log(term.bg.magenta + term.fg.white + 'Function Call:                                           ' + term.reset);
         console.log(term.bright + name + term.reset);
     }
 };
