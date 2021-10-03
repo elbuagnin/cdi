@@ -34,7 +34,7 @@ export default async function parseDescriptions(description, name) {
     //     }
     // });
     });
-    devBlockOver('parseDescriptions'); // eslint-disable-line
+    
     if (allCharacteristics) {
         return allCharacteristics;
     } else {

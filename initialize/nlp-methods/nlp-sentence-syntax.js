@@ -15,7 +15,5 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let nounPhrase = this.nounPhrases();
         devInfo(nounPhrase, 'nounPhrase', devInfoOn, devBlockName)// eslint-disable-line
 
-
-        devBlockOver('sentenceSyntax'); // eslint-disable-line
     };
 });
