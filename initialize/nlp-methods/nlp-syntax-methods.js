@@ -24,9 +24,12 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     Doc.prototype.nounPhrases = function () {
         // Call prepositionalPhrases() before looking for nounPhrases.
 
+        // the shiny, red automobile
+        // multiple, head-scratching mysteries
+
         /* Development Options */
         let devBlockName = 'nounPhrases'; // eslint-disable-line
-        let devInfoOn = true; // eslint-disable-line
+        let devInfoOn = false; // eslint-disable-line
         devBlock('nounPhrases', devInfoOn);  // eslint-disable-line
         /***********************/
 
@@ -38,17 +41,15 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let nouns = sentence.nouns().not('#PrepositionalPhrase').reverse();
 
         // Looking for potential head nouns of noun phrases.
+        // If they can form a phrase, they are the head of a noun phrase.
         nouns.forEach(noun => {
             let nounPhrase = sentence.phraseBackward(noun, '#Verb');
             phrases.push(nounPhrase);
             strPhrases = phrases.NlpArrayToString();
             strPhrases = strPhrases.noSubDupes();
-
-            devInfo(strPhrases, 'strPhrases', devInfoOn, devBlockName); // eslint-disable-line
-
-
         });
 
+        // Convert back to NLP, tag 'em and bag 'em.
         strPhrases.reverse();
         let nounPhrases = stringArrayToNlp(sentence, strPhrases);
         sentence.syntaxTag(nounPhrases, 'NounPhrase');
@@ -91,26 +92,32 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     Doc.prototype.prepositionalPhrases = function () {
         /* Development Options */
         let devBlockName = 'prepositionalPhrases'; // eslint-disable-line
-        let devInfoOn = false; // eslint-disable-line
+        let devInfoOn = true; // eslint-disable-line
         devBlock('prepositionalPhrases', devInfoOn); // eslint-disable-line
         /***********************/
-
-        let copy = this.clone();
+        let sentence = this;
         let phrases = [];
+        let strPhrases = [];
 
         // Find preprosition words.
-        let prepositions = copy.prepositions().reverse();
+        let prepositions = sentence.prepositions().reverse();
 
         // Search forward fo the noun that ends the prepositional phrase.
+        // @example: for [country] and [honor]
+        // @example: of the [people]
         prepositions.forEach (preposition => {
             devInfo(preposition, 'preposition', true); // eslint-disable-line
-            let prepPhrase = preposition.phraseForwardTo('#Noun', '#Conjunction', '#Pronoun');
-            //let prepPhrase = copy.matchOne(preposition + ' * ' + endPhrase).text();
+            let prepPhrase = sentence.phraseForward(preposition, '#Noun', '#Pronoun');
             phrases.push(prepPhrase);
+            strPhrases = phrases.NlpArrayToString();
+            strPhrases = strPhrases.noSubDupes();
         });
 
-        let prepositionalPhrases = stringArrayToNlp(copy, phrases);
-        this.syntaxTag(prepositionalPhrases, 'PrepositionalPhrase');
+        // Convert back to NLP, tag 'em and bag 'em.
+        strPhrases.reverse();
+        let prepositionalPhrases = stringArrayToNlp(sentence, strPhrases);
+        sentence.syntaxTag(prepositionalPhrases, 'PrepositionalPhrase');
+
         return prepositionalPhrases;
     };
 
@@ -134,7 +141,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     Doc.prototype.justAfter = function () {
         /* Development Options */
       let devBlockName = 'justAfter'; // eslint-disable-line
-      let devInfoOn = false; // eslint-disable-line
+      let devInfoOn = true; // eslint-disable-line
       devBlock('justAfter', devInfoOn); // eslint-disable-line
         /***********************/
         devInfo(this.parent(), 'this.parent()', devInfoOn, devBlockName); // eslint-disable-line
@@ -175,14 +182,22 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         return nlpPhrase;
     };
 
-    Doc.prototype.phraseForwardTo = function (tail, keepGoing = '', goneToFar = '') {
-        let phrase = this.text();
-        devInfo(phrase, 'arg', true, 'phraseForwardTo'); // eslint-disable-line
-        let currentMatch = this;
-        devInfo(currentMatch, 'currentMatch', true, 'phraseForwardTo'); // eslint-disable-line
+    Doc.prototype.phraseForward = function (head, tail, goneToFar = '') {
+        /* Development Options */
+         let devBlockName = 'phraseForward'; // eslint-disable-line
+         let devInfoOn = true; // eslint-disable-line
+         devBlock('phraseForward', devInfoOn); // eslint-disable-line
+        /***********************/
+
+        let sentence = this;
+        let phrase = head.text();
+        let currentMatch = head;
+        devInfo(sentence, 'arg', true, 'phraseForward'); // eslint-disable-line
+
+        devInfo(currentMatch, 'currentMatch', true, 'phraseForward'); // eslint-disable-line
         while(currentMatch !== false) {
-            let succeedingTerm = currentMatch.justAfter();
-            devInfo(succeedingTerm, 'succeedingTerm', true, 'phraseForwardTo'); // eslint-disable-line
+            let succeedingTerm = sentence.match(currentMatch).justAfter();
+            devInfo(succeedingTerm, 'succeedingTerm', true, 'phraseForward'); // eslint-disable-line
             if (succeedingTerm.not(tail).found) {
                 currentMatch = succeedingTerm;
                 phrase = phrase + ' ' + currentMatch.text();
@@ -193,6 +208,9 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                 phrase = phrase.substring(phrase.indexOf(goneToFar), phrase.lastIndexOf(goneToFar));
             }
         }
+        
+        let nlpPhrase = sentence.match(phrase);
+        return nlpPhrase;
     };
 
     Array.prototype.noSubDupes = function () {
@@ -268,19 +286,19 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         if (arrayOfStrings.length === 0) return;
 
         // Let's not splice up the original.
-        let copy = doc.clone();
+        let sentence = doc.clone();
 
         // Split up the strings.
         arrayOfStrings.forEach(string => {
             devInfo(string, 'string to split on', devInfoOn, devBlockName); // eslint-disable-line
-            copy = copy.splitBefore(string);
-            copy = copy.splitAfter(string);
+            sentence = sentence.splitBefore(string);
+            sentence = sentence.splitAfter(string);
         });
 
-        devInfo(copy.length, 'copy.length', devInfoOn, devBlockName); // eslint-disable-line
+        devInfo(sentence.length, 'sentence.length', devInfoOn, devBlockName); // eslint-disable-line
         const indices = [];
         devInfo(indices, 'indices', devInfoOn, devBlockName); // eslint-disable-line
-        copy.forEach((segment, index) => {
+        sentence.forEach((segment, index) => {
             arrayOfStrings.forEach(string => {
                 if (segment.has(string)) {
                     indices.push(index);
@@ -295,16 +313,16 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             }
         }
 
-        copy.forEach((segment, i) => {
+        sentence.forEach((segment, i) => {
             if (remove.indexOf(i) > -1) {
-                copy.eq(i).delete();
+                sentence.eq(i).delete();
             }
         });
 
         devInfo(indices, 'indices', devInfoOn, devBlockName); // eslint-disable-line
         devInfo(remove, 'remove', devInfoOn, devBlockName); // eslint-disable-line
-        devInfo(copy, 'copy after split', devInfoOn, devBlockName); // eslint-disable-line
-        return copy;
+        devInfo(sentence, 'sentence after split', devInfoOn, devBlockName); // eslint-disable-line
+        return sentence;
     }
 
 });
