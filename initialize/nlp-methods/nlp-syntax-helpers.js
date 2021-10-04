@@ -208,4 +208,14 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
         return positive;
     };
+
+    Doc.prototype.remove = function (segment) {
+        let phrase = this;
+        let string = segment.text();
+        let remainder = phrase.clone();
+
+        remainder.match(string).replaceWith(nothing);
+        
+        return remainder;
+    };
 });
