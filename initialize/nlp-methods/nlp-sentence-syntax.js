@@ -5,7 +5,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     Doc.prototype.sentenceSyntax = function () {
         /* Development Options */
          let devBlockName = 'sentenceSyntax'; // eslint-disable-line
-         let devInfoOn = false; // eslint-disable-line
+         let devInfoOn = true; // eslint-disable-line
          devBlock('sentenceSyntax', devInfoOn); // eslint-disable-line
         /***********************/
 

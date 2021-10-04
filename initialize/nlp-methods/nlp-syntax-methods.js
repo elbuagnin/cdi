@@ -1,5 +1,7 @@
 import nlp from 'compromise';
 
+const nothing = '';
+
 nlp.extend((Doc, world) => { // eslint-disable-line
 
     Doc.prototype.subject = function () {
@@ -33,6 +35,10 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         }
     };
 
+    Doc.prototype.verbPhrases = function () {
+        //
+    };
+
     Doc.prototype.nounPhrases = function () {
         // the shiny, red automobile
         // multiple, head-scratching mysteries
@@ -63,12 +69,39 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         // Convert back to NLP, tag 'em and bag 'em.
         strPhrases.reverse();
         let nounPhrases = strPhrases.stringArrayToNlp(sentence);
+
+        // Remove prepositional phrases
+        nounPhrases = nounPhrases.map((phrase, i) => {
+           devInfo(phrase, 'phrase', devInfoOn, devBlockName); // eslint-disable-line
+            if (phrase.prepositions().found) {
+                let prepositions = phrase.prepositions();
+                let updatedPhrase = {};
+                prepositions.forEach(preposition => {
+                    let prepPhrase = phrase.phraseForward(preposition, [{tag: '#Noun', include: true}]);
+                    updatedPhrase = phrase.remove(prepPhrase);
+                    if (updatedPhrase.wordCount() === 1) {
+                        console.log('i = ' + i);
+                        console.log('deleting ' + nounPhrases[i]);
+                        updatedPhrase = '';
+                    }
+                });
+
+                return updatedPhrase;
+            } else {
+                return phrase;
+            }
+        });
+
         sentence.syntaxTag(nounPhrases, 'NounPhrase');
 
         return nounPhrases;
     };
 
     Doc.prototype.prepositionalPhrases = function () {
+        // over the moon
+        // in Cherry Hill Lane
+        // of the turning away
+
         /* Development Options */
         let devBlockName = 'prepositionalPhrases'; // eslint-disable-line
         let devInfoOn = false; // eslint-disable-line
