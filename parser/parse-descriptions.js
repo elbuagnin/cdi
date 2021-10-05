@@ -8,14 +8,14 @@ import nlp from 'compromise';
 export default async function parseDescriptions(description, name) {
     /* Development Options */
     let devBlockName = 'parseDescriptions'; // eslint-disable-line
-    let devInfoOn = true; // eslint-disable-line
+    let devInfoOn = false; // eslint-disable-line
     devBlock('parseDescriptions', devInfoOn); // eslint-disable-line
     /***********************/
 
     var allCharacteristics = [];
     //var ruleSets = await loadRules(rulePath);
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
-    let document = nlp('My friends and I will have been studying Italian for three years.', 'Fred');
+    let document = nlp('While I slept quietly in bed with my dog, my friends held a noisy party in the backyard.', 'Fred');
     document.contractions().expand();
     document.sentences().forEach(sentence => {
         console.log('##########################################################');

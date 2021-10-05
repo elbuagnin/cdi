@@ -1,6 +1,6 @@
 import nlp from 'compromise';
 
-const nothing = '';
+// const nothing = '';
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
@@ -45,7 +45,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
         /* Development Options */
             let devBlockName = 'nounPhrases'; // eslint-disable-line
-            let devInfoOn = true; // eslint-disable-line
+            let devInfoOn = false; // eslint-disable-line
             devBlock('nounPhrases', devInfoOn);  // eslint-disable-line
         /***********************/
 
@@ -112,7 +112,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let strPhrases = [];
 
         // Find preprosition words.
-        let prepositions = sentence.match('#Preposition').reverse();
+        let prepositions = sentence.prepositions().reverse();
 
         // Search forward fo the noun that ends the prepositional phrase.
         // @example: for [country] and [honor]

@@ -5,44 +5,29 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     const nothing = '';
 
     Doc.prototype.justBefore = function () {
-        /* Development Options */
-      let devBlockName = 'justBefore'; // eslint-disable-line
-      let devInfoOn = false; // eslint-disable-line
-      devBlock('justBefore', devInfoOn); // eslint-disable-line
-        /***********************/
-
-        let precedingWords = this.parent().before(this);
+        let precedingWords = this.all().before(this);
         let precedingWord = precedingWords.lastTerms();
 
         if (precedingWord.found) {
             return precedingWord;
-        } else return this.match('');
+        } else return this.match(nothing);
     };
 
-    Doc.prototype.justAfter = function () {
-        /* Development Options */
-      let devBlockName = 'justAfter'; // eslint-disable-line
-      let devInfoOn = false; // eslint-disable-line
-      devBlock('justAfter', devInfoOn); // eslint-disable-line
-        /***********************/
 
-        let succeedingWords = this.parent().after(this);
+    Doc.prototype.justAfter = function () {
+        let succeedingWords = this.all().after(this);
         let succeedingWord = succeedingWords.firstTerms();
 
         if (succeedingWord.found) {
             return succeedingWord;
-        } else return this.match('');
+        } else return this.match(nothing);
     };
 
+
     Doc.prototype.phraseBackward = function (head, tail) {
-        /* Development Options */
-      let devBlockName = 'phraseBackward'; // eslint-disable-line
-      let devInfoOn = false; // eslint-disable-line
-      devBlock('phraseBackward()', devInfoOn); // eslint-disable-line
-        /***********************/
-        let sentence = this;
-        let phrase = head.text();
-        let currentMatch = head.text();
+        let sentence = this.all();
+        let phrase = head;
+        let currentMatch = head;
         let proceed = true;
 
         while(proceed === true) {
@@ -50,7 +35,6 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             let preceedingTerm = sentence.match(currentMatch).justBefore();
 
             if (preceedingTerm.has(anything)) {
-               devInfo(preceedingTerm, 'preceedingTerm', devInfoOn, devBlockName); // eslint-disable-line
                 tail.forEach(rule => {
                     if (preceedingTerm.has(rule.tag)) {
                         proceed = false;
@@ -63,29 +47,24 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
             if (proceed) {
                 currentMatch = preceedingTerm;
-                phrase = currentMatch.text() + ' ' + phrase;
+                phrase = currentMatch.concat(phrase);
             } else {
                 currentMatch = false;
                 if (includeTerm === true) {
-                    phrase = preceedingTerm.text() + ' ' + phrase;
+                    phrase = preceedingTerm.concat(phrase);
                 }
             }
         }
 
-        let nlpPhrase = sentence.match(phrase);
-        return nlpPhrase;
+        return phrase;
     };
 
-    Doc.prototype.phraseForward = function (head, tail) {
-        /* Development Options */
-      let devBlockName = 'phraseForward'; // eslint-disable-line
-      let devInfoOn = false; // eslint-disable-line
-      devBlock('phraseForward()', devInfoOn); // eslint-disable-line
-        /***********************/
 
-        let sentence = this;
-        let phrase = head.text();
-        let currentMatch = head.text();
+    Doc.prototype.phraseForward = function (head, tailSearchTerms) {
+        let sentence = this.all();
+        let currentMatch = head;
+        let tail = head;
+        let phrase = this.all();
         let proceed = true;
 
         while(proceed === true) {
@@ -93,7 +72,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             let succeedingTerm = sentence.match(currentMatch).justAfter();
 
             if (succeedingTerm.has(anything)) {
-                tail.forEach(rule => {
+                tailSearchTerms.forEach(rule => {
                     if (succeedingTerm.has(rule.tag)) {
                         proceed = false;
                         includeTerm = rule.include;
@@ -105,18 +84,21 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
             if (proceed) {
                 currentMatch = succeedingTerm;
-                phrase = phrase + ' ' + currentMatch.text();
+                tail = currentMatch;
             } else {
                 currentMatch = false;
                 if (includeTerm === true) {
-                    phrase = phrase + ' ' + succeedingTerm.text();
+                    tail = succeedingTerm;
                 }
             }
+
+            phrase = sentence.splitBefore(head);
+            phrase = phrase.splitAfter(tail);
         }
 
-        let nlpPhrase = sentence.match(phrase);
-        return nlpPhrase;
+        return phrase;
     };
+
 
     Array.prototype.noSubDupes = function () {
         // Eliminate phrases that are subphrases of other choices in an array.
@@ -209,13 +191,42 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         return positive;
     };
 
+    Doc.prototype.mask = function (segments) {
+        // Building a new Doc of the selected phrases.
+        let negative = this.all().clone();
+        let positive = this.all().clone();
+
+        if ((typeof segments) === 'string') {
+            segments = [segments];
+        }
+
+        // Use array strings to create a negative.
+        segments.forEach(string => {
+            negative.match(string).replaceWith(nothing);
+        });
+
+        // Use the negative to isolate the positive.
+        negative.forEach(segment => {
+            let remove = segment.text();
+            positive.match(remove).replaceWith(nothing);
+        });
+
+        // Now split the phrases that remain.
+        segments.forEach(string => {
+            positive = positive.splitBefore(string);
+            positive = positive.splitAfter(string);
+        });
+
+        return positive;
+    };
+
     Doc.prototype.remove = function (segment) {
         let phrase = this;
         let string = segment.text();
         let remainder = phrase.clone();
 
         remainder.match(string).replaceWith(nothing);
-        
+
         return remainder;
     };
 });
