@@ -2,9 +2,25 @@ import nlp from 'compromise';
 
 nlp.extend((Doc, world) => { // eslint-disable-line
     const anything = '.';
+    //    const word = '.';
     const nothing = '';
+    const empty = nlp(nothing);
 
-    Doc.prototype.justBefore = function () {
+    Doc.prototype.index = function () {
+        /* Development Options */
+        let devBlockName = 'index'; // eslint-disable-line
+        let devInfoOn = true; // eslint-disable-line
+        devBlock('index', devInfoOn); // eslint-disable-line
+        /***********************/
+
+        devInfo(this, 'this', devInfoOn, devBlockName); // eslint-disable-line
+        let sentence = this.all();
+        if (sentence.match(this).out('offset').length > 0) {
+            return sentence.match(this).out('offset')[0].offset.index;
+        } else return -1;
+    };
+
+    Doc.prototype.previous = function () {
         let precedingWords = this.all().before(this);
         let precedingWord = precedingWords.lastTerms();
 
@@ -14,7 +30,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     };
 
 
-    Doc.prototype.justAfter = function () {
+    Doc.prototype.next = function () {
         let succeedingWords = this.all().after(this);
         let succeedingWord = succeedingWords.firstTerms();
 
@@ -24,21 +40,37 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     };
 
 
-    Doc.prototype.phraseBackward = function (head, tail) {
+    Doc.prototype.phraseBackward = function (head, tailSearchTerms) {
+        /* Development Options */
+        let devBlockName = 'phraseBackward'; // eslint-disable-line
+        let devInfoOn = false; // eslint-disable-line
+        devBlock('phraseBackward', devInfoOn); // eslint-disable-line
+        /***********************/
+        devInfo(head, 'head', devInfoOn, devBlockName); // eslint-disable-line
+
         let sentence = this.all();
-        let phrase = head;
-        let currentMatch = head;
         let proceed = true;
+        let phrase = empty;
+        let currentMatch = head;
+        let tail = empty;
+        let beginning = empty;
 
         while(proceed === true) {
-            let includeTerm = false;
-            let preceedingTerm = sentence.match(currentMatch).justBefore();
+            let include = false;
+            let preceedingTerm = sentence.match(currentMatch).previous();
 
             if (preceedingTerm.has(anything)) {
-                tail.forEach(rule => {
-                    if (preceedingTerm.has(rule.tag)) {
-                        proceed = false;
-                        includeTerm = rule.include;
+                tailSearchTerms.forEach(searchTerm => {
+                    if (preceedingTerm.match(searchTerm.term).found) {
+                        if (searchTerm.terminal === true) {
+                            proceed = false;
+                            tail = preceedingTerm;
+                            if (searchTerm.include === true) {
+                                include = true;
+                            }
+                        } else {
+                            proceed = true;
+                        }
                     }
                 });
             } else {
@@ -47,11 +79,22 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
             if (proceed) {
                 currentMatch = preceedingTerm;
-                phrase = currentMatch.concat(phrase);
+
             } else {
-                currentMatch = false;
-                if (includeTerm === true) {
-                    phrase = preceedingTerm.concat(phrase);
+    
+                if (include === true) {
+                    if (tail.previous().found) {
+                        beginning = sentence.after(tail.previous());
+                    } else {
+                        beginning = sentence;
+                    }
+                }
+
+                if (head.next().found) {
+                    phrase = beginning.before(head.next());
+                }
+                else {
+                    phrase = beginning;
                 }
             }
         }
@@ -64,18 +107,18 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let sentence = this.all();
         let currentMatch = head;
         let tail = head;
-        let phrase = this.all();
+        let phrase = this.all(nothing);
         let proceed = true;
 
         while(proceed === true) {
-            let includeTerm = false;
-            let succeedingTerm = sentence.match(currentMatch).justAfter();
+            let include = false;
+            let succeedingTerm = sentence.match(currentMatch).next();
 
             if (succeedingTerm.has(anything)) {
                 tailSearchTerms.forEach(rule => {
                     if (succeedingTerm.has(rule.tag)) {
                         proceed = false;
-                        includeTerm = rule.include;
+                        include = rule.include;
                     }
                 });
             } else {
@@ -87,7 +130,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                 tail = currentMatch;
             } else {
                 currentMatch = false;
-                if (includeTerm === true) {
+                if (include === true) {
                     tail = succeedingTerm;
                 }
             }
