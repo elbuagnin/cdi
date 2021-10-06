@@ -6,20 +6,6 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     const nothing = '';
     const empty = nlp(nothing);
 
-    Doc.prototype.index = function () {
-        /* Development Options */
-        let devBlockName = 'index'; // eslint-disable-line
-        let devInfoOn = true; // eslint-disable-line
-        devBlock('index', devInfoOn); // eslint-disable-line
-        /***********************/
-
-        devInfo(this, 'this', devInfoOn, devBlockName); // eslint-disable-line
-        let sentence = this.all();
-        if (sentence.match(this).out('offset').length > 0) {
-            return sentence.match(this).out('offset')[0].offset.index;
-        } else return -1;
-    };
-
     Doc.prototype.previous = function () {
         let precedingWords = this.all().before(this);
         let precedingWord = precedingWords.lastTerms();
@@ -203,7 +189,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     Array.prototype.stringArrayToNlp = function (sentence) {
         /* Development Options */
         let devBlockName = 'stringArrayToNlp';
-        let devInfoOn = false;
+        let devInfoOn = true;
         devBlock('stringArrayToNlp', devInfoOn, devBlockName); // eslint-disable-line
         /***********************/
 
@@ -216,15 +202,16 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
         // Use array strings to create a negative.
         array.forEach(string => {
+            negative = negative.splitAfter(string);
             negative.match(string).replaceWith(nothing);
         });
-
+        devInfo(negative, 'negative', devInfoOn, devBlockName); // eslint-disable-line
         // Use the negative to isolate the positive.
         negative.forEach(segment => {
             let remove = segment.text();
             positive.match(remove).replaceWith(nothing);
         });
-
+        devInfo(positive, 'positive', devInfoOn, devBlockName); // eslint-disable-line
         // Now split the phrases that remain.
         array.forEach(string => {
             positive = positive.splitBefore(string);
@@ -234,60 +221,8 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         return positive;
     };
 
-    Doc.prototype.mask = function (segments) {
-        /* Development Options */
-      let devBlockName = 'mask'; // eslint-disable-line
-      let devInfoOn = true; // eslint-disable-line
-      devBlock('mask', devInfoOn); // eslint-disable-line
-        /***********************/
-
-        // Building a new Doc of the selected phrases.
-        let negative = this.all().clone();
-        let positive = this.all().clone();
-
-        if ((typeof segments) === 'string') {
-            segments = [segments];
-        }
-
-        // Use array strings to create a negative.
-        segments.forEach(string => {
-            negative.match(string).replaceWith('');
-        });
-
-        // Use the negative to isolate the positive.
-        negative.forEach(segment => {
-            let remove = segment.text();
-            devInfo(remove, 'remove', devInfoOn, devBlockName); // eslint-disable-line
-            positive.match(remove).replaceWith(nothing);
-        });
-
-        // Now split the phrases that remain.
-        segments.forEach(string => {
-            positive = positive.splitBefore(string);
-            positive = positive.splitAfter(string);
-        });
-
-        return positive;
-    };
-
-    Doc.prototype.crop = function (keep) {
-        let sentence = this.all();
-        sentence.forEach (segment => {
-            let keepThis = false;
-            keep.forEach (keeper => {
-                if (segment.match(keeper)) {
-                    keepThis = true;
-                }
-            });
-            if (keepThis === false) {
-                sentence.match(segment).delete();
-            }
-        });
-        return sentence;
-    };
-
     Doc.prototype.remove = function (segment) {
-        let phrase = this;
+        let phrase = this.all();
         let string = segment.text();
         let remainder = phrase.clone();
 

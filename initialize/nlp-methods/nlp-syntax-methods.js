@@ -45,7 +45,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
         /* Development Options */
             let devBlockName = 'nounPhrases'; // eslint-disable-line
-            let devInfoOn = true; // eslint-disable-line
+            let devInfoOn = false; // eslint-disable-line
             devBlock('nounPhrases', devInfoOn);  // eslint-disable-line
         /***********************/
 
@@ -68,7 +68,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                     {term: '#Adverb', terminal: false}
                 ]);
             devInfo(nounPhrase, 'nounPhrase', devInfoOn, devBlockName); // eslint-disable-line
-            devInfo(nounPhrase.all(), 'nounPhrase.all()', devInfoOn, devBlockName); // eslint-disable-line
+            //devInfo(nounPhrase.all(), 'nounPhrase.all()', devInfoOn, devBlockName); // eslint-disable-line
             phrases.push(nounPhrase);
         });
 
@@ -78,7 +78,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         // Convert back to NLP, tag 'em and bag 'em.
         strPhrases.reverse();
         let nounPhrases = strPhrases.stringArrayToNlp(sentence);
-        nounPhrases = sentence.crop(strPhrases);
+        //nounPhrases = sentence.crop(strPhrases);
 
         // // Remove prepositional phrases
         // nounPhrases = nounPhrases.map((phrase, i) => {
