@@ -81,7 +81,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                 currentMatch = preceedingTerm;
 
             } else {
-    
+
                 if (include === true) {
                     if (tail.previous().found) {
                         beginning = sentence.after(tail.previous());
@@ -235,6 +235,12 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     };
 
     Doc.prototype.mask = function (segments) {
+        /* Development Options */
+      let devBlockName = 'mask'; // eslint-disable-line
+      let devInfoOn = true; // eslint-disable-line
+      devBlock('mask', devInfoOn); // eslint-disable-line
+        /***********************/
+
         // Building a new Doc of the selected phrases.
         let negative = this.all().clone();
         let positive = this.all().clone();
@@ -245,12 +251,13 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
         // Use array strings to create a negative.
         segments.forEach(string => {
-            negative.match(string).replaceWith(nothing);
+            negative.match(string).replaceWith('');
         });
 
         // Use the negative to isolate the positive.
         negative.forEach(segment => {
             let remove = segment.text();
+            devInfo(remove, 'remove', devInfoOn, devBlockName); // eslint-disable-line
             positive.match(remove).replaceWith(nothing);
         });
 
@@ -261,6 +268,22 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         });
 
         return positive;
+    };
+
+    Doc.prototype.crop = function (keep) {
+        let sentence = this.all();
+        sentence.forEach (segment => {
+            let keepThis = false;
+            keep.forEach (keeper => {
+                if (segment.match(keeper)) {
+                    keepThis = true;
+                }
+            });
+            if (keepThis === false) {
+                sentence.match(segment).delete();
+            }
+        });
+        return sentence;
     };
 
     Doc.prototype.remove = function (segment) {

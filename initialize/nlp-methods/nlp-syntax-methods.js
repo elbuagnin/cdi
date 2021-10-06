@@ -78,6 +78,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         // Convert back to NLP, tag 'em and bag 'em.
         strPhrases.reverse();
         let nounPhrases = strPhrases.stringArrayToNlp(sentence);
+        nounPhrases = sentence.crop(strPhrases);
 
         // // Remove prepositional phrases
         // nounPhrases = nounPhrases.map((phrase, i) => {
