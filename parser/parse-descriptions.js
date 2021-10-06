@@ -18,7 +18,7 @@ export default async function parseDescriptions(description, name) {
     let document = nlp('While I slept quietly in bed with my dog, my friends held a noisy party in the backyard.', 'Fred');
     document.contractions().expand();
     document.sentences().forEach(sentence => {
-        console.log('##########################################################');
+        startMarker(); // eslint-disable-line
         devInfo(sentence, 'sentence before syntax', devInfoOn, devBlockName); // eslint-disable-line
         sentence.sentenceSyntax();
         devInfo(sentence, 'sentence after syntax', devInfoOn, devBlockName); // eslint-disable-line
