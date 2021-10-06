@@ -33,6 +33,10 @@ global.term = {
     }
 };
 
+global.startMarker = function () {
+    console.log(term.bg.red + '                                                         ' + term.reset);
+};
+
 global.display = function (v, name = '', devInfoOn = false) {
     if (devInfoOn) {
         console.log('\n' + term.bright);
