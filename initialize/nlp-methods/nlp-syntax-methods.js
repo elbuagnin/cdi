@@ -41,9 +41,14 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
     Doc.prototype.nounPhrases = function () {
         // @Examples
+<<<<<<< HEAD
         // street corner wonderlust
         // owner of a lonely heart
         // a yellow submarine
+=======
+        // the shiny, red automobile
+        // multiple, head-scratching mysteries
+>>>>>>> 78091c8ae034f39ce1b0322517daa78392bfbaf2
 
         let sentence = this;
         let phrases = [];
@@ -52,7 +57,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         // Find all nouns.
         let nouns = sentence.match('#Noun').not('#Possessive'); // Do .match('#Noun') instead of .nouns to include pronouns.
 
-        // Looking for potential head nouns of noun phrases.
+        // Look for potential head nouns of noun phrases.
         // If they can form a phrase, they are the head of a noun phrase.
         nouns.forEach(noun => {
             let nounPhrase = sentence.phraseBackward(noun,
@@ -66,17 +71,23 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             phrases.push(nounPhrase);
         });
 
+        // Convert to string to make a mask. Check for duplicates.
         strPhrases = phrases.NlpArrayToString();
         strPhrases = strPhrases.noSubDupes();
 
         // Convert back to NLP, tag 'em and bag 'em.
         let nounPhrases = sentence.mask(strPhrases);
         sentence.syntaxTag(nounPhrases, 'NounPhrase');
+
         return nounPhrases;
     };
 
     Doc.prototype.prepositionalPhrases = function () {
         // @Examples
+<<<<<<< HEAD
+=======
+        // in Cherry Hill Lane
+>>>>>>> 78091c8ae034f39ce1b0322517daa78392bfbaf2
         // of the turning away
         // of a thousand dances
         // in Cherry Hill Park
@@ -89,6 +100,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         // Find all prepositions.
         let prepositions = sentence.prepositions();
 
+<<<<<<< HEAD
         // Do the form a phrase by ending in a noun or acting noun?
         prepositions.forEach(preposition => {
             let prepositionalPhrase = sentence.phraseForward(preposition,
@@ -101,14 +113,38 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             phrases.push(prepositionalPhrase);
         });
 
+=======
+        // Search forward fo the noun that ends the prepositional phrase.
+        // @example: for [country] and [honor]
+        // @example: of the [people]
+        prepositions.forEach(preposition => {
+            let prepositionPhrase = sentence.phraseForward(preposition,
+                [
+                    {term: '#Noun', terminal: true, include: true},
+                    {term: '#Gerund', terminal: true, include: true},
+                    {term: '#Preposition', terminal: false, subset: true},
+                    {term: '#Pronoun', terminal: false},
+                    {term: '#Possessive', terminal: false},
+                    {term: '#Adverb', terminal: false}
+                ]);
+            phrases.push(prepositionPhrase);
+        });
+
+        // Convert to string to make a mask. Check for duplicates.
+>>>>>>> 78091c8ae034f39ce1b0322517daa78392bfbaf2
         strPhrases = phrases.NlpArrayToString();
         strPhrases = strPhrases.noSubDupes();
 
         // Convert back to NLP, tag 'em and bag 'em.
+<<<<<<< HEAD
         let prepositionalPhrases = sentence.mask(strPhrases);
         sentence.syntaxTag(prepositionalPhrases, 'PrepositionalPhrase');
+=======
+        let prepositionPhrases = sentence.mask(strPhrases);
+        sentence.syntaxTag(prepositionPhrases, 'PrepositionalPhrase');
+>>>>>>> 78091c8ae034f39ce1b0322517daa78392bfbaf2
 
-        return prepositionalPhrases;
+        return prepositionPhrases;
     };
 
 });
