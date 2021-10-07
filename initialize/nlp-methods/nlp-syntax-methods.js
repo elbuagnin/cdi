@@ -6,11 +6,6 @@ let empty = nlp(nothing);
 nlp.extend((Doc, world) => { // eslint-disable-line
 
     Doc.prototype.phrasing = function () {
-        /* Development Options */
-        let devBlockName = 'phrasing'// eslint-disable-line
-        let devInfoOn = true; // eslint-disable-line
-        devBlock('phrasing', devInfoOn); // eslint-disable-line
-        /***********************/
         let sentence = this;
         let phrasing = this;
 
@@ -19,9 +14,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         phrasing = sentence.split('@hasSemicolon');
         phrasing = phrasing.splitOnAround('@hasComma', '#List+');
 
-
-
-        devInfo(phrasing, 'phrasing', devInfoOn, devBlockName); // eslint-disable-line
+        return phrasing;
     };
 
     Doc.prototype.clauses = function () {
