@@ -5,6 +5,18 @@ let empty = nlp(nothing);
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
+    Doc.prototype.listPhrases = function () {
+        let sentence = this;
+
+        let listPhrases = sentence.lists();
+
+        if (listPhrases.found) {
+            sentence.syntaxTag(listPhrases, 'List');
+        }
+
+        return listPhrases;
+    };
+
     Doc.prototype.verbPhrases = function () {
         let sentence = this;
         let verbs = sentence.verbs();
