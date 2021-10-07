@@ -38,6 +38,10 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         GerundPhrase: {
             isA: '',
             notA: ''
+        },
+        List: {
+            isA: '',
+            notA: ''
         }
     });
 });
