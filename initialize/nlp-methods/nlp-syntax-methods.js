@@ -5,6 +5,19 @@ import nlp from 'compromise';
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
+    Doc.prototype.phrasing = function () {
+        /* Development Options */
+        let devBlockName = 'phrasing'// eslint-disable-line
+        let devInfoOn = true; // eslint-disable-line
+        devBlock('phrasing', devInfoOn); // eslint-disable-line
+        /***********************/
+
+        let sentence = this;
+        let lists = sentence.listPhrases();
+
+        devInfo(lists, 'lists', devInfoOn, devBlockName); // eslint-disable-line
+    };
+
     Doc.prototype.clauses = function () {
         return this;
     };
