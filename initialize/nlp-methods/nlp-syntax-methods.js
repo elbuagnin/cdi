@@ -41,14 +41,9 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
     Doc.prototype.nounPhrases = function () {
         // @Examples
-<<<<<<< HEAD
         // street corner wonderlust
         // owner of a lonely heart
         // a yellow submarine
-=======
-        // the shiny, red automobile
-        // multiple, head-scratching mysteries
->>>>>>> 78091c8ae034f39ce1b0322517daa78392bfbaf2
 
         let sentence = this;
         let phrases = [];
@@ -84,10 +79,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
     Doc.prototype.prepositionalPhrases = function () {
         // @Examples
-<<<<<<< HEAD
-=======
         // in Cherry Hill Lane
->>>>>>> 78091c8ae034f39ce1b0322517daa78392bfbaf2
         // of the turning away
         // of a thousand dances
         // in Cherry Hill Park
@@ -100,7 +92,6 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         // Find all prepositions.
         let prepositions = sentence.prepositions();
 
-<<<<<<< HEAD
         // Do the form a phrase by ending in a noun or acting noun?
         prepositions.forEach(preposition => {
             let prepositionalPhrase = sentence.phraseForward(preposition,
@@ -113,7 +104,6 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             phrases.push(prepositionalPhrase);
         });
 
-=======
         // Search forward fo the noun that ends the prepositional phrase.
         // @example: for [country] and [honor]
         // @example: of the [people]
@@ -131,18 +121,14 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         });
 
         // Convert to string to make a mask. Check for duplicates.
->>>>>>> 78091c8ae034f39ce1b0322517daa78392bfbaf2
         strPhrases = phrases.NlpArrayToString();
         strPhrases = strPhrases.noSubDupes();
 
         // Convert back to NLP, tag 'em and bag 'em.
-<<<<<<< HEAD
         let prepositionalPhrases = sentence.mask(strPhrases);
         sentence.syntaxTag(prepositionalPhrases, 'PrepositionalPhrase');
-=======
         let prepositionPhrases = sentence.mask(strPhrases);
         sentence.syntaxTag(prepositionPhrases, 'PrepositionalPhrase');
->>>>>>> 78091c8ae034f39ce1b0322517daa78392bfbaf2
 
         return prepositionPhrases;
     };
