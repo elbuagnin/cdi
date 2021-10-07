@@ -27,13 +27,6 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
 
     Doc.prototype.phraseBackward = function (head, tailSearchTerms) {
-        /* Development Options */
-        let devBlockName = 'phraseBackward'; // eslint-disable-line
-        let devInfoOn = false; // eslint-disable-line
-        devBlock('phraseBackward', devInfoOn); // eslint-disable-line
-        /***********************/
-        devInfo(head, 'head', devInfoOn, devBlockName); // eslint-disable-line
-
         let sentence = this.all();
         let proceed = true;
         let phrase = empty;
@@ -89,13 +82,6 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     };
 
     Doc.prototype.phraseForward = function (head, tailSearchTerms) {
-        /* Development Options */
-        let devBlockName = 'phraseForward'; // eslint-disable-line
-        let devInfoOn = false; // eslint-disable-line
-        devBlock('phraseForward', devInfoOn); // eslint-disable-line
-        /***********************/
-        devInfo(head, 'head', devInfoOn, devBlockName); // eslint-disable-line
-
         let sentence = this.all();
         let proceed = true;
         let phrase = empty;
@@ -154,7 +140,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     Array.prototype.noSubDupes = function () {
         // Eliminate phrases that are subphrases of other choices in an array.
 
-        let array = this;
+        let array = this.reverse(); // Reversing is needed to spot subsets.
 
         for (let k = 0; k < 2; k++) {
             array.forEach((phrase, i) => {
@@ -165,7 +151,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                 }
             });
         }
-        return array;
+        return array.reverse();
     };
 
     // Generates unique IDs for by Tag.
@@ -208,34 +194,28 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         return newArray;
     };
 
-    Array.prototype.stringArrayToNlp = function (sentence) {
-        /* Development Options */
-        let devBlockName = 'stringArrayToNlp';
-        let devInfoOn = true;
-        devBlock('stringArrayToNlp', devInfoOn, devBlockName); // eslint-disable-line
-        /***********************/
-
-        let array = this;
-        if (array.length === 0) return;
+    Doc.prototype.mask = function (segments) {
+        let sentence = this;
+        if (segments.length === 0) return;
 
         // Building a new Doc of the selected phrases.
         let negative = sentence.clone();
         let positive = sentence.clone();
 
-        // Use array strings to create a negative.
-        array.forEach(string => {
+        // Use segments strings to create a negative.
+        segments.forEach(string => {
             negative = negative.splitAfter(string);
             negative.match(string).replaceWith(nothing);
         });
-        devInfo(negative, 'negative', devInfoOn, devBlockName); // eslint-disable-line
+
         // Use the negative to isolate the positive.
         negative.forEach(segment => {
             let remove = segment.text();
             positive.match(remove).replaceWith(nothing);
         });
-        devInfo(positive, 'positive', devInfoOn, devBlockName); // eslint-disable-line
+
         // Now split the phrases that remain.
-        array.forEach(string => {
+        segments.forEach(string => {
             positive = positive.splitBefore(string);
             positive = positive.splitAfter(string);
         });

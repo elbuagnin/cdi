@@ -40,21 +40,17 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     };
 
     Doc.prototype.nounPhrases = function () {
-        // the shiny, red automobile
-        // multiple, head-scratching mysteries
-
-        /* Development Options */
-            let devBlockName = 'nounPhrases'; // eslint-disable-line
-            let devInfoOn = false; // eslint-disable-line
-            devBlock('nounPhrases', devInfoOn);  // eslint-disable-line
-        /***********************/
+        // @Examples
+        // street corner wonderlust
+        // owner of a lonely heart
+        // a yellow submarine
 
         let sentence = this;
         let phrases = [];
         let strPhrases = [];
 
         // Find all nouns.
-        let nouns = sentence.match('#Noun').not('#Possessive').reverse(); // Do .match('#Noun') instead of .nouns to include pronouns.
+        let nouns = sentence.match('#Noun').not('#Possessive'); // Do .match('#Noun') instead of .nouns to include pronouns.
 
         // Looking for potential head nouns of noun phrases.
         // If they can form a phrase, they are the head of a noun phrase.
@@ -67,8 +63,6 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                     {term: '#Verb', terminal: true, include: false},
                     {term: '#Adverb', terminal: false}
                 ]);
-            devInfo(nounPhrase, 'nounPhrase', devInfoOn, devBlockName); // eslint-disable-line
-            //devInfo(nounPhrase.all(), 'nounPhrase.all()', devInfoOn, devBlockName); // eslint-disable-line
             phrases.push(nounPhrase);
         });
 
@@ -76,66 +70,42 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         strPhrases = strPhrases.noSubDupes();
 
         // Convert back to NLP, tag 'em and bag 'em.
-        strPhrases.reverse();
-        let nounPhrases = strPhrases.stringArrayToNlp(sentence);
-        //nounPhrases = sentence.crop(strPhrases);
-
-        // // Remove prepositional phrases
-        // nounPhrases = nounPhrases.map((phrase, i) => {
-        //    devInfo(phrase, 'phrase', devInfoOn, devBlockName); // eslint-disable-line
-        //     if (phrase.prepositions().found) {
-        //         let prepositions = phrase.prepositions();
-        //         let updatedPhrase = {};
-        //         prepositions.forEach(preposition => {
-        //             let prepPhrase = phrase.phraseForward(preposition, [{term: '#Noun', include: true}]);
-        //             updatedPhrase = phrase.remove(prepPhrase);
-        //             if (updatedPhrase.wordCount() === 1) {
-        //                 console.log('i = ' + i);
-        //                 console.log('deleting ' + nounPhrases[i]);
-        //                 updatedPhrase = '';
-        //             }
-        //         });
-        //
-        //         return updatedPhrase;
-        //     } else {
-        //         return phrase;
-        //     }
-        // });
-        devInfo(nounPhrases.all(), 'nounPhrases.all()', devInfoOn, devBlockName); // eslint-disable-line
+        let nounPhrases = sentence.mask(strPhrases);
         sentence.syntaxTag(nounPhrases, 'NounPhrase');
         return nounPhrases;
     };
 
     Doc.prototype.prepositionalPhrases = function () {
-        // over the moon
-        // in Cherry Hill Lane
+        // @Examples
         // of the turning away
+        // of a thousand dances
+        // in Cherry Hill Park
+        // in a coalmine
 
-        /* Development Options */
-        let devBlockName = 'prepositionalPhrases'; // eslint-disable-line
-        let devInfoOn = false; // eslint-disable-line
-        devBlock('prepositionalPhrases', devInfoOn); // eslint-disable-line
-        /***********************/
         let sentence = this;
         let phrases = [];
         let strPhrases = [];
 
-        // Find preprosition words.
-        let prepositions = sentence.prepositions().reverse();
+        // Find all prepositions.
+        let prepositions = sentence.prepositions();
 
-        // Search forward fo the noun that ends the prepositional phrase.
-        // @example: for [country] and [honor]
-        // @example: of the [people]
-        prepositions.forEach (preposition => {
-            let prepPhrase = sentence.phraseForward(preposition, [{term: '#Noun', include: true}]);
-            phrases.push(prepPhrase);
-            strPhrases = phrases.NlpArrayToString();
-            strPhrases = strPhrases.noSubDupes();
+        // Do the form a phrase by ending in a noun or acting noun?
+        prepositions.forEach(preposition => {
+            let prepositionalPhrase = sentence.phraseForward(preposition,
+                [
+                    {term: '#Noun', terminal: true, include: true},
+                    {term: '#Gerund', terminal: true, include: true},
+                    {term: '#Possessive', terminal: false},
+                    {term: '#Adverb', terminal: false}
+                ]);
+            phrases.push(prepositionalPhrase);
         });
 
+        strPhrases = phrases.NlpArrayToString();
+        strPhrases = strPhrases.noSubDupes();
+
         // Convert back to NLP, tag 'em and bag 'em.
-        strPhrases.reverse();
-        let prepositionalPhrases = strPhrases.stringArrayToNlp(sentence);
+        let prepositionalPhrases = sentence.mask(strPhrases);
         sentence.syntaxTag(prepositionalPhrases, 'PrepositionalPhrase');
 
         return prepositionalPhrases;
