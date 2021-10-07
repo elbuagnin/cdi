@@ -15,6 +15,8 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         sentence.match(parentheticals).delete();
 
         devInfo(parentheticals, 'parentheticals', devInfoOn, devBlockName); // eslint-disable-line
+        this.phrasing();
+        //devInfo(this.phrasing(), 'this.phrasing()', devInfoOn, devBlockName); // eslint-disable-line
 
 
         this.clauses().forEach (fragment => {
