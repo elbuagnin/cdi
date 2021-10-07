@@ -1,6 +1,7 @@
 import nlp from 'compromise';
 
 // const nothing = '';
+// let empty = nlp(nothing);
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
@@ -33,82 +34,6 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         } else {
             return false;
         }
-    };
-
-    Doc.prototype.verbPhrases = function () {
-        //
-    };
-
-    Doc.prototype.nounPhrases = function () {
-        // @Examples
-        // street corner wonderlust
-        // owner of a lonely heart
-        // a yellow submarine
-
-        let sentence = this;
-        let phrases = [];
-        let strPhrases = [];
-
-        // Find all nouns.
-        let nouns = sentence.match('#Noun').not('#Possessive'); // Do .match('#Noun') instead of .nouns to include pronouns.
-
-        // Looking for potential head nouns of noun phrases.
-        // If they can form a phrase, they are the head of a noun phrase.
-        nouns.forEach(noun => {
-            let nounPhrase = sentence.phraseBackward(noun,
-                [
-                    {term: '#Determiner', terminal: true, include: true},
-                    {term: '#Possessive', terminal: true, include: true},
-                    {term: '#Preposition', terminal: true, include: false},
-                    {term: '#Verb', terminal: true, include: false},
-                    {term: '#Adverb', terminal: false}
-                ]);
-            phrases.push(nounPhrase);
-        });
-
-        strPhrases = phrases.NlpArrayToString();
-        strPhrases = strPhrases.noSubDupes();
-
-        // Convert back to NLP, tag 'em and bag 'em.
-        let nounPhrases = sentence.mask(strPhrases);
-        sentence.syntaxTag(nounPhrases, 'NounPhrase');
-        return nounPhrases;
-    };
-
-    Doc.prototype.prepositionalPhrases = function () {
-        // @Examples
-        // of the turning away
-        // of a thousand dances
-        // in Cherry Hill Park
-        // in a coalmine
-
-        let sentence = this;
-        let phrases = [];
-        let strPhrases = [];
-
-        // Find all prepositions.
-        let prepositions = sentence.prepositions();
-
-        // Do the form a phrase by ending in a noun or acting noun?
-        prepositions.forEach(preposition => {
-            let prepositionalPhrase = sentence.phraseForward(preposition,
-                [
-                    {term: '#Noun', terminal: true, include: true},
-                    {term: '#Gerund', terminal: true, include: true},
-                    {term: '#Possessive', terminal: false},
-                    {term: '#Adverb', terminal: false}
-                ]);
-            phrases.push(prepositionalPhrase);
-        });
-
-        strPhrases = phrases.NlpArrayToString();
-        strPhrases = strPhrases.noSubDupes();
-
-        // Convert back to NLP, tag 'em and bag 'em.
-        let prepositionalPhrases = sentence.mask(strPhrases);
-        sentence.syntaxTag(prepositionalPhrases, 'PrepositionalPhrase');
-
-        return prepositionalPhrases;
     };
 
 });

@@ -9,6 +9,9 @@ nlp.extend((Doc, world) => { // eslint-disable-line
          devBlock('sentenceSyntax', devInfoOn); // eslint-disable-line
         /***********************/
 
+        let gerundPhrases = this.gerundPhrases();
+        devInfo(gerundPhrases, 'gerundPhrases', devInfoOn, devBlockName); // eslint-disable-line
+        
         let prepositionalPhrases = this.prepositionalPhrases();
         devInfo(prepositionalPhrases, 'prepositionalPhrases', devInfoOn, devBlockName)// eslint-disable-line
 
