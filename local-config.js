@@ -88,6 +88,10 @@ global.devInfo = function (v, name = 'unknown', devInfoOn = false, devBlockName 
                 v.text();
                 v.debug();
                 break;
+            case 'r':
+                v.text();
+                v.debug();
+                break;
             default:
                 break;
             }
