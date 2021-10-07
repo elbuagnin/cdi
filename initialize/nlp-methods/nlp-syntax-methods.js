@@ -5,6 +5,10 @@ import nlp from 'compromise';
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
+    Doc.prototype.clauses = function () {
+        return this;
+    };
+
     Doc.prototype.subject = function () {
         let syntax = this.match('[<subject>#Noun] * #Verb').groups();
         return syntax.subject;
@@ -39,9 +43,9 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     Doc.prototype.parentheticals = function () {
 
         let sentence = this;
-        let parentheses = sentence.parentheses();
+        let parentheticals = sentence.parentheses();
 
-        return parentheses;
+        return parentheticals;
     };
 });
 
