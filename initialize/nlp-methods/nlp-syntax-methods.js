@@ -1,7 +1,7 @@
 import nlp from 'compromise';
 
-// const nothing = '';
-// let empty = nlp(nothing);
+const nothing = '';
+let empty = nlp(nothing);
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
@@ -11,11 +11,17 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let devInfoOn = true; // eslint-disable-line
         devBlock('phrasing', devInfoOn); // eslint-disable-line
         /***********************/
-
         let sentence = this;
-        let lists = sentence.listPhrases();
+        let phrasing = this;
 
-        devInfo(lists, 'lists', devInfoOn, devBlockName); // eslint-disable-line
+        sentence.listPhrases();
+
+        phrasing = sentence.split('@hasSemicolon');
+        phrasing = phrasing.splitOnAround('@hasComma', '#List+');
+
+
+
+        devInfo(phrasing, 'phrasing', devInfoOn, devBlockName); // eslint-disable-line
     };
 
     Doc.prototype.clauses = function () {

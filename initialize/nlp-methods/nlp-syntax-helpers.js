@@ -223,6 +223,43 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         return positive;
     };
 
+    Doc.prototype.splitOnAround = function (on, around) {
+        /* Development Options */
+        let devBlockName = 'splitOnAround'; // eslint-disable-line
+        let devInfoOn = true; // eslint-disable-line
+        devBlock('splitOnAround', devInfoOn); // eslint-disable-line
+        /***********************/
+        let sentence = this;
+
+        let target = sentence.match(around);
+
+        if (target.has(anything) === false) {
+            return sentence.split(on);
+        }
+
+        let before = sentence.before(around).split(on);
+        let after = sentence.after(around).split(on);
+
+        let beforeExists = before.has(anything);
+        let afterExists = after.has(anything);
+
+        switch (beforeExists && afterExists) {
+        case true:
+            return before.append(target).append(after);
+        case false:
+            switch (beforeExists || afterExists) {
+            case false:
+                return target;
+            case true:
+                if (beforeExists) {
+                    return before.append(target);
+                } else {
+                    return target.append(after);
+                }
+            }
+        }
+    };
+
     Doc.prototype.remove = function (segment) {
         let phrase = this.all();
         let string = segment.text();
