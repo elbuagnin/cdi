@@ -3,6 +3,7 @@ import './local-config.js';
 import './initialize/nlp-methods/nlp-syntax-tags.js';
 import './initialize/nlp-methods/nlp-syntax-helpers.js';
 import './initialize/nlp-methods/nlp-syntax-methods.js';
+import './initialize/nlp-methods/nlp-syntax-phrases.js';
 import './initialize/nlp-methods/nlp-sentence-syntax.js';
 import './initialize/nlp-methods/nlp-custom-tags-words.js';
 import './initialize/load-data.js';

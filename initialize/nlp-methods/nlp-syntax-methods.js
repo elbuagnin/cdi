@@ -1,6 +1,7 @@
 import nlp from 'compromise';
 
 // const nothing = '';
+// let empty = nlp(nothing);
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
@@ -35,15 +36,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         }
     };
 
-    Doc.prototype.verbPhrases = function () {
-        //
-    };
-
-    Doc.prototype.nounPhrases = function () {
-        // @Examples
-        // street corner wonderlust
-        // owner of a lonely heart
-        // a yellow submarine
+    Doc.prototype.parentheticals = function () {
 
         let sentence = this;
         let phrases = [];

@@ -15,7 +15,7 @@ export default async function parseDescriptions(description, name) {
     var allCharacteristics = [];
     //var ruleSets = await loadRules(rulePath);
     // Search for the terms, sentence by sentence, clause by clause, in the doc.
-    let document = nlp('While I slept quietly in bed with my dog, my friends held a noisy party in the backyard.', 'Fred');
+    let document = nlp('Walking the dog with my wife (when she is willing) is my favorite pastime.', 'Fred');
     document.contractions().expand();
     document.sentences().forEach(sentence => {
         startMarker(); // eslint-disable-line
