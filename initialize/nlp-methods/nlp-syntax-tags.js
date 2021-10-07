@@ -27,12 +27,16 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             isA: 'Phrase',
             notA: 'NounPhrase'
         },
-        AdverbialPhrase: {
+        AdverbPhrase: {
             isA: 'Phrase',
             notA: ''
         },
-        PrepositionalPhrase: {
+        PrepositionPhrase: {
             isA: 'Phrase',
+            notA: ''
+        },
+        GerundPhrase: {
+            isA: '',
             notA: ''
         }
     });

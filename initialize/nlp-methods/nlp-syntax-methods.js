@@ -1,6 +1,7 @@
 import nlp from 'compromise';
 
 // const nothing = '';
+// let empty = nlp(nothing);
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
@@ -35,6 +36,13 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         }
     };
 
+    Doc.prototype.parentheticals = function () {
+
+        let sentence = this;
+        let parentheses = sentence.parentheses();
+
+        return parentheses;
+    };
 });
 
 //

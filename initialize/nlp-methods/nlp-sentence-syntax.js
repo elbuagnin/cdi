@@ -8,6 +8,9 @@ nlp.extend((Doc, world) => { // eslint-disable-line
          let devInfoOn = true; // eslint-disable-line
          devBlock('sentenceSyntax', devInfoOn); // eslint-disable-line
         /***********************/
+        let parentheticals = this.parentheticals();
+        devInfo(parentheticals, 'parentheticals', devInfoOn, devBlockName); // eslint-disable-line
+        this.match(parentheticals).delete();
 
         let gerundPhrases = this.gerundPhrases();
         devInfo(gerundPhrases, 'gerundPhrases', devInfoOn, devBlockName); // eslint-disable-line
@@ -17,5 +20,10 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
         let nounPhrases = this.nounPhrases();
         devInfo(nounPhrases, 'nounPhrases', devInfoOn, devBlockName)// eslint-disable-line
+
+        let verbPhrases = this.verbPhrases();
+        devInfo(verbPhrases, 'verbPhrases', devInfoOn, devBlockName); // eslint-disable-line
+
+        devInfo(this, 'this', devInfoOn, devBlockName); // eslint-disable-line
     };
 });
