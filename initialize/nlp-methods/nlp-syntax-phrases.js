@@ -6,7 +6,14 @@ let empty = nlp(nothing);
 nlp.extend((Doc, world) => { // eslint-disable-line
 
     Doc.prototype.verbPhrases = function () {
-    //
+        let sentence = this;
+        let verbs = sentence.verbs();
+
+        return verbs;
+    };
+
+    Doc.prototype.adverbPhrases = function () {
+
     };
 
     Doc.prototype.nounPhrases = function () {
