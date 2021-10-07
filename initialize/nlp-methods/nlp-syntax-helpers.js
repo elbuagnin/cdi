@@ -88,23 +88,37 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         return phrase;
     };
 
-
     Doc.prototype.phraseForward = function (head, tailSearchTerms) {
+        /* Development Options */
+        let devBlockName = 'phraseForward'; // eslint-disable-line
+        let devInfoOn = false; // eslint-disable-line
+        devBlock('phraseForward', devInfoOn); // eslint-disable-line
+        /***********************/
+        devInfo(head, 'head', devInfoOn, devBlockName); // eslint-disable-line
+
         let sentence = this.all();
-        let currentMatch = head;
-        let tail = head;
-        let phrase = this.all(nothing);
         let proceed = true;
+        let phrase = empty;
+        let currentMatch = head;
+        let tail = empty;
+        let beginning = empty;
 
         while(proceed === true) {
             let include = false;
             let succeedingTerm = sentence.match(currentMatch).next();
 
             if (succeedingTerm.has(anything)) {
-                tailSearchTerms.forEach(rule => {
-                    if (succeedingTerm.has(rule.tag)) {
-                        proceed = false;
-                        include = rule.include;
+                tailSearchTerms.forEach(searchTerm => {
+                    if (succeedingTerm.match(searchTerm.term).found) {
+                        if (searchTerm.terminal === true) {
+                            proceed = false;
+                            tail = succeedingTerm;
+                            if (searchTerm.include === true) {
+                                include = true;
+                            }
+                        } else {
+                            proceed = true;
+                        }
                     }
                 });
             } else {
@@ -113,16 +127,24 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
             if (proceed) {
                 currentMatch = succeedingTerm;
-                tail = currentMatch;
+
             } else {
-                currentMatch = false;
+
                 if (include === true) {
-                    tail = succeedingTerm;
+                    if (tail.next().found) {
+                        beginning = sentence.before(tail.next());
+                    } else {
+                        beginning = sentence;
+                    }
+                }
+
+                if (head.previous().found) {
+                    phrase = beginning.after(head.previous());
+                }
+                else {
+                    phrase = beginning;
                 }
             }
-
-            phrase = sentence.splitBefore(head);
-            phrase = phrase.splitAfter(tail);
         }
 
         return phrase;
