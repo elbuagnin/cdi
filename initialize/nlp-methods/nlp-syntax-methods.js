@@ -36,6 +36,13 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         }
     };
 
+    Doc.prototype.parentheticals = function () {
+
+        let sentence = this;
+        let parentheses = sentence.parentheses();
+
+        return parentheses;
+    };
 });
 
 //
