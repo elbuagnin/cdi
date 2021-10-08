@@ -68,7 +68,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let direction = 'forward';
         let head = '#Gerund';
         let tail = [
-            {term: '#Noun', terminal: true, include: true}
+            {term: '#Noun?+ #Noun', terminal: true, include: true}
         ];
 
         let argObj = {pos: pos, head: head, tail: tail, direction: direction};
@@ -85,7 +85,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
         let pos = 'Preposition';
         let direction = 'forward';
-        let head = '#Preposition';
+        let head = '#Preposition?+ #Preposition';
         let tail =
       [
           {term: '#Noun', terminal: true, include: true},
