@@ -1,3 +1,5 @@
+import * as _ from 'lodash-es';
+
 // Main function
 // Takes a string and parses it using JSON file rules to find useful characteristics.
 const parse = function (segment, searchRules) {
@@ -100,4 +102,4 @@ function evaluateMatches (matchedRules) {
     return evaluatedMatches;
 }
 
-export parse;
+export {parse};
