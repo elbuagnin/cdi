@@ -51,8 +51,6 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let tail =
     [
         {term: '#Determiner', terminal: true, include: true},
-        {term: '#Possessive', terminal: true, include: true},
-        {term: '#Preposition', terminal: true, include: false},
         {term: '#Verb', terminal: true, include: false},
         {term: '#Adverb', terminal: false}
     ];
@@ -100,6 +98,13 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     };
 
     Doc.prototype.findPhrase = function (argumentsObj) {
+        /* Development Options */
+        let devBlockName = 'findPhrase'; // eslint-disable-line
+        let devInfoOn = true; // eslint-disable-line
+        devBlock('findPhrase', devInfoOn); // eslint-disable-line
+        /***********************/
+
+
         let pos = argumentsObj.pos;
         let head = argumentsObj.head;
         let tail = argumentsObj.tail;
@@ -111,6 +116,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
         // Find all instances of the POS type..
         let posFind = sentence.match(head);
+        devInfo(posFind, 'posFind', devInfoOn, devBlockName); // eslint-disable-line
 
         // Do theu form a phrase by ending in the requisite POS word?
         posFind.forEach(posTerm => {
@@ -121,6 +127,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
                 posPhrase = sentence.phraseForward(posTerm, tail);
             }
             phrases.push(posPhrase);
+            devInfo(posPhrase, 'posPhrase', devInfoOn, devBlockName); // eslint-disable-line
         });
 
         strPhrases = phrases.NlpArrayToString();
