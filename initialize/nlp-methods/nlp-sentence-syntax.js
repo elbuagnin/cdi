@@ -13,8 +13,10 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let parentheticals = this.parentheticals();
         sentence.match(parentheticals).delete();
 
-
+        devInfo(sentence, 'sentence', devInfoOn, devBlockName); // eslint-disable-line
         sentence.sentencePhrasing().forEach (fragment => {
+            fragment.gerundRoles();
+
             let gerundPhrases = fragment.gerundPhrases();
             devInfo(gerundPhrases, 'gerundPhrases', devInfoOn, devBlockName); // eslint-disable-line
 
