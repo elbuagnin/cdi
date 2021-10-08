@@ -5,7 +5,6 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     //    const word = '.';
     const nothing = '';
     const empty = nlp(nothing);
-    let calls = 0;
 
     Doc.prototype.previous = function () {
         let precedingWords = this.all().before(this);
@@ -196,6 +195,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     };
 
     Doc.prototype.mask = function (segments) {
+
         let sentence = this;
         if (segments.length === 0) return;
 
@@ -205,59 +205,44 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
         // Use segments strings to create a negative.
         segments.forEach(string => {
-            negative = negative.splitAfter(string);
+            negative = negative.split(string);
             negative.match(string).replaceWith(nothing);
         });
 
         // Use the negative to isolate the positive.
         negative.forEach(segment => {
-            let remove = segment.text();
+            let remove = segment.text('reduced');
             positive.match(remove).replaceWith(nothing);
+
         });
 
         // Now split the phrases that remain.
         segments.forEach(string => {
-            positive = positive.splitBefore(string);
-            positive = positive.splitAfter(string);
+            positive = positive.split(string);
         });
 
         return positive;
     };
 
     Doc.prototype.splitOnAround = function (on, around) {
-        /* Development Options */
-        let devBlockName = 'splitOnAround'; // eslint-disable-line
-        let devInfoOn = true; // eslint-disable-line
-        devBlock('splitOnAround', devInfoOn); // eslint-disable-line
-        /***********************/
-        calls++;
-        console.log('Call #' + calls);
         let sentence = this;
-    devInfo(sentence, 'sentence #1b', devInfoOn, devBlockName); // eslint-disable-line
 
         let target = sentence.match(around);
-    devInfo(target, 'target #2b', devInfoOn, devBlockName); // eslint-disable-line
 
         if (target.has(anything) === false) {
             return sentence.split(on);
-                devInfo(sentence.split(on), 'sentence.split(on) #3b return', devInfoOn, devBlockName); // eslint-disable-line
         }
 
         let before = sentence.before(around).split(on);
-    devInfo(before, 'before #4b', devInfoOn, devBlockName); // eslint-disable-line
         let after = sentence.after(around).split(on);
-    devInfo(after, 'after #5b', devInfoOn, devBlockName); // eslint-disable-line
 
         let beforeExists = before.has(anything);
-    devInfo(beforeExists, 'beforeExists #6b', devInfoOn, devBlockName); // eslint-disable-line
         let afterExists = after.has(anything);
-    devInfo(afterExists, 'afterExists #7b', devInfoOn, devBlockName); // eslint-disable-line
         let build = [];
         let construction = empty;
 
         switch (beforeExists && afterExists) {
         case true:
-            console.log('case #A');
             build.push( before.first(before.length-1) );
             build.push( before.last(1).append(target) ).append(after.first(1));
             build.push( after.last(after.length-1) );
@@ -270,16 +255,13 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         case false:
             switch (beforeExists || afterExists) {
             case false:
-                console.log('case #B');
                 return target;
             case true:
                 if (beforeExists) {
-                    console.log('case #C');
                     let a = before.first(before.length-1);
                     let b = before.last(1).append(target);
                     return a.concat(b);
                 } else {
-                    console.log('case #D');
                     let a = target.append(after.first(1));
                     let b = after.last(after.length-1);
                     return a.concat(b);
