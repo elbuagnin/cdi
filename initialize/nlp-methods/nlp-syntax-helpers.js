@@ -2,7 +2,7 @@ import nlp from 'compromise';
 
 nlp.extend((Doc, world) => { // eslint-disable-line
     const anything = '.';
-    //    const word = '.';
+    // const word = '.';
     const nothing = '';
     const empty = nlp(nothing);
 
