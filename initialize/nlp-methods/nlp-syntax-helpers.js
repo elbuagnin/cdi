@@ -27,6 +27,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
 
     Doc.prototype.phraseBackward = function (head, tailSearchTerms) {
+
         let sentence = this;
         let proceed = true;
         let phrase = empty;
@@ -34,19 +35,23 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let tail = empty;
         let beginning = empty;
 
-        while(proceed === true) {
+        while (proceed === true) {
             let include = false;
             let preceedingTerm = sentence.match(currentMatch).previous();
 
             if (preceedingTerm.has(anything)) {
                 tailSearchTerms.forEach(searchTerm => {
+
                     if (preceedingTerm.match(searchTerm.term).found) {
+
                         if (searchTerm.terminal === true) {
                             proceed = false;
                             tail = preceedingTerm;
+
                             if (searchTerm.include === true) {
                                 include = true;
                             }
+
                         } else {
                             proceed = true;
                         }
@@ -62,17 +67,19 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             } else {
 
                 if (include === true) {
-                    if (tail.previous().found) {
+                    if (sentence.after(tail.previous()).found) {
                         beginning = sentence.after(tail.previous());
                     } else {
                         beginning = sentence;
                     }
+
+                } else {
+                    beginning = sentence.after(tail);
                 }
 
-                if (head.next().found) {
+                if (beginning.before(head.next()).found) {
                     phrase = beginning.before(head.next());
-                }
-                else {
+                } else {
                     phrase = beginning;
                 }
             }
@@ -94,19 +101,25 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             let succeedingTerm = sentence.match(currentMatch).next();
 
             if (succeedingTerm.has(anything)) {
+
                 tailSearchTerms.forEach(searchTerm => {
+
                     if (succeedingTerm.match(searchTerm.term).found) {
+
                         if (searchTerm.terminal === true) {
                             proceed = false;
                             tail = succeedingTerm;
+
                             if (searchTerm.include === true) {
                                 include = true;
                             }
+
                         } else {
                             proceed = true;
                         }
                     }
                 });
+
             } else {
                 proceed = false;
             }
@@ -117,14 +130,15 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             } else {
 
                 if (include === true) {
-                    if (tail.next().found) {
+
+                    if (sentence.before(tail.next()).found) {
                         beginning = sentence.before(tail.next());
                     } else {
                         beginning = sentence;
                     }
                 }
 
-                if (head.previous().found) {
+                if (beginning.after(head.previous()).found) {
                     phrase = beginning.after(head.previous());
                 }
                 else {
