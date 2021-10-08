@@ -28,7 +28,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
 
 
     Doc.prototype.phraseBackward = function (head, tailSearchTerms) {
-        let sentence = this.all();
+        let sentence = this;
         let proceed = true;
         let phrase = empty;
         let currentMatch = head;
@@ -83,7 +83,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     };
 
     Doc.prototype.phraseForward = function (head, tailSearchTerms) {
-        let sentence = this.all();
+        let sentence = this;
         let proceed = true;
         let phrase = empty;
         let currentMatch = head;
@@ -252,11 +252,21 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     devInfo(beforeExists, 'beforeExists #6b', devInfoOn, devBlockName); // eslint-disable-line
         let afterExists = after.has(anything);
     devInfo(afterExists, 'afterExists #7b', devInfoOn, devBlockName); // eslint-disable-line
+        let build = [];
+        let construction = empty;
 
         switch (beforeExists && afterExists) {
         case true:
             console.log('case #A');
-            return before.last().append(target).append(after).first();
+            build.push( before.first(before.length-1) );
+            build.push( before.last(1).append(target) ).append(after.first(1));
+            build.push( after.last(after.length-1) );
+
+            build.forEach (part => {
+                construction = construction.concat(part);
+            });
+
+            return construction;
         case false:
             switch (beforeExists || afterExists) {
             case false:
@@ -265,17 +275,21 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             case true:
                 if (beforeExists) {
                     console.log('case #C');
-                    return before.append(target).last();
+                    let a = before.first(before.length-1);
+                    let b = before.last(1).append(target);
+                    return a.concat(b);
                 } else {
                     console.log('case #D');
-                    return target.append(after).first();
+                    let a = target.append(after.first(1));
+                    let b = after.last(after.length-1);
+                    return a.concat(b);
                 }
             }
         }
     };
 
     Doc.prototype.remove = function (segment) {
-        let phrase = this.all();
+        let phrase = this();
         let string = segment.text();
         let remainder = phrase.clone();
 
