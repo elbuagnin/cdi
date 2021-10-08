@@ -2,6 +2,7 @@
 import './local-config.js';
 import './initialize/nlp-methods/nlp-syntax-tags.js';
 import './initialize/nlp-methods/nlp-syntax-helpers.js';
+import './initialize/nlp-methods/nlp-syntax-roles.js';
 import './initialize/nlp-methods/nlp-syntax-clauses.js';
 import './initialize/nlp-methods/nlp-syntax-phrases.js';
 import './initialize/nlp-methods/nlp-sentence-syntax.js';
