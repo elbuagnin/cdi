@@ -10,14 +10,10 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         /***********************/
         let sentence = this;
         sentence.contractions().expand();
-
         let parentheticals = this.parentheticals();
         sentence.match(parentheticals).delete();
 
-        devInfo(parentheticals, 'parentheticals', devInfoOn, devBlockName); // eslint-disable-line
-        this.phrasing();
-        //devInfo(this.phrasing(), 'this.phrasing()', devInfoOn, devBlockName); // eslint-disable-line
-
+        sentence = sentence.sentencePhrasing();
 
         this.clauses().forEach (fragment => {
             let gerundPhrases = fragment.gerundPhrases();

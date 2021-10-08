@@ -1,21 +1,9 @@
 import nlp from 'compromise';
 
-const nothing = '';
-let empty = nlp(nothing);
+// const nothing = '';
+// let empty = nlp(nothing);
 
 nlp.extend((Doc, world) => { // eslint-disable-line
-
-    Doc.prototype.phrasing = function () {
-        let sentence = this;
-        let phrasing = this;
-
-        sentence.listPhrases();
-
-        phrasing = sentence.split('@hasSemicolon');
-        phrasing = phrasing.splitOnAround('@hasComma', '#List+');
-
-        return phrasing;
-    };
 
     Doc.prototype.clauses = function () {
         return this;

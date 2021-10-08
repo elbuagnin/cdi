@@ -5,6 +5,17 @@ let empty = nlp(nothing);
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
+    Doc.prototype.sentencePhrasing = function () {
+        let sentence = this;
+
+        sentence.listPhrases();
+
+        sentence = sentence.split('@hasSemicolon');
+        sentence = sentence.splitOnAround('@hasComma', '#List+');
+
+        return sentence;
+    };
+
     Doc.prototype.listPhrases = function () {
         let sentence = this;
 

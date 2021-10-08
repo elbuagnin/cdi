@@ -5,6 +5,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     //    const word = '.';
     const nothing = '';
     const empty = nlp(nothing);
+    let calls = 0;
 
     Doc.prototype.previous = function () {
         let precedingWords = this.all().before(this);
@@ -229,32 +230,45 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         let devInfoOn = true; // eslint-disable-line
         devBlock('splitOnAround', devInfoOn); // eslint-disable-line
         /***********************/
+        calls++;
+        console.log('Call #' + calls);
         let sentence = this;
+    devInfo(sentence, 'sentence #1b', devInfoOn, devBlockName); // eslint-disable-line
 
         let target = sentence.match(around);
+    devInfo(target, 'target #2b', devInfoOn, devBlockName); // eslint-disable-line
 
         if (target.has(anything) === false) {
             return sentence.split(on);
+                devInfo(sentence.split(on), 'sentence.split(on) #3b return', devInfoOn, devBlockName); // eslint-disable-line
         }
 
         let before = sentence.before(around).split(on);
+    devInfo(before, 'before #4b', devInfoOn, devBlockName); // eslint-disable-line
         let after = sentence.after(around).split(on);
+    devInfo(after, 'after #5b', devInfoOn, devBlockName); // eslint-disable-line
 
         let beforeExists = before.has(anything);
+    devInfo(beforeExists, 'beforeExists #6b', devInfoOn, devBlockName); // eslint-disable-line
         let afterExists = after.has(anything);
+    devInfo(afterExists, 'afterExists #7b', devInfoOn, devBlockName); // eslint-disable-line
 
         switch (beforeExists && afterExists) {
         case true:
-            return before.append(target).append(after);
+            console.log('case #A');
+            return before.last().append(target).append(after).first();
         case false:
             switch (beforeExists || afterExists) {
             case false:
+                console.log('case #B');
                 return target;
             case true:
                 if (beforeExists) {
-                    return before.append(target);
+                    console.log('case #C');
+                    return before.append(target).last();
                 } else {
-                    return target.append(after);
+                    console.log('case #D');
+                    return target.append(after).first();
                 }
             }
         }
