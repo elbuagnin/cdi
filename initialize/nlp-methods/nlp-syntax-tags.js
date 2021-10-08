@@ -9,14 +9,14 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         },
         Phrase: {
             isA: '',
-            notA: 'Clause'
+            notA: ''
         },
         Independent: {
-            isA: '',
+            isA: 'Clause',
             notA: 'Dependent'
         },
         Dependent: {
-            isA: '',
+            isA: 'Clause',
             notA: 'Independent'
         },
         NounPhrase: {
@@ -25,6 +25,14 @@ nlp.extend((Doc, world) => { // eslint-disable-line
         },
         VerbPhrase: {
             isA: 'Phrase',
+            notA: 'NounPhrase'
+        },
+        VerbalPhrase: {
+            isA: 'NounPhrase',
+            notA: 'VerbPhrase'
+        },
+        InfinitivePhrase: {
+            isA: 'VerbPhrase',
             notA: 'NounPhrase'
         },
         AdverbPhrase: {
@@ -36,12 +44,45 @@ nlp.extend((Doc, world) => { // eslint-disable-line
             notA: ''
         },
         GerundPhrase: {
-            isA: '',
+            isA: 'VerbalPhrase',
             notA: ''
         },
         List: {
+            isA: 'Phrase',
+            notA: 'VerbPhrase'
+        },
+        Verbal: {
             isA: '',
+            notA: 'Verb'
+        },
+        Participle: {
+            iaA: 'Verbal',
             notA: ''
+        },
+        Subject: {
+            isA: '',
+            notA: 'Object'
+        },
+        Object: {
+            isA: '',
+            notA: 'Subject'
+        },
+        DirectObject: {
+            isA: 'Object',
+            notA: 'IndirectObject'
+        },
+        IndirectObject: {
+            isA: 'Object',
+            notA: 'DirectObject'
+        },
+        Possessive: {
+            isA: '',
+            notA: ['Noun', 'Pronoun']
         }
+    });
+
+    world.addWords({
+        kermit: 'Character',
+        gonzo: 'Character',
     });
 });
