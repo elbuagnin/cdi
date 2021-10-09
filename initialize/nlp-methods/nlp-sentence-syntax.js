@@ -1,15 +1,15 @@
 import nlp from 'compromise';
+import preParser from '../../parser/pre-parser.js';
 
 nlp.extend((Doc, world) => { // eslint-disable-line
 
     Doc.prototype.sentenceSyntax = function () {
         /* Development Options */
          let devBlockName = 'sentenceSyntax'; // eslint-disable-line
-         let devInfoOn = true; // eslint-disable-line
-         devBlock('sentenceSyntax', devInfoOn); // eslint-disable-line
+         let devInfoOn = false; // eslint-disable-line
         /***********************/
-        let sentence = this;
-        sentence.contractions().expand();
+        let sentence = preParser(this);
+
         let parentheticals = this.parentheticals();
         sentence.match(parentheticals).delete();
 

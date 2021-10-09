@@ -100,7 +100,7 @@ nlp.extend((Doc, world) => { // eslint-disable-line
     Doc.prototype.findPhrase = function (argumentsObj) {
         /* Development Options */
         let devBlockName = 'findPhrase'; // eslint-disable-line
-        let devInfoOn = true; // eslint-disable-line
+        let devInfoOn = false; // eslint-disable-line
         devBlock('findPhrase', devInfoOn); // eslint-disable-line
         /***********************/
 
