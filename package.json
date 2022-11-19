@@ -20,9 +20,8 @@
   "author": "Charles Fewlass",
   "license": "MIT",
   "dependencies": {
+    "compromise": "github:spencermountain/compromise",
     "colors": "^1.4.0",
-    "compromise": "^13.11.3",
-    "compromise-sentences": "^0.3.0",
     "lodash-es": "^4.17.21",
     "nodemon": "^2.0.12"
   },
