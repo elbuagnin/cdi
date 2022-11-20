@@ -3,9 +3,9 @@ import syntax from "compromise.syntax";
 import { pianoOptions } from "./playerPianoConfig.js";
 import devLogger from "../lib/dev-logger.js";
 import { surfaceCopy, equivalentDocs } from "../lib/doc-helpers.js";
-import { loadJSONFile } from "../lib/filesystem.js";
-import { sequencePath } from "../data-interface/data-file-structure.js";
-import initialize from "./initialize.js";
+import { loadJSONFile, loadJSONDir } from "../lib/filesystem.js";
+import { sequencePath, tagsPath, wordsPath } from "../data-interface/data-file-structure.js";
+//import initialize from "./initialize.js";
 import sequencer from "../workers/sequencer.js";
 
 export default function startPlayerPiano(doc) {
@@ -17,7 +17,11 @@ export default function startPlayerPiano(doc) {
       return false;
     }
   }
-  initialize();
+  const tags = loadJSONDir(tagsPath);
+  const words = loadJSONDir(wordsPath);
+  
+  nlp.addTags(tags);
+  nlp.addWords(words);
   nlp.plugin(syntax);
   doc.syntax();
   const entryDoc = snapshot(doc, "title", "Entry Document");
