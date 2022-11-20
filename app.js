@@ -1,9 +1,10 @@
 import http from "http";
 import { readFile } from "fs";
 import nlp from "compromise";
-import cdi from "./index.js";
+import {cdi, cdiInit} from "./index.js";
 var text = "";
 
+cdiInit();
 nlp.plugin(cdi);
 const primeTheEngine = nlp('prime');
 primeTheEngine.cdi();
@@ -27,8 +28,6 @@ function test() {
     }
     text = data;
     const doc = nlp(text);
-    //console.log("Initial Doc:")
-    //doc.debug();
     doc.cdi();
     console.log("After CDI:");
     doc.debug();
