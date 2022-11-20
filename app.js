@@ -6,8 +6,6 @@ var text = "";
 
 cdiInit();
 nlp.plugin(cdi);
-const primeTheEngine = nlp('prime');
-primeTheEngine.cdi();
 
 const requestListener = function (req, res) {
   res.writeHead(200);
@@ -19,7 +17,7 @@ const server = http.createServer(requestListener);
 server.listen(8080);
 
 function test() {
-  const name = "Dax";
+  const name = "name=Dax";
 
   readFile("./sample.txt", "utf8", (err, data) => {
     if (err) {
@@ -28,7 +26,7 @@ function test() {
     }
     text = data;
     const doc = nlp(text);
-    doc.cdi();
+    doc.cdi(name);
     console.log("After CDI:");
     doc.debug();
 

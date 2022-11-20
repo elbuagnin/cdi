@@ -1,4 +1,4 @@
-export let CDIOptions = { tagType: "compromise" };
+export let CDIOptions = { tagType: "compromise", name: "" };
 
 export function setCDIOptions() {
   const optionList = arguments[0][0];
@@ -29,6 +29,9 @@ export function setCDIOptions() {
       switch (option) {
         case "tagType":
           CDIOptions.tagType = settings[key];
+          break;
+        case "name":
+          CDIOptions.name = settings[key];
           break;
         default:
           break;
