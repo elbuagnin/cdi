@@ -1,21 +1,22 @@
-'use strict';
 import './local-config.js';
-import './initialize/nlp-methods/nlp-syntax-tags.js';
-import './initialize/nlp-methods/nlp-syntax-helpers.js';
-import './initialize/nlp-methods/nlp-syntax-roles.js';
-import './initialize/nlp-methods/nlp-syntax-clauses.js';
-import './initialize/nlp-methods/nlp-syntax-phrases.js';
-import './initialize/nlp-methods/nlp-sentence-syntax.js';
-import './initialize/nlp-methods/nlp-custom-tags-words.js';
-import './initialize/load-data.js';
-import descriptionParser from './parser/parse-descriptions.js';
-import statUpCharacter from './statter/statup-character.js';
+import startPlayerPiano from "./startup/startPlayerPiano.js";
+import { setPlayerPianoOptions } from "./startup/playerPianoConfig.js";
+import { setCDIOptions } from "./startup/CDIConfig.js";
 
-export default function cdi(description, name) {
-
-    console.log('\x1b[1m', '\x1b[34m', '\n\n####################\n',name, '\n', '\x1b[0m');
-    descriptionParser(description, name)
-        .then(results => {
-            statUpCharacter (results);
-        });
-}
+const cdi = {
+    api: (View) => {
+      View.prototype.cdi = function () {
+        if (arguments.length > 0) {
+          setCDIOptions(arguments);
+        }
+  
+        const playerPianoOptions = "verbose=none";
+        setPlayerPianoOptions(playerPianoOptions);
+  
+        startPlayerPiano(this); 
+        this.debug();
+      };
+    },
+  };
+  
+  export default cdi;
