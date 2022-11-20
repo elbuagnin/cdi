@@ -1,9 +1,0 @@
-{
-    "Race": "Species",
-    "FighterType":"Archetype",
-    "RogueType":"Archetype",
-    "MageType":"Archetype",
-    "PriestType":"Archetype",
-    "Deity": "Person",
-    "Guild": "Organization"
-}

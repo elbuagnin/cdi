@@ -1,0 +1,9 @@
+{
+    "Race":  {"isA": "Species"},
+    "FighterType": {"isA": "Archetype"},
+    "RogueType": {"isA": "Archetype"},
+    "MageType": {"isA": "Archetype"},
+    "PriestType": {"isA": "Archetype"},
+    "Deity":  {"isA": "Person"},
+    "Guild":  {"isA": "Organization"}
+}

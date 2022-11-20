@@ -1,0 +1,23 @@
+{
+   "World":  {"isA": "Place"},
+   "Geography": {"isA": "Place"},
+   "Structure": {"isA": "Place"},
+   "Settlement": {"isA": "Place"},
+   "SocialGroup": {"isA": "Noun"},
+   "Event": {"isA": "Noun"},
+   "Species": {"isA": "Noun"},
+   "Principal": {"isA": "Person"},
+   "Age":  {"isA": "Comparable"},
+   "Gender":  {"isA": "Noun"},
+   "BodyType":  {"isA": "Comparable"},
+   "BodyPart":  {"isA": "Noun"},
+   "HairStyle":  {"isA": "Noun"},
+   "FacialHair":  {"isA": "Noun"},
+   "Clothing":  {"isA": "Noun"},
+   "ClothingPart":  {"isA": "Noun"},
+   "Archetype": {"isA": "Actor"},
+   "Occupation": {"isA": "Actor"},
+   "FullName": {"isA": "Person"},
+   "Characteristic":  {"isA": "Adjective"},
+   "Color":  {"isA": "Comparable"}
+}

@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "cdi",
   "version": "0.0.0",
   "type": "module",
@@ -20,13 +19,13 @@
   "author": "Charles Fewlass",
   "license": "MIT",
   "dependencies": {
-    "compromise": "github:spencermountain/compromise",
     "colors": "^1.4.0",
+    "compromise": "github:spencermountain/compromise",
+    "compromise.syntax": "github:elbuagnin/compromise.syntax",
     "lodash-es": "^4.17.21",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.20"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.5",
-    "eslint": "^7.32.0"
+    "@types/lodash-es": "^4.17.5"
   }
 }
