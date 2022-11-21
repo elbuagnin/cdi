@@ -1,4 +1,5 @@
 {
+   "Character": {"isA": "Person"},
    "World":  {"isA": "Place"},
    "Geography": {"isA": "Place"},
    "Structure": {"isA": "Place"},
@@ -6,7 +7,7 @@
    "SocialGroup": {"isA": "Noun"},
    "Event": {"isA": "Noun"},
    "Species": {"isA": "Noun"},
-   "Principal": {"isA": "Person"},
+   "Principal": {"isA": "Character"},
    "Age":  {"isA": "Comparable"},
    "Gender":  {"isA": "Noun"},
    "BodyType":  {"isA": "Comparable"},

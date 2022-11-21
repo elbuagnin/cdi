@@ -1,9 +1,0 @@
-{
-    "Name": {
-        "order": "1",
-        "term": "to",
-        "pattern": "(#Subject && #Name)",
-        "tag": "#Character",
-        "discern": true
-      }
-}

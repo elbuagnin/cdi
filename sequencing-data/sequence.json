@@ -1,10 +1,10 @@
 {
-  "Tag Character": {
+  "Tag Character Refs": {
     "order": "1",
-    "action": "tag",
-    "parseBy": "pattern",
+    "action": "process",
+    "parseBy": "process",
     "scope": "document",
-    "source": "file",    
-    "payload": { "file": "find-character-references" }
+    "source": "payload",    
+    "payload": { "process": "tag-char-refs" }
   }
 }
