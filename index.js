@@ -15,11 +15,10 @@ const cdi = {
           setCDIOptions(arguments);
         }
   
-        const playerPianoOptions = "verbose=none";
+        const playerPianoOptions = "verbose=details";
         setPlayerPianoOptions(playerPianoOptions);
   
         startPlayerPiano(this); 
-        this.debug();
       };
     },
   };
