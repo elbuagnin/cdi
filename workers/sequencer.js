@@ -56,6 +56,7 @@ export default function sequencer(document, instructions) {
   instructions.sort((a, b) => a.order - b.order);
 
   instructions.forEach((instruction, key) => {
+    console.log("Sequencer running Instruction")
     devLogger("instructions", instruction, "title", "instruction");
 
       if (instruction.action) {

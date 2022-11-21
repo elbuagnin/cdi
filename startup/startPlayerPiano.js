@@ -16,7 +16,7 @@ export default function startPlayerPiano(doc) {
   //     return false;
   //   }
   // }
-  
+  console.log("startPlayerPiano");
   nlp.plugin(syntax);
   doc.syntax();
 

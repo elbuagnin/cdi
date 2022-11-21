@@ -5,6 +5,7 @@ import { setCDIOptions } from "./startup/CDIConfig.js";
 import initialize from "./startup/initialize.js";
 
 function cdiInit () {
+  console.log("index cdiInit");
   initialize();
 }
 
@@ -14,8 +15,8 @@ const cdi = {
         if (arguments.length > 0) {
           setCDIOptions(arguments);
         }
-  
-        const playerPianoOptions = "verbose=details";
+        console.log("index cdi")
+        const playerPianoOptions = "verbose=none";
         setPlayerPianoOptions(playerPianoOptions);
   
         startPlayerPiano(this); 

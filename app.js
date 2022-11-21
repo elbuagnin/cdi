@@ -24,11 +24,12 @@ function test() {
       console.err(err);
       return;
     }
+    console.log("App");
     text = data;
     const doc = nlp(text);
     doc.cdi(name);
-    console.log("After CDI:");
-    doc.debug();
+    
+    //doc.debug();
 
   });
 
