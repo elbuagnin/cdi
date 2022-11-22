@@ -1,5 +1,5 @@
 import './local-config.js';
-import startPlayerPiano from "./startup/startPlayerPiano.js";
+import startPlayerPiano from "./parser.js";
 import { setPlayerPianoOptions } from "./startup/playerPianoConfig.js";
 import { setCDIOptions } from "./startup/CDIConfig.js";
 import initialize from "./startup/initialize.js";

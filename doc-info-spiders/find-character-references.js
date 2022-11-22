@@ -1,4 +1,4 @@
-import { CDIOptions } from "../../startup/CDIConfig.js";
+import { CDIOptions } from "../startup/CDIConfig.js";
 import nlp from "compromise";
 
 export default function tagCharName (doc) {
