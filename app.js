@@ -1,11 +1,11 @@
 import http from "http";
 import { readFile } from "fs";
 import nlp from "compromise";
-import {cdi, cdiInit} from "./index.js";
+import {cdiDoc, cdiInit} from "./index.js";
 var text = "";
 
 cdiInit();
-nlp.plugin(cdi);
+nlp.plugin(cdiDoc);
 
 const requestListener = function (req, res) {
   res.writeHead(200);
@@ -27,9 +27,11 @@ function test() {
     console.log("App");
     text = data;
     const doc = nlp(text);
-    doc.cdi(name);
+    doc.cdiDoc(name);
     
-    //doc.debug();
+    doc.debug();
+
+    console.log(JSON.stringify(doc.getArchetypes()));
 
   });
 
