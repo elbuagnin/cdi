@@ -1,5 +1,5 @@
 import nlp from "compromise";
-import subTags from "../lib/doc-helpers.js";
+import { subTags } from "../lib/doc-helpers.js";
 
 const addGetArchetypes = nlp.extend({
   api: (View) => {
