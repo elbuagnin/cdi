@@ -1,3 +1,3 @@
-import addGetArchetypes from "../doc-info-getters/getArchetypes.js";
+import addGetArchetypes from "../doc-info-getters/get-archetypes.js";
 
 addGetArchetypes();
