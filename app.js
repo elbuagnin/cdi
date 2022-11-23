@@ -32,7 +32,7 @@ function test() {
     doc.debug();
 
     console.log(JSON.stringify(doc.getArchetypes()));
-
+    console.log(JSON.stringify(doc.getAppearance()));
   });
 
 }
