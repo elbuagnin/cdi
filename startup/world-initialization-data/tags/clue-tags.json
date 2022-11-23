@@ -1,4 +1,7 @@
 {
     "ArchetypeClue": {"isA": ""},
-    "RogueWord": {"isA": "ArchetypeClue"}
+    "RogueWord": {"isA": "ArchetypeClue"},
+    "CombatWord": {"isA": "ArchetypeClue"},
+    "MageWord": {"isA": "ArchetypeClue"},
+    "PriestWord": {"isA": "ArchetypeClue"}
 }
