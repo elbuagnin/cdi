@@ -16,14 +16,30 @@ const addGetArchetypes = nlp.extend({
       const mergedResults = [].concat(docArchetypeTerms, docArchetypeClues);
       mergedResults.forEach(element => {
         if (element.subtag.indexOf("Type") > 0 ) {
-          element.archetype = element.subtag.substr(0,element.subtag.indexOf("Type"));
+          element.archetype = element.subtag.substr(1,element.subtag.indexOf("Type")-1);
+          element.weight = 1;
         }
         if (element.subtag.indexOf("Word") > 0 ) {
-          element.archetype = element.subtag.substr(0,element.subtag.indexOf("Word"));
+          element.archetype = element.subtag.substr(1,element.subtag.indexOf("Word")-1);
+          element.weight = .5;
         }
         return element;
       })
       console.log(mergedResults);
+
+      archetypeTermsList.forEach(term => {
+        const rootTerm = term.substr(0,term.length - 4);
+        const count = mergedResults.filter(element => {
+          if (element.archetype === rootTerm) {
+            return true;
+          } else {
+            return false;
+          }
+        }).length;
+
+        
+
+      });
     };
   },
 });
