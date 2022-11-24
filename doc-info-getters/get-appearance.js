@@ -15,34 +15,31 @@ const addGetAppearance = nlp.extend({
             bodypart: bodyPartTerm.text(),
             descripters: descripters.map((term) => term.text()),
           };
-          let obj = { bodydata: bodyData, nlpdata: nlpData };
+          let obj = { items: bodyData, nlpdata: nlpData };
           bodyParts.push(obj);
         }
       });
 
       // Clothing
       const rawClothingList = [];
+      const rawNLPList = [];
       const clothingTerms = this.match("#Clothing");
 
       clothingTerms.forEach((clothingTerm) => {
         let descripters = isModifiedBy(clothingTerm, this);
 
         let nlpData = { clothing: clothingTerm, descripters: descripters };
+        rawNLPList.push(nlpData);
 
         let clothingData = {
           clothing: clothingTerm.text(),
           descripters: descripters.map((term) => term.text()),
         };
-
-        let obj = { clothingdata: clothingData, nlpdata: nlpData };
-
-        rawClothingList.push(obj);
+        rawClothingList.push(clothingData);
       });
 
-      const clothing = mergeDuplicates(
-        rawClothingList.map((item) => item.clothingdata)
-      );
-      console.log("merged" + JSON.stringify(clothing));
+      const clothingList = mergeDuplicates(rawClothingList);
+      const clothing = {items: clothingList, nlpData: rawNLPList};
 
       return { bodyparts: bodyParts, clothing: clothing };
     };
