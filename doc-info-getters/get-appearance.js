@@ -1,5 +1,5 @@
 import nlp from "compromise";
-import { itModifies, isModifiedBy } from "../lib/doc-helpers.js";
+import { mergeDuplicates, isModifiedBy } from "../lib/doc-helpers.js";
 
 const addGetAppearance = nlp.extend({
   api: (View) => {
@@ -21,21 +21,30 @@ const addGetAppearance = nlp.extend({
       });
 
       // Clothing
-      const clothing = [];
+      const rawClothingList = [];
       const clothingTerms = this.match("#Clothing");
+
       clothingTerms.forEach((clothingTerm) => {
         let descripters = isModifiedBy(clothingTerm, this);
 
         let nlpData = { clothing: clothingTerm, descripters: descripters };
+
         let clothingData = {
           clothing: clothingTerm.text(),
           descripters: descripters.map((term) => term.text()),
         };
+
         let obj = { clothingdata: clothingData, nlpdata: nlpData };
-        clothing.push(obj);
+
+        rawClothingList.push(obj);
       });
 
-      return { "bodyparts": bodyParts, "clothing": clothing };
+      const clothing = mergeDuplicates(
+        rawClothingList.map((item) => item.clothingdata)
+      );
+      console.log("merged" + JSON.stringify(clothing));
+
+      return { bodyparts: bodyParts, clothing: clothing };
     };
   },
 });
