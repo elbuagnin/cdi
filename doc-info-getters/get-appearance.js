@@ -5,31 +5,37 @@ const addGetAppearance = nlp.extend({
   api: (View) => {
     View.prototype.getAppearance = function () {
       // Body
-      const bodyParts = [];
+      const rawBodyPartsList = [];
+      const bodyPartsNLPData = [];
       const bodyPartTerms = this.match("#BodyPart");
+
       bodyPartTerms.forEach((bodyPartTerm) => {
         let descripters = isModifiedBy(bodyPartTerm, this);
         if (descripters.length > 0) {
           let nlpData = { bodypart: bodyPartTerm, descripters: descripters };
+          bodyPartsNLPData.push(nlpData);
+
           let bodyData = {
             bodypart: bodyPartTerm.text(),
             descripters: descripters.map((term) => term.text()),
           };
-          let obj = { items: bodyData, nlpdata: nlpData };
-          bodyParts.push(obj);
+          rawBodyPartsList.push(bodyData);
         }
       });
 
+      const bodyPartsList = mergeDuplicates(rawBodyPartsList);
+      const bodyParts = {items: bodyPartsList, nlpData: bodyPartsNLPData};
+
       // Clothing
       const rawClothingList = [];
-      const rawNLPList = [];
+      const clothingNLPData = [];
       const clothingTerms = this.match("#Clothing");
 
       clothingTerms.forEach((clothingTerm) => {
         let descripters = isModifiedBy(clothingTerm, this);
 
         let nlpData = { clothing: clothingTerm, descripters: descripters };
-        rawNLPList.push(nlpData);
+        clothingNLPData.push(nlpData);
 
         let clothingData = {
           clothing: clothingTerm.text(),
@@ -39,7 +45,7 @@ const addGetAppearance = nlp.extend({
       });
 
       const clothingList = mergeDuplicates(rawClothingList);
-      const clothing = {items: clothingList, nlpData: rawNLPList};
+      const clothing = {items: clothingList, nlpData: clothingNLPData};
 
       return { bodyparts: bodyParts, clothing: clothing };
     };
