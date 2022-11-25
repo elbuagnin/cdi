@@ -1,18 +1,57 @@
 import nlp from "compromise";
-import { findItemsFromDoc } from "../lib/doc-helpers.js";
+//import { CDIOptions } from "../startup/CDIConfig.js";
+import { addDescripters, findItemsFromDoc } from "../lib/doc-helpers.js";
 
 const addGetAppearance = nlp.extend({
   api: (View) => {
     View.prototype.getAppearance = function () {
-        const allItemsOn = true;
-        const allItemsOff = false;
+      this.match("hair").debug();
+      const allItemsOn = true;
+      const allItemsOff = false;
 
-        // Body
-      const bodyParts = findItemsFromDoc("#BodyPart", "bodypart", this, allItemsOff);
+      // Body
+      const bodyParts = findItemsFromDoc(
+        "#BodyPart",
+        "bodypart",
+        this,
+        allItemsOff
+      );
+
+      // Hair
+      const hair = findItemsFromDoc(
+        "#HairStyle",
+        "hairstyle",
+        this,
+        allItemsOn
+      );
+      console.log(JSON.stringify(hair));
+      const mentions = hair.items.length;
+      console.log("mentions of hair " + mentions);
+
+      if (mentions > 0) {
+        let hairstyleEntry = null;
+        hair.items.forEach((item) => {
+          if (item.descripters.length > 0) {
+            console.log(item.descripters);
+            hairstyleEntry = item;
+          } else {
+            hairstyleEntry = item.hairstyle;
+          }
+
+          console.log(hairstyleEntry);
+          addDescripters(bodyParts, "hair", hairstyleEntry);
+        });
+
+        
+      }
 
       // Clothing
-      const clothing = findItemsFromDoc("#Clothing", "clothing", this, allItemsOn);
-
+      const clothing = findItemsFromDoc(
+        "#Clothing",
+        "clothing",
+        this,
+        allItemsOn
+      );
 
       return { bodyparts: bodyParts, clothes: clothing };
     };
