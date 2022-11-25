@@ -1,6 +1,5 @@
 import nlp from "compromise";
-//import { CDIOptions } from "../startup/CDIConfig.js";
-import { addDescripters, findItemsFromDoc } from "../lib/doc-helpers.js";
+import { findItemsFromDoc } from "../lib/doc-helpers.js";
 
 const addGetAppearance = nlp.extend({
   api: (View) => {
@@ -38,8 +37,6 @@ const addGetAppearance = nlp.extend({
             hairstyleEntry = item.hairstyle;
           }
 
-          console.log(hairstyleEntry);
-          addDescripters(bodyParts, "hair", hairstyleEntry);
         });
 
         
