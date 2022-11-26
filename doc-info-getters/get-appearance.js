@@ -4,7 +4,6 @@ import { findItemsFromDoc } from "../lib/doc-helpers.js";
 const addGetAppearance = nlp.extend({
   api: (View) => {
     View.prototype.getAppearance = function () {
-      this.match("hair").debug();
       const allItemsOn = true;
       const allItemsOff = false;
 
@@ -23,24 +22,17 @@ const addGetAppearance = nlp.extend({
         this,
         allItemsOn
       );
-      console.log(JSON.stringify(hair));
-      const mentions = hair.items.length;
-      console.log("mentions of hair " + mentions);
 
-      if (mentions > 0) {
-        let hairstyleEntry = null;
-        hair.items.forEach((item) => {
-          if (item.descripters.length > 0) {
-            console.log(item.descripters);
-            hairstyleEntry = item;
-          } else {
-            hairstyleEntry = item.hairstyle;
-          }
+      // Facial Hair
+      const facialHair = findItemsFromDoc(
+        "#FacialHair",
+        "facialhair",
+        this,
+        allItemsOn
+      );
+      
+      
 
-        });
-
-        
-      }
 
       // Clothing
       const clothing = findItemsFromDoc(
@@ -50,7 +42,7 @@ const addGetAppearance = nlp.extend({
         allItemsOn
       );
 
-      return { bodyparts: bodyParts, clothes: clothing };
+      return { bodyparts: bodyParts, clothes: clothing, hair: hair, facialhair: facialHair };
     };
   },
 });
