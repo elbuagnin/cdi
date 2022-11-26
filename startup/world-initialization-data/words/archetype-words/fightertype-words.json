@@ -6,5 +6,6 @@
     "defend": "CombatWord",
     "outfight": "CombatWord",
     "shield": "CombatWord",
-    "weapon": "CombatWord"
+    "weapon": "CombatWord",
+    "martial artist": "CombatWord"
 }

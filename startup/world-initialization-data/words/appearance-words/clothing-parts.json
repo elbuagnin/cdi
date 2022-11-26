@@ -1,7 +1,9 @@
 {
     "collar":"ClothingPart",
     "cuff":"ClothingPart",
+    "cuffs":"ClothingPart",
     "eyelet":"ClothingPart",
+    "eyelets":"ClothingPart",
     "hem":"ClothingPart",
     "inseam":"ClothingPart",
     "laces":"ClothingPart",
@@ -9,9 +11,14 @@
     "pant leg":"ClothingPart",
     "pants leg":"ClothingPart",
     "pocket":"ClothingPart",
+    "pockets":"ClothingPart",
     "pouch":"ClothingPart",
+    "pouches":"ClothingPart",
     "shoelace":"ClothingPart",
+    "shoelaces":"CothingPart",
     "sleeve":"ClothingPart",
+    "sleeves":"ClothingPart",
     "waistband":"ClothingPart",
-    "zipper":"ClothingPart"
+    "zipper":"ClothingPart",
+    "zippers":"ClothingPart"
 }

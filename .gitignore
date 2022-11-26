@@ -5,3 +5,4 @@ sample.txt
 *.sh
 .gitiignore
 *lint*
+.bash_local_aliases

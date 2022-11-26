@@ -18,6 +18,7 @@
    "ClothingPart":  {"isA": "Noun"},
    "Archetype": {"isA": "Actor"},
    "Occupation": {"isA": "Actor"},
+   "Skill": {"isA": "Noun"},
    "FullName": {"isA": "Person"},
    "Characteristic":  {"isA": "Adjective"},
    "Color":  {"isA": "Comparable"}

@@ -1,6 +1,7 @@
 import nlp from "compromise";
 import * as mfs from "../lib/filesystem.js";
-import { tagsPath, wordsPath } from "../data-interface/data-file-structure.js";
+import { tagsPath, wordsPath } from "../lib/data-file-structure.js";
+import "./addGetterMethods.js";
 
 export default function initialize() {
   
