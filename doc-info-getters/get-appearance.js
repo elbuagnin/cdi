@@ -15,6 +15,14 @@ const addGetAppearance = nlp.extend({
         allItemsOff
       );
 
+      // Bodytype
+      const bodyType = findItemsFromDoc(
+        "#BodyType",
+        "bodytype",
+        this,
+        allItemsOn
+      );
+
       // Hair
       const hair = findItemsFromDoc(
         "#HairStyle",
@@ -30,9 +38,6 @@ const addGetAppearance = nlp.extend({
         this,
         allItemsOn
       );
-      
-      
-
 
       // Clothing
       const clothing = findItemsFromDoc(
@@ -42,7 +47,7 @@ const addGetAppearance = nlp.extend({
         allItemsOn
       );
 
-      return { bodyparts: bodyParts, clothes: clothing, hair: hair, facialhair: facialHair };
+      return { bodyparts: bodyParts, bodytype: bodyType, clothes: clothing, hair: hair, facialhair: facialHair };
     };
   },
 });
