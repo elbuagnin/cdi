@@ -26,12 +26,18 @@ export function setCDIOptions() {
     });
 
     options.forEach((option, key) => {
+      const setting = settings[key];
       switch (option) {
-        case "tagType":
-          CDIOptions.tagType = settings[key];
-          break;
         case "name":
-          CDIOptions.name = settings[key];
+          const regex = /^[A-Za-z][A-Za-z\'\-]+([\ A-Za-z][A-Za-z\'\-]+)*/ //ToDo: add unicode special characters
+          if (setting.match(regex)) {
+            CDIOptions.name = setting;
+          }
+          break;
+        case "nlpData":
+          if (setting === true || setting === false) {
+            CDIOptions.nlpData = setting;
+          }
           break;
         default:
           break;
