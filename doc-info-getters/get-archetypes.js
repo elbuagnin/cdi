@@ -1,5 +1,6 @@
 import nlp from "compromise";
 import { subTags } from "../lib/doc-helpers.js";
+import { CDIOptions } from "../startup/CDIConfig.js";
 
 const addGetArchetypes = nlp.extend({
   api: (View) => {
@@ -67,7 +68,11 @@ const addGetArchetypes = nlp.extend({
         return newObj;
       });
 
-      return { makeup: archetypeMakeup, termData: mergedResults };
+      if (CDIOptions.nlpData === true) {
+        return { makeup: archetypeMakeup, termData: mergedResults };
+      } else {
+        return { makeup: archetypeMakeup };
+      }
     };
   },
 });
