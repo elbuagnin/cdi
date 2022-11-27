@@ -1,9 +1,13 @@
 import nlp from "compromise";
 import { findItemsFromDoc } from "../lib/doc-helpers.js";
+import { tagIsh } from "../lib/doc-helpers.js";
 
 const addGetAppearance = nlp.extend({
   api: (View) => {
     View.prototype.getAppearance = function () {
+      const localDoc = this.clone();
+      tagIsh(localDoc);
+
       const allItemsOn = true;
       const allItemsOff = false;
 
@@ -11,7 +15,7 @@ const addGetAppearance = nlp.extend({
       const bodyParts = findItemsFromDoc(
         "#BodyPart",
         "bodypart",
-        this,
+        localDoc,
         allItemsOff
       );
 
@@ -19,7 +23,7 @@ const addGetAppearance = nlp.extend({
       const bodyType = findItemsFromDoc(
         "#BodyType",
         "bodytype",
-        this,
+        localDoc,
         allItemsOn
       );
 
@@ -27,7 +31,7 @@ const addGetAppearance = nlp.extend({
       const hair = findItemsFromDoc(
         "#HairStyle",
         "hairstyle",
-        this,
+        localDoc,
         allItemsOn
       );
 
@@ -35,7 +39,7 @@ const addGetAppearance = nlp.extend({
       const facialHair = findItemsFromDoc(
         "#FacialHair",
         "facialhair",
-        this,
+        localDoc,
         allItemsOn
       );
 
@@ -43,11 +47,17 @@ const addGetAppearance = nlp.extend({
       const clothing = findItemsFromDoc(
         "#Clothing",
         "clothing",
-        this,
+        localDoc,
         allItemsOn
       );
 
-      return { bodyparts: bodyParts, bodytype: bodyType, clothes: clothing, hair: hair, facialhair: facialHair };
+      return {
+        bodyparts: bodyParts,
+        bodytype: bodyType,
+        clothes: clothing,
+        hair: hair,
+        facialhair: facialHair,
+      };
     };
   },
 });
