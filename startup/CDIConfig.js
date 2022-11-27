@@ -1,6 +1,6 @@
-export let CDIOptions = { tagType: "compromise", name: "" };
+let CDIOptions = { name: "", nlpData: false };
 
-export function setCDIOptions() {
+function setCDIOptions() {
   const optionList = arguments[0][0];
 
   if (typeof optionList === "string") {
@@ -29,7 +29,7 @@ export function setCDIOptions() {
       const setting = settings[key];
       switch (option) {
         case "name":
-          const regex = /^[A-Za-z][A-Za-z\'\-]+([\ A-Za-z][A-Za-z\'\-]+)*/ //ToDo: add unicode special characters
+          const regex = /^[A-Za-z][A-Za-z\'\-]+([\ A-Za-z][A-Za-z\'\-]+)*/gm //ToDo: add unicode special characters
           if (setting.match(regex)) {
             CDIOptions.name = setting;
           }
@@ -47,3 +47,5 @@ export function setCDIOptions() {
     return false;
   }
 }
+
+export {CDIOptions, setCDIOptions};
