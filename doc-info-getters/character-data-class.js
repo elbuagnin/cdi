@@ -22,7 +22,12 @@ export class Describer {
         descripter.text()
       );
 
-      return { [this.aspect]: nlpTerm.text(), descripters: textualDescripters };
+      return {
+        [this.aspect]: nlpTerm.text(),
+        descripters: textualDescripters,
+        parts: [],
+        contains: [],
+      };
     });
 
     const mergedTermObjList = helper.mergeDuplicates(termObjList);
@@ -31,7 +36,9 @@ export class Describer {
   }
 
   describedTermsOnly() {
-    return this.inventory.filter((term) => Object.values(term)[1].length > 0);
+    return this.inventory.filter((term) => {
+      return term.descripters.length > 0 || term.parts.length > 0 || term.contains.length > 0;
+    });
   }
 
   get terms() {
@@ -86,9 +93,10 @@ export class Describer {
   }
 
   addDetails(editItem, details, type) {
+    console.log("Adding details of " + editItem);
     let detailsArray = [];
 
-    if(["descripters", "parts", "contains"].indexOf(type) === -1) {
+    if (["descripters", "parts", "contains"].indexOf(type) === -1) {
       type = "descripters";
     }
 
@@ -101,8 +109,9 @@ export class Describer {
     }
 
     const index = this.findIndexOf(editItem);
-
+    console.log("index of found terms s " + index);
     if (index > -1) {
+      console.log("updating details of " + editItem);
       var updatedDetails = "";
 
       switch (type) {
@@ -120,15 +129,22 @@ export class Describer {
           this.inventory[index].contains = updatedDetails;
           break;
         default:
-          updatedDetails = this.inventory[index].descripters.concat(detailsArray);
+          updatedDetails =
+            this.inventory[index].descripters.concat(detailsArray);
           break;
       }
     } else {
+      console.log("Creating new object for " + editItem);
       const newItemObj = {
         [this.aspect]: editItem,
-        [type]: detailsArray,
+        descripters: [],
+        parts: [],
+        contains: [],
       };
-
+      console.log(newItemObj);
+      newItemObj[type] = updatedDetails;
+      console.log(newItemObj[type]);
+      console.log(newItemObj);
       this.inventory.push(newItemObj);
     }
 
