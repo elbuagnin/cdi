@@ -74,9 +74,9 @@ export class Describer {
         descripters: addedItem.descripters,
       };
     }
-    
+
     const isItAlreadyAnEntry = this.find(objToAdd[this.aspect]);
-    
+
     if (isItAlreadyAnEntry != false) {
       this.addDescripter(objToAdd[this.aspect], objToAdd.descripters);
     } else {
@@ -108,7 +108,7 @@ export class Describer {
         descripters: descriptersArray,
       };
 
-      this.addItem(newItemObj);
+      this.inventory.push(newItemObj);
     }
 
     return true;

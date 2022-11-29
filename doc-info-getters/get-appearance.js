@@ -13,8 +13,8 @@ const addGetAppearance = nlp.plugin({
       // Bodytype
       const bodyType = new Describer("#BodyType", this, allItems);
 
-      // Hair
-      const hair = new Describer("#HairStyle", this, allItems);
+      // Hairstyles
+      const hairStyles = new Describer("#HairStyle", this, allItems);
 
       // Facial Hair
       const facialHair = new Describer("#FacialHair", this, allItems);
@@ -22,11 +22,27 @@ const addGetAppearance = nlp.plugin({
       // Clothing
       const clothing = new Describer("#Clothing", this, allItems);
 
+      // Also, add styles as descripters to bodyParts.
+      if (hairStyles.terms.length > 0) {
+        bodyParts.addDescripter(
+          "hair",
+          hairStyles.terms.map((item) => item.hairstyle)
+        );
+      }
+
+      // Also, add facial hair as descripters to bodyParts.
+      if (facialHair.terms.length > 0) {
+        bodyParts.addDescripter(
+          "face",
+          facialHair.terms.map((item) => item.facialhair)
+        );
+      }
+
       return {
         bodyparts: bodyParts.terms,
         bodytype: bodyType.terms,
         clothes: clothing.terms,
-        hair: hair.terms,
+        hair: hairStyles.terms,
         facialhair: facialHair.terms,
       };
     };
