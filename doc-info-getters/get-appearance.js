@@ -24,7 +24,7 @@ const addGetAppearance = nlp.plugin({
 
       // Also, add styles as descripters to bodyParts.
       if (hairStyles.terms.length > 0) {
-        bodyParts.addDescripter(
+        bodyParts.addDetails(
           "hair",
           hairStyles.terms.map((item) => item.hairstyle)
         );
@@ -32,9 +32,10 @@ const addGetAppearance = nlp.plugin({
 
       // Also, add facial hair as descripters to bodyParts.
       if (facialHair.terms.length > 0) {
-        bodyParts.addDescripter(
+        bodyParts.addDetails(
           "face",
-          facialHair.terms.map((item) => item.facialhair)
+          facialHair.terms.map((item) => item.facialhair),
+          "parts"
         );
       }
 

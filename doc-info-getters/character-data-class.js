@@ -1,3 +1,4 @@
+import { update } from "lodash-es";
 import * as helper from "../lib/doc-helpers.js";
 
 export class Describer {
@@ -30,7 +31,7 @@ export class Describer {
   }
 
   describedTermsOnly() {
-    return this.inventory.filter((term) => term.descripters.length > 0);
+    return this.inventory.filter((term) => Object.values(term)[1].length > 0);
   }
 
   get terms() {
@@ -78,34 +79,54 @@ export class Describer {
     const isItAlreadyAnEntry = this.find(objToAdd[this.aspect]);
 
     if (isItAlreadyAnEntry != false) {
-      this.addDescripter(objToAdd[this.aspect], objToAdd.descripters);
+      this.addDetails(objToAdd[this.aspect], objToAdd.descripters);
     } else {
       this.inventory.push(objToAdd);
     }
   }
 
-  addDescripter(editItem, descripter) {
-    let descriptersArray = [];
+  addDetails(editItem, details, type) {
+    let detailsArray = [];
 
-    if (Array.isArray(descripter)) {
-      descriptersArray = descripter;
+    if(["descripters", "parts", "contains"].indexOf(type) === -1) {
+      type = "descripters";
+    }
+
+    if (Array.isArray(details)) {
+      detailsArray = details;
     } else {
-      if (typeof descripter === "string") {
-        descriptersArray.push(descripter);
+      if (typeof details === "string") {
+        detailsArray.push(details);
       }
     }
 
     const index = this.findIndexOf(editItem);
 
     if (index > -1) {
-      const updatedDescripters =
-        this.inventory[index].descripters.concat(descriptersArray);
+      var updatedDetails = "";
 
-      this.inventory[index].descripters = updatedDescripters;
+      switch (type) {
+        case "descripters":
+          updatedDetails =
+            this.inventory[index].descripters.concat(detailsArray);
+          this.inventory[index].descripters = updatedDetails;
+          break;
+        case "parts":
+          updatedDetails = this.inventory[index].parts.concat(detailsArray);
+          this.inventory[index].parts = updatedDetails;
+          break;
+        case "contains":
+          updatedDetails = this.inventory[index].contains.concat(detailsArray);
+          this.inventory[index].contains = updatedDetails;
+          break;
+        default:
+          updatedDetails = this.inventory[index].descripters.concat(detailsArray);
+          break;
+      }
     } else {
       const newItemObj = {
         [this.aspect]: editItem,
-        descripters: descriptersArray,
+        [type]: detailsArray,
       };
 
       this.inventory.push(newItemObj);
