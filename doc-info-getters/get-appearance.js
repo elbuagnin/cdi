@@ -1,62 +1,30 @@
 import nlp from "compromise";
-import { findItemsFromDoc } from "../lib/doc-helpers.js";
-import { tagIsh } from "../lib/doc-helpers.js";
+import { Describer } from "./character-data-class.js";
 
-const addGetAppearance = nlp.extend({
+const addGetAppearance = nlp.plugin({
   api: (View) => {
     View.prototype.getAppearance = function () {
-      const localDoc = this.clone();
-      tagIsh(localDoc);
-
-      const allItemsOn = true;
-      const allItemsOff = false;
-
       // Body
-      const bodyParts = findItemsFromDoc(
-        "#BodyPart",
-        "bodypart",
-        localDoc,
-        allItemsOff
-      );
+      const bodyParts = new Describer("#BodyPart", this);
 
       // Bodytype
-      const bodyType = findItemsFromDoc(
-        "#BodyType",
-        "bodytype",
-        localDoc,
-        allItemsOn
-      );
+      const bodyType = new Describer("#BodyType", this);
 
       // Hair
-      const hair = findItemsFromDoc(
-        "#HairStyle",
-        "hairstyle",
-        localDoc,
-        allItemsOn
-      );
+      const hair = new Describer("#HairStyle", this);
 
       // Facial Hair
-      const facialHair = findItemsFromDoc(
-        "#FacialHair",
-        "facialhair",
-        localDoc,
-        allItemsOn
-      );
+      const facialHair = new Describer("#FacialHair", this);
 
       // Clothing
-      const clothing = findItemsFromDoc(
-        "#Clothing",
-        "clothing",
-        localDoc,
-        allItemsOn
-      );
+      const clothing = new Describer("#Clothing", this);
 
       return {
-        bodyparts: bodyParts,
-        bodytype: bodyType,
-        clothes: clothing,
-        hair: hair,
-        facialhair: facialHair,
+        bodyparts: bodyParts.terms,
+        bodytype: bodyType.terms,
+        clothes: clothing.terms,
+        hair: hair.terms,
+        facialhair: facialHair.terms,
       };
     };
   },
