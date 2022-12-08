@@ -29,9 +29,9 @@ function test() {
     const doc = nlp(text);
     doc.cdiDoc(name);
     
-    doc.debug();
+    //doc.debug();
 
-    console.log(JSON.stringify(doc.getArchetypes()));
+    //console.log(JSON.stringify(doc.getArchetypes()));
     console.log(JSON.stringify(doc.getAppearance()));
   });
 

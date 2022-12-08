@@ -1,62 +1,50 @@
 import nlp from "compromise";
-import { findItemsFromDoc } from "../lib/doc-helpers.js";
-import { tagIsh } from "../lib/doc-helpers.js";
+import { Describer } from "./character-data-class.js";
 
-const addGetAppearance = nlp.extend({
+const addGetAppearance = nlp.plugin({
   api: (View) => {
     View.prototype.getAppearance = function () {
-      const localDoc = this.clone();
-      tagIsh(localDoc);
-
-      const allItemsOn = true;
-      const allItemsOff = false;
+      const describedOnly = true;
+      const allItems = false;
 
       // Body
-      const bodyParts = findItemsFromDoc(
-        "#BodyPart",
-        "bodypart",
-        localDoc,
-        allItemsOff
-      );
+      const bodyParts = new Describer("#BodyPart", this, describedOnly);
 
       // Bodytype
-      const bodyType = findItemsFromDoc(
-        "#BodyType",
-        "bodytype",
-        localDoc,
-        allItemsOn
-      );
+      const bodyType = new Describer("#BodyType", this, allItems);
 
-      // Hair
-      const hair = findItemsFromDoc(
-        "#HairStyle",
-        "hairstyle",
-        localDoc,
-        allItemsOn
-      );
+      // Hairstyles
+      const hairStyles = new Describer("#HairStyle", this, allItems);
 
       // Facial Hair
-      const facialHair = findItemsFromDoc(
-        "#FacialHair",
-        "facialhair",
-        localDoc,
-        allItemsOn
-      );
+      const facialHair = new Describer("#FacialHair", this, allItems);
 
       // Clothing
-      const clothing = findItemsFromDoc(
-        "#Clothing",
-        "clothing",
-        localDoc,
-        allItemsOn
-      );
+      const clothing = new Describer("#Clothing", this, allItems);
+
+      // Also, add styles as descripters to bodyParts.
+      if (hairStyles.terms.length > 0) {
+        bodyParts.addDetails(
+          "hair",
+          hairStyles.terms.map((item) => item.hairstyle)
+        );
+      }
+
+      // Also, add facial hair as parts to bodyParts.
+      if (facialHair.terms.length > 0) {
+        bodyParts.addDetails(
+          "face",
+          facialHair.terms,
+          "parts"
+        );
+      }
 
       return {
-        bodyparts: bodyParts,
-        bodytype: bodyType,
-        clothes: clothing,
-        hair: hair,
-        facialhair: facialHair,
+        bodyparts: bodyParts.terms,
+        bodytype: bodyType.terms,
+        clothes: clothing.terms,
+        hair: hairStyles.terms,
+        facialhair: facialHair.terms,
       };
     };
   },
