@@ -1,4 +1,3 @@
-import { update } from "lodash-es";
 import * as helper from "../lib/doc-helpers.js";
 
 export class Describer {
