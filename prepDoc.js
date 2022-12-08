@@ -1,10 +1,9 @@
 import nlp from "compromise";
-import syntax from "compromise.syntax";
+import disambiguation from "compromise.disambiguation";
 import tagCharName from "./doc-info-getters/find-character-references.js";
 
 export default function prepDoc(doc) {
-  nlp.plugin(syntax);
-  doc.syntax();
-
+  nlp.plugin(disambiguation);
+  doc.disambiguate();
   tagCharName(doc);
 }
