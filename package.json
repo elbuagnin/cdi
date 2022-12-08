@@ -21,11 +21,11 @@
   "dependencies": {
     "colors": "^1.4.0",
     "compromise": "github:spencermountain/compromise",
-    "compromise.syntax": "github:elbuagnin/compromise.syntax",
-    "lodash-es": "^4.17.21",
-    "nodemon": "^2.0.20"
+    "compromise.disambiguation": "github:elbuagnin/compromise.disambiguation"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.5"
+    "@types/lodash-es": "^4.17.5",
+    "lodash-es": "^4.17.21",
+    "nodemon": "^2.0.20"
   }
 }
